@@ -1,0 +1,57 @@
+const dotenv = require("dotenv");
+dotenv.config({ path: ".env.local" });
+
+const PORT = process.env.PORT || 5050;
+const API_URL = process.env.API_URL
+const CLIENT_URL = process.env.CLIENT_URL;
+
+const DB_NAME = process.env.DB_NAME;
+const DB_USERNAME = process.env.DB_USERNAME;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_LOCALHOST = process.env.DB_LOCALHOST;
+
+
+const JWT_ACCESS_TOKEN = process.env.JWT_ACCESS_TOKEN;
+const JWT_REFRESH_TOKEN = process.env.JWT_REFRESH_TOKEN;
+
+const JWT_ACCESS_TOKEN_EXPIRATION_TIME =
+  process.env.JWT_ACCESS_TOKEN_EXPIRATION_TIME;
+const JWT_REFRESH_TOKEN_EXPIRATION_TIME =
+  process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME;
+
+const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME;
+const S3_BUCKET_REGION = process.env.S3_BUCKET_REGION;
+const S3_ACCEESS_KEY = process.env.S3_ACCEESS_KEY;
+const S3_SECRET_ACCEESS_KEY = process.env.S3_SECRET_ACCEESS_KEY;
+
+const REDIS_URL = process.env.REDIS_URL;
+
+const SMTP_HOST = process.env.SMTP_HOST;
+const SMTP_PORT = process.env.SMTP_PORT;
+const SMTP_USER = process.env.SMTP_USER;
+const SMTP_PASSWORD = process.env.SMTP_PASSWORD;
+
+module.exports = {
+  PORT,
+  API_URL,
+  CLIENT_URL,
+  DB_NAME,
+  DB_USERNAME,
+  DB_PASSWORD,
+  DB_LOCALHOST,
+  JWT_ACCESS_TOKEN,
+  JWT_REFRESH_TOKEN,
+  JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+  JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+  S3_BUCKET_NAME,
+  S3_BUCKET_REGION,
+  S3_ACCEESS_KEY,
+  S3_SECRET_ACCEESS_KEY,
+  UPSTASH_REDIS_REST_URL,
+  UPSTASH_REDIS_REST_TOKEN,
+  REDIS_URL,
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_USER,
+  SMTP_PASSWORD,
+};
