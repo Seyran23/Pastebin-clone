@@ -5,16 +5,16 @@ module.exports = {
   async up (queryInterface, Sequelize) {
 
     await queryInterface.bulkInsert('syntax_highlights', [
-      { language: 'bash' },
-      { language: 'c' },
-      { language: 'c#' },
-      { language: 'c++' },
-      { language: 'css' },
-      { language: 'html' },
-      { language: 'json' },
-      { language: 'java' },
-      { language: 'javascript' },
-      { language: 'python' },
+      { language: 'Bash' },
+      { language: 'C' },
+      { language: 'C#' },
+      { language: 'C++' },
+      { language: 'CSS' },
+      { language: 'HTML' },
+      { language: 'JSON' },
+      { language: 'Java' },
+      { language: 'JavaScript' },
+      { language: 'Python' },
     ], {});
 
   },

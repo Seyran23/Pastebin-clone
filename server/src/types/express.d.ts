@@ -1,5 +1,3 @@
-import type { JwtPayload } from 'jsonwebtoken';
-
 export interface AuthUser {
   id: string;
   username: string;

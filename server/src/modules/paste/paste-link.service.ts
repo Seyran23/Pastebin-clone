@@ -1,6 +1,7 @@
-import redisClient from '../../utils/redis';
-import generateBase64HashService from '../../services/hashing.service';
 import { v4 as uuidv4 } from 'uuid';
+
+import generateBase64HashService from '../../services/hashing.service';
+import redisClient from '../../utils/redis';
 
 const LINK_CACHE_KEY = 'hashed-links';
 const BATCH_SIZE = 30;

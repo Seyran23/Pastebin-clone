@@ -1,12 +1,14 @@
 import { sequelize } from '../../db/models';
-
-import { AppError } from '../../middlewares/error-handler';
-import { getFileFromS3 } from '../cloud/service';
-import { PasteDto } from './dto';
 import type { Paste } from '../../db/models/paste';
 import type { User } from '../../db/models/user';
+import { AppError } from '../../middlewares/error-handler';
+import { getFileFromS3 } from '../cloud/service';
 
-export const formatPasteContent = async (paste: Paste): Promise<{ content: string; contentType: string }> => {
+import { PasteDto } from './dto';
+
+export const formatPasteContent = async (
+  paste: Paste,
+): Promise<{ content: string; contentType: string }> => {
   const fileContent = await getFileFromS3(paste.cloud_name);
 
   let formattedContent: string;
@@ -33,7 +35,11 @@ export interface PasteResponse {
   remainingTime: number | null;
 }
 
-export const formatPasteResponse = (paste: Paste & { user?: User | null }, fileData: { content: string; contentType: string }, remainingTime: number | null): PasteResponse => {
+export const formatPasteResponse = (
+  paste: Paste & { user?: User | null },
+  fileData: { content: string; contentType: string },
+  remainingTime: number | null,
+): PasteResponse => {
   const owner = paste.user
     ? { id: paste.user.id, username: paste.user.username, avatar: paste.user.avatar }
     : null;
@@ -60,18 +66,20 @@ export const buildOrder = (sort: string): any[] => {
     oldest: [['createdAt', 'ASC']],
     likes: [
       [
-        sequelize.literal('(SELECT COUNT(*) FROM like_stats WHERE paste_id = "Paste".id AND is_liked = true)'),
+        sequelize.literal(
+          '(SELECT COUNT(*) FROM like_stats WHERE paste_id = "Paste".id AND is_liked = true)',
+        ),
         'DESC',
       ],
     ],
   };
-  return orderMap[sort] ?? orderMap['newest']!;
+  return orderMap[sort] ?? orderMap.newest;
 };
 
 export const parseTimeFilter = (time: string): Date | null => {
   const timeMap: Record<string, number> = { day: 1, week: 7, month: 30, year: 365 };
   if (!timeMap[time]) return null;
   const date = new Date();
-  date.setDate(date.getDate() - timeMap[time]!);
+  date.setDate(date.getDate() - timeMap[time]);
   return date;
 };

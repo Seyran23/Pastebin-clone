@@ -1,11 +1,25 @@
 import { Router } from 'express';
-import {
-  signup, login, logout, refresh, activateProfile,
-  forgotPassword, forgotUsername, resendActivationLink,
-} from './controller';
-import { validateSignup, validateLogin, validateUUIDParam, validateUsername, validateEmail } from './validator';
+
 import handleValidationErrors from '../../middlewares/validation-error.middleware';
+
+import {
+  activateProfile,
+  forgotPassword,
+  forgotUsername,
+  login,
+  logout,
+  refresh,
+  resendActivationLink,
+  signup,
+} from './controller';
 import { authMiddleware } from './middleware';
+import {
+  validateEmail,
+  validateLogin,
+  validateSignup,
+  validateUsername,
+  validateUUIDParam,
+} from './validator';
 
 const router = Router();
 
@@ -19,6 +33,12 @@ router.post('/forgot-username', validateEmail, handleValidationErrors, forgotUse
 router.post('/resend-activation', validateUsername, handleValidationErrors, resendActivationLink);
 
 router.get('/refresh', refresh);
-router.get('/verify-email/:activationLink', authMiddleware, validateUUIDParam, handleValidationErrors, activateProfile);
+router.get(
+  '/verify-email/:activationLink',
+  authMiddleware,
+  validateUUIDParam,
+  handleValidationErrors,
+  activateProfile,
+);
 
 export default router;

@@ -1,14 +1,15 @@
 import { Sequelize } from 'sequelize';
-import { DB_NAME, DB_USERNAME, DB_PASSWORD, DB_LOCALHOST, NODE_ENV } from '../../utils/env';
 
-import { User } from './user';
-import { Paste } from './paste';
+import { DB_LOCALHOST, DB_NAME, DB_PASSWORD, DB_USERNAME, NODE_ENV } from '../../utils/env';
+
 import { Comment } from './comment';
-import { Token } from './token';
+import { ExpirationTime } from './expirationtime';
 import { LikeStats } from './likestats';
+import { Paste } from './paste';
 import { PasteCategory } from './pastecategory';
 import { SyntaxHighlights } from './syntaxhighlights';
-import { ExpirationTime } from './expirationtime';
+import { Token } from './token';
+import { User } from './user';
 
 const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   host: DB_LOCALHOST,
@@ -36,7 +37,11 @@ Paste.belongsTo(User, { foreignKey: 'createdBy', as: 'user' });
 Paste.hasMany(Comment, { foreignKey: 'paste_id', as: 'comments' });
 Paste.hasMany(LikeStats, { foreignKey: 'paste_id', as: 'likes' });
 Paste.belongsTo(PasteCategory, { foreignKey: 'category_id', targetKey: 'id', as: 'category' });
-Paste.belongsTo(SyntaxHighlights, { foreignKey: 'syntax_highlight_id', targetKey: 'id', as: 'syntaxHighlight' });
+Paste.belongsTo(SyntaxHighlights, {
+  foreignKey: 'syntax_highlight_id',
+  targetKey: 'id',
+  as: 'syntaxHighlight',
+});
 
 Comment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 Comment.belongsTo(Paste, { foreignKey: 'paste_id', as: 'paste' });
@@ -47,17 +52,21 @@ LikeStats.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 LikeStats.belongsTo(Paste, { foreignKey: 'paste_id', as: 'paste' });
 
 PasteCategory.hasMany(Paste, { foreignKey: 'category_id', sourceKey: 'id', as: 'pastes' });
-SyntaxHighlights.hasMany(Paste, { foreignKey: 'syntax_highlight_id', sourceKey: 'id', as: 'pastes' });
+SyntaxHighlights.hasMany(Paste, {
+  foreignKey: 'syntax_highlight_id',
+  sourceKey: 'id',
+  as: 'pastes',
+});
 
 export {
-  sequelize,
-  Sequelize,
-  User,
-  Paste,
   Comment,
-  Token,
-  LikeStats,
-  PasteCategory,
-  SyntaxHighlights,
   ExpirationTime,
+  LikeStats,
+  Paste,
+  PasteCategory,
+  Sequelize,
+  sequelize,
+  SyntaxHighlights,
+  Token,
+  User,
 };

@@ -1,4 +1,10 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
+
+import type { Comment } from './comment';
+import type { LikeStats } from './likestats';
+import type { PasteCategory } from './pastecategory';
+import type { SyntaxHighlights } from './syntaxhighlights';
+import type { User } from './user';
 
 export interface PasteAttributes {
   id: string;
@@ -22,7 +28,10 @@ export type PasteCreationAttributes = Optional<
   'id' | 'syntax_highlight_id' | 'category_id' | 'password' | 'expiration_time' | 'expired' | 'size'
 >;
 
-export class Paste extends Model<PasteAttributes, PasteCreationAttributes> implements PasteAttributes {
+export class Paste
+  extends Model<PasteAttributes, PasteCreationAttributes>
+  implements PasteAttributes
+{
   declare id: string;
   declare createdBy: string;
   declare syntax_highlight_id: number | null;
@@ -39,11 +48,11 @@ export class Paste extends Model<PasteAttributes, PasteCreationAttributes> imple
   declare readonly updatedAt: Date;
 
   // Associations (populated by eager loading)
-  declare user?: import('./user').User;
-  declare category?: import('./pastecategory').PasteCategory;
-  declare syntaxHighlight?: import('./syntaxhighlights').SyntaxHighlights;
-  declare comments?: import('./comment').Comment[];
-  declare likes?: import('./likestats').LikeStats[];
+  declare user?: User;
+  declare category?: PasteCategory;
+  declare syntaxHighlight?: SyntaxHighlights;
+  declare comments?: Comment[];
+  declare likes?: LikeStats[];
 
   static initModel(sequelize: Sequelize): typeof Paste {
     Paste.init(
@@ -74,7 +83,7 @@ export class Paste extends Model<PasteAttributes, PasteCreationAttributes> imple
         expired: { type: DataTypes.BOOLEAN, defaultValue: false },
         size: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
       },
-      { sequelize, tableName: 'pastes', timestamps: true }
+      { sequelize, tableName: 'pastes', timestamps: true },
     );
     return Paste;
   }

@@ -19,15 +19,15 @@ module.exports = {
         },
         onDelete: "CASCADE",
       },
-      category: {
+      category_id: {
         type: Sequelize.INTEGER, 
-        allowNull: false,
+        allowNull: true,
         references: {
           model: "paste_categories",
           key: "id",
         },
       },
-      syntax_highlight: {
+      syntax_highlight_id: {
         type: Sequelize.INTEGER, 
         allowNull: true,
         references: {
@@ -36,7 +36,7 @@ module.exports = {
         },
       },
       exposure: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM("public", "private", "unlisted"),
         allowNull: false,
       },
       password: {
@@ -61,6 +61,11 @@ module.exports = {
       expired: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
+      },
+      expired: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,

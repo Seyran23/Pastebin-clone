@@ -15,7 +15,9 @@ export class PasteDto {
   category: { id: number; name: string } | null;
   syntaxHighlight: { id: number; name: string } | null;
 
-  constructor(paste: Paste & { category?: PasteCategory | null; syntaxHighlight?: SyntaxHighlights | null }) {
+  constructor(
+    paste: Paste & { category?: PasteCategory | null; syntaxHighlight?: SyntaxHighlights | null },
+  ) {
     this.id = paste.id;
     this.createdBy = paste.createdBy;
     this.title = paste.name;
@@ -25,7 +27,11 @@ export class PasteDto {
     this.updatedAt = paste.updatedAt;
     this.expirationTime = paste.expiration_time;
     this.size = paste.size;
-    this.category = paste.category ? { id: paste.category.id, name: paste.category.category_name } : null;
-    this.syntaxHighlight = paste.syntaxHighlight ? { id: paste.syntaxHighlight.id, name: paste.syntaxHighlight.language } : null;
+    this.category = paste.category
+      ? { id: paste.category.id, name: paste.category.category_name }
+      : null;
+    this.syntaxHighlight = paste.syntaxHighlight
+      ? { id: paste.syntaxHighlight.id, name: paste.syntaxHighlight.language }
+      : null;
   }
 }

@@ -1,20 +1,26 @@
-import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-import { CLIENT_URL, API_URL } from '../../utils/env';
+import { v4 as uuidv4 } from 'uuid';
+
 import { User } from '../../db/models';
-import { UserDto } from '../user/dto';
+import { AppError } from '../../middlewares/error-handler';
+import {
+  findToken,
+  generateTokens,
+  removeToken,
+  resetPasswordToken,
+  saveToken,
+  validateRefreshToken,
+} from '../../services/token.service';
+import attachAvatarImage from '../../utils/attachAvatar';
+import { API_URL, CLIENT_URL } from '../../utils/env';
 import hashingPassword from '../../utils/passwordHashing';
 import {
-  generateTokens, saveToken, removeToken,
-  validateRefreshToken, findToken, resetPasswordToken,
-} from '../../services/token.service';
-import {
-  sendRegistrationEmail, sendForgotPasswordEmail,
-  sendForgotUsernameEmail, resendActivationEmail,
+  resendActivationEmail,
+  sendForgotPasswordEmail,
+  sendForgotUsernameEmail,
+  sendRegistrationEmail,
 } from '../mail/controller';
-import { getFileFromS3 } from '../cloud/service';
-import { AppError } from '../../middlewares/error-handler';
-import attachAvatarImage from '../../utils/attachAvatar';
+import { UserDto } from '../user/dto';
 
 export const signupService = async (username: string, email: string, password: string) => {
   const [existingUsername, existingEmail] = await Promise.all([
@@ -30,7 +36,11 @@ export const signupService = async (username: string, email: string, password: s
 
   const user = await User.create({ username, email, password: hashedPassword, activationLink });
 
-  await sendRegistrationEmail(email, username, `${CLIENT_URL}/verify-email?activationLink=${activationLink}`);
+  await sendRegistrationEmail(
+    email,
+    username,
+    `${CLIENT_URL}/verify-email?activationLink=${activationLink}`,
+  );
 
   const payload = { id: user.id, username, email, role: user.role, isActivated: user.isActivated };
   const tokens = generateTokens(payload);
@@ -66,7 +76,9 @@ export const logoutService = async (refreshToken: string) => {
 export const activateProfileService = async (activationLink: string, requestingUserId: string) => {
   const user = await User.findOne({ where: { activationLink } });
   if (!user) throw new AppError(404, 'Inaccurate link for activation');
-  if (requestingUserId !== user.id) throw new AppError(403, "You don't have permission to activate this account");
+  if (requestingUserId !== user.id) {
+    throw new AppError(403, "You don't have permission to activate this account");
+  }
   if (user.isActivated) throw new AppError(409, 'Account already activated');
 
   user.isActivated = true;
@@ -110,7 +122,8 @@ export const forgotPasswordService = async (username: string) => {
   await sendForgotPasswordEmail(user.email, username, link);
 
   return {
-    message: 'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
+    message:
+      'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
   };
 };
 
@@ -122,7 +135,8 @@ export const forgotUsernameService = async (email: string) => {
   await sendForgotUsernameEmail(email, user.username);
 
   return {
-    message: 'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
+    message:
+      'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
   };
 };
 
@@ -135,9 +149,14 @@ export const resendActivationEmailService = async (username: string, email: stri
   user.activationLink = activationLink;
   await user.save();
 
-  await resendActivationEmail(email, username, `${API_URL}/api/auth/verify-email/${activationLink}`);
+  await resendActivationEmail(
+    email,
+    username,
+    `${API_URL}/api/auth/verify-email/${activationLink}`,
+  );
 
   return {
-    message: 'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
+    message:
+      'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
   };
 };

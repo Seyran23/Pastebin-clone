@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
 
 export interface SyntaxHighlightsAttributes {
   id?: number;
@@ -20,7 +20,12 @@ export class SyntaxHighlights
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         language: { type: DataTypes.STRING, unique: true, allowNull: false },
       },
-      { sequelize, modelName: 'SyntaxHighlights', tableName: 'syntax_highlights', timestamps: false }
+      {
+        sequelize,
+        modelName: 'SyntaxHighlights',
+        tableName: 'syntax_highlights',
+        timestamps: false,
+      },
     );
     return SyntaxHighlights;
   }

@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
 
 export interface CommentAttributes {
   id?: number;
@@ -11,7 +11,10 @@ export interface CommentAttributes {
 
 type CommentCreationAttributes = Optional<CommentAttributes, 'id'>;
 
-export class Comment extends Model<CommentAttributes, CommentCreationAttributes> implements CommentAttributes {
+export class Comment
+  extends Model<CommentAttributes, CommentCreationAttributes>
+  implements CommentAttributes
+{
   declare id: number;
   declare content: string;
   declare paste_id: string;
@@ -34,7 +37,7 @@ export class Comment extends Model<CommentAttributes, CommentCreationAttributes>
           references: { model: 'users', key: 'id' },
         },
       },
-      { sequelize, modelName: 'Comment', tableName: 'comments', timestamps: true }
+      { sequelize, modelName: 'Comment', tableName: 'comments', timestamps: true },
     );
     return Comment;
   }

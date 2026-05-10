@@ -1,4 +1,5 @@
 import { Op } from 'sequelize';
+
 import { Paste } from '../db/models';
 import { deleteFileFromS3 } from '../modules/cloud/service';
 
@@ -6,7 +7,7 @@ const markExpiredPastes = async (): Promise<void> => {
   const now = Date.now();
   await Paste.update(
     { expired: true },
-    { where: { expiration_time: { [Op.lte]: now }, expired: false } }
+    { where: { expiration_time: { [Op.lte]: now }, expired: false } },
   );
 };
 
@@ -31,8 +32,15 @@ const deleteExpiredPastes = async (): Promise<void> => {
 };
 
 export const startExpiredPasteJobs = (): void => {
-  setInterval(markExpiredPastes, 60 * 1000);
-  setInterval(deleteExpiredPastes, 2 * 60 * 1000);
+  setInterval(() => {
+    void markExpiredPastes();
+  }, 60 * 1000);
+  setInterval(
+    () => {
+      void deleteExpiredPastes();
+    },
+    2 * 60 * 1000,
+  );
 };
 
-export { markExpiredPastes, deleteExpiredPastes };
+export { deleteExpiredPastes, markExpiredPastes };

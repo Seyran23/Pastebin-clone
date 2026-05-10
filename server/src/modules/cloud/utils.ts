@@ -30,12 +30,18 @@ export interface FileResult {
   textContent?: string;
 }
 
-export const formatImageFile = async (response: { Body: Readable; ContentType: string }): Promise<FileResult> => {
+export const formatImageFile = async (response: {
+  Body: Readable;
+  ContentType: string;
+}): Promise<FileResult> => {
   const { buffer, memoryAmount } = await streamToBuffer(response.Body);
   return { contentType: response.ContentType, buffer, memoryAmount, isImage: true };
 };
 
-export const formatTextFile = async (response: { Body: Readable; ContentType: string }): Promise<FileResult> => {
+export const formatTextFile = async (response: {
+  Body: Readable;
+  ContentType: string;
+}): Promise<FileResult> => {
   const { buffer, memoryAmount } = await streamToBuffer(response.Body);
   return {
     contentType: response.ContentType,

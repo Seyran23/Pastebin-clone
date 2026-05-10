@@ -10,9 +10,8 @@ interface EmailTemplate {
   html: string;
 }
 
-type TemplateMap = Record<string, (data: TemplateData) => EmailTemplate>;
+type TemplateMap = Record<MailAction, (data: TemplateData) => EmailTemplate>;
 
-// Keys match MailActions values exactly
 const EMAIL_TEMPLATES: TemplateMap = {
   registration: ({ username, link }) => ({
     subject: 'Account registration at Pastebin',
@@ -24,13 +23,11 @@ const EMAIL_TEMPLATES: TemplateMap = {
     html: `<div><p>Hello ${username},</p><p>Your email has been changed. Follow the link below to verify your new email address:</p><a href="${link}">${link}</a></div>`,
   }),
 
-  // Fixed: was "forgetUsername" — didn't match MailActions.FORGOT_USERNAME = "forgotUsername"
   forgotUsername: ({ username }) => ({
     subject: 'Username Information',
     html: `<div><p>Hello ${username},</p><p>It seems you have requested a reminder of your Pastebin username.</p><p>Your Pastebin username is: <strong>${username}</strong></p></div>`,
   }),
 
-  // Fixed: was "forgetPassword" — didn't match MailActions.FORGOT_PASSWORD = "forgotPassword"
   forgotPassword: ({ username, link }) => ({
     subject: 'Password Reset for Pastebin',
     html: `<div><p>Hello ${username},</p><p>Click the link below to reset your password:</p><a href="${link}">${link}</a></div>`,

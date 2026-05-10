@@ -1,30 +1,3 @@
-"use strict";
-/** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("tokens", {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        references: {
-          model: "users",
-          key: "id",
-        },
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
-      },
-      refreshToken: {
-        type: Sequelize.STRING,
-      },
-    });
-  },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("tokens");
-  },
-};
-
-
 // migrations/20241014133051-create-token.js
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
@@ -36,18 +9,18 @@ module.exports = {
         primaryKey: true,
         autoIncrement: true,
       },
-      user_id: { // Foreign key to users.id (UUID)
+      user_id: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "users", // References the users table
+          model: "users", 
           key: "id",
         },
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       },
       refreshToken: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       createdAt: {

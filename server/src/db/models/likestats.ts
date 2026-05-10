@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
 
 export interface LikeStatsAttributes {
   id?: number;
@@ -11,7 +11,10 @@ export interface LikeStatsAttributes {
 
 type LikeStatsCreationAttributes = Optional<LikeStatsAttributes, 'id'>;
 
-export class LikeStats extends Model<LikeStatsAttributes, LikeStatsCreationAttributes> implements LikeStatsAttributes {
+export class LikeStats
+  extends Model<LikeStatsAttributes, LikeStatsCreationAttributes>
+  implements LikeStatsAttributes
+{
   declare id: number;
   declare paste_id: string;
   declare user_id: string;
@@ -42,7 +45,7 @@ export class LikeStats extends Model<LikeStatsAttributes, LikeStatsCreationAttri
         modelName: 'LikeStats',
         tableName: 'like_stats',
         indexes: [{ unique: true, fields: ['paste_id', 'user_id'] }],
-      }
+      },
     );
     return LikeStats;
   }

@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
 
 export interface PasteCategoryAttributes {
   id?: number;
@@ -20,7 +20,7 @@ export class PasteCategory
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         category_name: { type: DataTypes.STRING, unique: true, allowNull: false },
       },
-      { sequelize, modelName: 'PasteCategory', tableName: 'paste_categories', timestamps: false }
+      { sequelize, modelName: 'PasteCategory', tableName: 'paste_categories', timestamps: false },
     );
     return PasteCategory;
   }

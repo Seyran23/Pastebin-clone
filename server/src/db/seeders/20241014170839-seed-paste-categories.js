@@ -3,7 +3,6 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert('paste_categories', [
-      { category_name: 'None' },
       { category_name: 'Cryptocurrency' },
       { category_name: 'Cybersecurity' },
       { category_name: 'Fixit' },

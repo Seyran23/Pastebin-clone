@@ -1,15 +1,14 @@
-import express from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import express from 'express';
 
-import { PORT, CLIENT_URL } from './utils/env';
 import { sequelize } from './db/models';
 import { errorHandler } from './middlewares/error-handler';
-import { startExpiredPasteJobs } from './services/expiredPastes.service';
-
 import authRouter from './modules/auth/route';
 import pasteRouter from './modules/paste/route';
 import userRouter from './modules/user/route';
+import { startExpiredPasteJobs } from './services/expiredPastes.service';
+import { CLIENT_URL, PORT } from './utils/env';
 
 const app = express();
 
@@ -25,12 +24,12 @@ app.use(errorHandler);
 
 const startServer = async (): Promise<void> => {
   await sequelize.sync({ alter: true });
-  console.log('Database synchronized');
+  console.info('Database synchronized');
 
   startExpiredPasteJobs();
 
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.info(`Server running on port ${PORT}`);
   });
 };
 

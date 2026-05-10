@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
 
 export interface ExpirationTimeAttributes {
   id?: number;
@@ -23,7 +23,7 @@ export class ExpirationTime
         label: { type: DataTypes.STRING, unique: true, allowNull: false },
         duration: { type: DataTypes.BIGINT, allowNull: true },
       },
-      { sequelize, modelName: 'ExpirationTime', tableName: 'expiration_times', timestamps: false }
+      { sequelize, modelName: 'ExpirationTime', tableName: 'expiration_times', timestamps: false },
     );
     return ExpirationTime;
   }

@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
 
 export interface TokenAttributes {
   id?: number;
@@ -10,7 +10,10 @@ export interface TokenAttributes {
 
 type TokenCreationAttributes = Optional<TokenAttributes, 'id'>;
 
-export class Token extends Model<TokenAttributes, TokenCreationAttributes> implements TokenAttributes {
+export class Token
+  extends Model<TokenAttributes, TokenCreationAttributes>
+  implements TokenAttributes
+{
   declare id: number;
   declare user_id: string;
   declare refreshToken: string;
@@ -29,7 +32,7 @@ export class Token extends Model<TokenAttributes, TokenCreationAttributes> imple
         },
         refreshToken: { type: DataTypes.TEXT, allowNull: false },
       },
-      { sequelize, modelName: 'Token', tableName: 'tokens', timestamps: true }
+      { sequelize, modelName: 'Token', tableName: 'tokens', timestamps: true },
     );
     return Token;
   }

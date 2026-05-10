@@ -1,4 +1,5 @@
-import type { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import type { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
+
 import { NODE_ENV } from '../utils/env';
 
 export class AppError extends Error {
@@ -17,7 +18,12 @@ export class AppError extends Error {
   }
 }
 
-export const errorHandler: ErrorRequestHandler = (err: AppError, _req: Request, res: Response, _next: NextFunction) => {
+export const errorHandler: ErrorRequestHandler = (
+  err: AppError,
+  _req: Request,
+  res: Response,
+  _next: NextFunction,
+) => {
   const statusCode = err.statusCode || 500;
   const status = err.status || 'error';
 
@@ -28,7 +34,7 @@ export const errorHandler: ErrorRequestHandler = (err: AppError, _req: Request, 
   res.status(statusCode).json({
     status,
     message: err.message,
-    errors: err.errors ?? [],
+    errors: err.errors,
     ...(NODE_ENV === 'development' && { stack: err.stack }),
   });
 };

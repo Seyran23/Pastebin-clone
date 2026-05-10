@@ -1,21 +1,22 @@
 import jwt from 'jsonwebtoken';
-import {
-  JWT_ACCESS_TOKEN,
-  JWT_REFRESH_TOKEN,
-  JWT_RESET_TOKEN,
-  JWT_ACCESS_TOKEN_EXPIRATION_TIME,
-  JWT_REFRESH_TOKEN_EXPIRATION_TIME,
-} from '../utils/env';
+
 import { Token } from '../db/models';
 import type { AuthUser } from '../types/express';
+import {
+  JWT_ACCESS_TOKEN,
+  JWT_ACCESS_TOKEN_EXPIRATION_TIME,
+  JWT_REFRESH_TOKEN,
+  JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+  JWT_RESET_TOKEN,
+} from '../utils/env';
 
 type TokenPayload = AuthUser;
 
 export const generateTokens = (payload: TokenPayload) => {
-  const accessToken = jwt.sign(payload as object, JWT_ACCESS_TOKEN, {
+  const accessToken = jwt.sign(payload, JWT_ACCESS_TOKEN, {
     expiresIn: JWT_ACCESS_TOKEN_EXPIRATION_TIME,
   });
-  const refreshToken = jwt.sign(payload as object, JWT_REFRESH_TOKEN, {
+  const refreshToken = jwt.sign(payload, JWT_REFRESH_TOKEN, {
     expiresIn: JWT_REFRESH_TOKEN_EXPIRATION_TIME,
   });
   return { accessToken, refreshToken };

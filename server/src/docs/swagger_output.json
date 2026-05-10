@@ -1,0 +1,1509 @@
+{
+  "definitions": {},
+  "host": "localhost:8080",
+  "info": {
+    "title": "server",
+    "version": "1.0.0",
+    "license": {
+      "name": "ISC"
+    },
+    "description": "Specification JSONs: [v2](/api-spec/v2), [v3](/api-spec/v3)."
+  },
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "summary": "/api/auth/signup",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "seyran2307"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "seyranm230@gmail.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "******"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiMTVkNzIzLWJiOWQtNDhiZS05NWYyLTg3YTNlNmFiMTZkYyIsInVzZXJuYW1lIjoic2V5cmFuMjMwNyIsInJvbGUiOiJ1c2VyIiwiaXNBY3RpdmF0ZWQiOmZhbHNlLCJpYXQiOjE3NDU2NzkxNjQsImV4cCI6MTc0NTY4Mjc2NH0.I3bnzuSHhcC5l2AyRy-bf-K0TYQsEkqhsvIJmgu7M4g"
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "1b15d723-bb9d-48be-95f2-87a3e6ab16dc"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "seyran2307"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "seyranm230@gmail.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "user"
+                    },
+                    "isActivated": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "location": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-04-26T14:52:44.963Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "msg": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "location": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["type", "msg", "path", "location"]
+                  },
+                  "example": [
+                    {
+                      "type": "field",
+                      "msg": "Email is required",
+                      "path": "email",
+                      "location": "body"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "fail"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "User with this username exits"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {},
+                  "example": [null]
+                },
+                "stack": {
+                  "type": "string",
+                  "example": "Error: User with this username exits\n    at signupService (D:\\Seyran\\Div\\pastebin-clone\\server\\src\\modules\\auth\\service.js:29:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async signup (D:\\Seyran\\Div\\pastebin-clone\\server\\src\\modules\\auth\\controller.js:15:49)"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "User with this username exits"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["auth"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "/api/auth/login",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "usa23"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "******"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzYTIzIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3NDQ0NDU2MjIsImV4cCI6MTc0NDQ0OTIyMn0.hnkkqQT9MmpZUWBXfI938XzGsMMwDxultqKsglz9Vt8"
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "2c92f0a5-028a-4535-b300-87016a5189e8"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "usa23"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "usa40paralel@gmail.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "user"
+                    },
+                    "isActivated": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "location": {
+                      "type": "string",
+                      "example": ""
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "value too long for type character varying(255)"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["auth"],
+        "produces": ["application/json"]
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "/api/auth/logout",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["auth"]
+      }
+    },
+    "/api/auth/forgot-password": {
+      "post": {
+        "summary": "/api/auth/forgot-password",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["auth"]
+      }
+    },
+    "/api/auth/forgot-username": {
+      "post": {
+        "summary": "/api/auth/forgot-username",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["auth"]
+      }
+    },
+    "/api/authresend-activation": {
+      "post": {
+        "summary": "/api/authresend-activation",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["auth"]
+      }
+    },
+    "/api/auth/refresh": {
+      "get": {
+        "summary": "/api/auth/refresh",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["auth"]
+      }
+    },
+    "/api/auth/verify-email/{activationLink}": {
+      "get": {
+        "summary": "/api/auth/verify-email/{activationLink}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "activationLink",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "7c689a83-4f11-4ca6-9435-1717a756344e"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU3ZTBkODVhLTE0MTctNDk4YS1iNjVjLTRlN2EzZjg1ZDNlMyIsInVzZXJuYW1lIjoic2V5cmFuMjMwNyIsInJvbGUiOiJ1c2VyIiwiaXNBY3RpdmF0ZWQiOnRydWUsImlhdCI6MTc0NTg1NDE4NywiZXhwIjoxNzQ1ODU3Nzg3fQ.9Bpzb3EzSwtARfW1lnbWl0HRWD5Dgoood8OeNeMvs90"
+                },
+                "user": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "e7e0d85a-1417-498a-b65c-4e7a3f85d3e3"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "seyran2307"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "seyranm230@gmail.com"
+                    },
+                    "role": {
+                      "type": "string",
+                      "example": "user"
+                    },
+                    "isActivated": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "location": {
+                      "type": "string",
+                      "example": ""
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-04-28T15:29:27.430Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "302": {
+            "description": "Found",
+            "schema": {
+              "type": "string",
+              "example": "<p>Found. Redirecting to http://localhost:3000/user/profile</p>"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "fail"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Inaccurate link for activation"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {},
+                  "example": [null]
+                },
+                "stack": {
+                  "type": "string",
+                  "example": "Error: Inaccurate link for activation\n    at activateProfileService (D:\\Seyran\\Div\\pastebin-clone\\server\\src\\modules\\auth\\service.js:129:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async activateProfile (D:\\Seyran\\Div\\pastebin-clone\\server\\src\\modules\\auth\\controller.js:94:47)"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Cannot destructure property 'id' of 'req.user' as it is undefined."
+                },
+                "stack": {
+                  "type": "string",
+                  "example": "TypeError: Cannot destructure property 'id' of 'req.user' as it is undefined.\n    at activateProfile (D:\\Seyran\\Div\\pastebin-clone\\server\\src\\modules\\auth\\controller.js:90:16)\n    at Layer.handle [as handle_request] (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at handleValidationErrors (D:\\Seyran\\Div\\pastebin-clone\\server\\src\\middlewares\\validation-error.middleware.js:10:3)\n    at Layer.handle [as handle_request] (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at middleware (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express-validator\\lib\\middlewares\\check.js:16:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["auth"],
+        "produces": ["text/html", "application/json"],
+        "security": [
+          {
+            "x-browser-channel": []
+          },
+          {
+            "x-browser-year": []
+          },
+          {
+            "x-browser-validation": []
+          },
+          {
+            "x-browser-copyright": []
+          },
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/api/users/profile/{username}": {
+      "get": {
+        "summary": "/api/users/profile/{username}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/users/profile/{username}/pastes": {
+      "get": {
+        "summary": "/api/users/profile/{username}/pastes",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Comment is associated to Paste using an alias. You must use the 'as' keyword to specify the alias within your include statement."
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users", "pastes"],
+        "produces": ["application/json"]
+      }
+    },
+    "/api/users/stats/{username}": {
+      "get": {
+        "summary": "/api/users/stats/{username}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "usa23"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "totalActivePastes": {
+                  "type": "number",
+                  "example": 3
+                },
+                "publicPastes": {
+                  "type": "number",
+                  "example": 1
+                },
+                "unlistedPastes": {
+                  "type": "number",
+                  "example": 1
+                },
+                "privatePastes": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "pageViews is not defined"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/api/users/edit/profile-details": {
+      "patch": {
+        "summary": "/api/users/edit/profile-details",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/users/edit/profile-avatar": {
+      "patch": {
+        "summary": "/api/users/edit/profile-avatar",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/users/change-password": {
+      "patch": {
+        "summary": "/api/users/change-password",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["users"]
+      },
+      "put": {
+        "summary": "/api/users/change-password",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/users/{id}": {
+      "delete": {
+        "summary": "/api/users/{id}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/pastes/categories": {
+      "get": {
+        "summary": "/api/pastes/categories",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/expiration-time": {
+      "get": {
+        "summary": "/api/pastes/expiration-time",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/syntax-highlights": {
+      "get": {
+        "summary": "/api/pastes/syntax-highlights",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/summary": {
+      "get": {
+        "summary": "/api/pastes/summary",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "size": {
+                        "type": "number"
+                      },
+                      "syntax": {
+                        "type": "string"
+                      },
+                      "exposure": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["id", "title", "date", "size", "syntax", "exposure"]
+                  },
+                  "example": [
+                    {
+                      "id": "d402388d-c6fd-4d3f-a871-5d8ccadc84d6",
+                      "title": "Meeting Notes 2024-04-15",
+                      "date": "2025-04-10T08:48:06.056Z",
+                      "size": 101,
+                      "syntax": "text",
+                      "exposure": "public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized: Invalid token"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Authentication required"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["pastes"],
+        "produces": ["application/json"]
+      }
+    },
+    "/api/pastes/search": {
+      "get": {
+        "summary": "/api/pastes/search",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "link": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "expiresAt": {
+                        "type": "null"
+                      },
+                      "syntaxHighlight": {
+                        "type": "string"
+                      },
+                      "author": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "example": [
+                    {
+                      "id": "488fd830-2879-47fb-80fd-4390d92bff4b",
+                      "name": "Data Analysis Script",
+                      "link": "8QuFavEQ",
+                      "createdAt": "2025-04-10T08:44:29.372Z",
+                      "expiresAt": null,
+                      "syntaxHighlight": "C#",
+                      "author": "seyran23"
+                    }
+                  ]
+                },
+                "pagination": {
+                  "type": "object",
+                  "properties": {
+                    "hasNextPage": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "hasPrevPage": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "nextCursor": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "prevCursor": {
+                      "type": "string",
+                      "example": "2025-04-10T08:44:29.372Z"
+                    },
+                    "itemsPerPage": {
+                      "type": "number",
+                      "example": 10
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "sequelize is not defined"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["pastes"],
+        "produces": ["application/json"]
+      }
+    },
+    "/api/pastes/search-self": {
+      "get": {
+        "summary": "/api/pastes/search-self",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "link": {
+                    "type": "string"
+                  },
+                  "added": {
+                    "type": "string"
+                  },
+                  "expires": {
+                    "type": ["string", "null"]
+                  },
+                  "comments": {
+                    "type": "string"
+                  },
+                  "syntax": {
+                    "type": "string"
+                  }
+                },
+                "required": ["id", "name", "link", "added", "expires", "comments", "syntax"]
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized: Invalid Token"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Comment is associated to Paste using an alias. You must use the 'as' keyword to specify the alias within your include statement."
+                }
+              }
+            }
+          }
+        },
+        "tags": ["pastes"],
+        "produces": ["application/json"]
+      }
+    },
+    "/api/pastes/like-stats/{id}": {
+      "get": {
+        "summary": "/api/pastes/like-stats/{id}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/{link}": {
+      "get": {
+        "summary": "/api/pastes/{link}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "link",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "example": "FTerIy5w"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "pasteData": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "88ae4849-ae07-489d-a034-1201eafb6a66"
+                    },
+                    "createdBy": {
+                      "type": "string",
+                      "example": "24eeb68d-6948-43c9-8c24-2de0824c902a"
+                    },
+                    "title": {
+                      "type": "string",
+                      "example": "API Endpoints Reference"
+                    },
+                    "linkEndpoint": {
+                      "type": "string",
+                      "example": "0PKDDtuN"
+                    },
+                    "exposure": {
+                      "type": "string",
+                      "example": "unlisted"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2025-04-10T08:44:12.650Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2025-04-10T08:44:12.650Z"
+                    },
+                    "expirationTime": {
+                      "type": "null",
+                      "example": null
+                    },
+                    "size": {
+                      "type": "number",
+                      "example": 131
+                    },
+                    "category": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "Cybersecurity"
+                        }
+                      }
+                    },
+                    "syntaxHighlight": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "number",
+                          "example": 9
+                        },
+                        "name": {
+                          "type": "string",
+                          "example": "JavaScript"
+                        }
+                      }
+                    },
+                    "content": {
+                      "type": "string",
+                      "example": "## User API\n- `GET /users` - List all users\n- `POST /users` - Create new user\n\n## Posts API\n- `GET /posts/{id}` - Get specific post"
+                    },
+                    "contentType": {
+                      "type": "string",
+                      "example": "text/plain"
+                    }
+                  }
+                },
+                "owner": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "24eeb68d-6948-43c9-8c24-2de0824c902a"
+                    },
+                    "username": {
+                      "type": "string",
+                      "example": "seyran23"
+                    }
+                  }
+                },
+                "remainingTime": {
+                  "type": "null",
+                  "example": null
+                },
+                "requiresPassword": {
+                  "type": "boolean",
+                  "example": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "error"
+                },
+                "message": {
+                  "type": "string",
+                  "example": "AppError is not defined"
+                },
+                "stack": {
+                  "type": "string",
+                  "example": "ReferenceError: AppError is not defined\n    at authMiddleware (D:\\Seyran\\Div\\pastebin-clone\\server\\src\\modules\\auth\\middleware.js:26:20)\n    at Layer.handle [as handle_request] (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:284:15\n    at param (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:365:14)\n    at param (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:376:14)\n    at Function.process_params (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:421:3)\n    at next (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:280:10)"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["pastes"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      },
+      "patch": {
+        "summary": "/api/pastes/{link}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "link",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/create": {
+      "post": {
+        "summary": "/api/pastes/create",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/unlock-paste": {
+      "post": {
+        "summary": "/api/pastes/unlock-paste",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/like/{id}": {
+      "post": {
+        "summary": "/api/pastes/like/{id}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/comment/{id}": {
+      "post": {
+        "summary": "/api/pastes/comment/{id}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["pastes"]
+      },
+      "delete": {
+        "summary": "/api/pastes/comment/{id}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/pastes/{id}": {
+      "delete": {
+        "summary": "/api/pastes/{id}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["pastes"]
+      }
+    },
+    "/api/auth/email-test": {
+      "post": {
+        "summary": "/api/auth/email-test",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Email test successful"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["auth"],
+        "produces": ["application/json"]
+      }
+    },
+    "/api/users/resend-activation": {
+      "post": {
+        "summary": "/api/users/resend-activation",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/users/edit-profile-details": {
+      "put": {
+        "summary": "/api/users/edit-profile-details",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/users/edit-profile-avatar": {
+      "put": {
+        "summary": "/api/users/edit-profile-avatar",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Avatar updated successfully"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "string",
+              "example": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>ReferenceError: errorResMsg is not defined<br> &nbsp; &nbsp;at D:\\Seyran\\Div\\pastebin-clone\\server\\src\\index.js:48:5<br> &nbsp; &nbsp;at Layer.handle [as handle_request] (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\layer.js:95:5)<br> &nbsp; &nbsp;at trim_prefix (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:328:13)<br> &nbsp; &nbsp;at D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:286:9<br> &nbsp; &nbsp;at Function.process_params (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:346:12)<br> &nbsp; &nbsp;at next (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:280:10)<br> &nbsp; &nbsp;at D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express-oas-generator\\index.js:475:7<br> &nbsp; &nbsp;at Layer.handle [as handle_request] (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\layer.js:95:5)<br> &nbsp; &nbsp;at trim_prefix (D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:328:13)<br> &nbsp; &nbsp;at D:\\Seyran\\Div\\pastebin-clone\\server\\node_modules\\express\\lib\\router\\index.js:286:9</pre>\n</body>\n</html>\n"
+            }
+          }
+        },
+        "tags": ["users"],
+        "produces": ["application/json", "text/html"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/api/users/test": {
+      "post": {
+        "summary": "/api/users/test",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fieldname": {
+                  "type": "string",
+                  "example": "avatar"
+                },
+                "originalname": {
+                  "type": "string",
+                  "example": "avatar-1ef8d302f8426230b3859b648b3736c0.png"
+                },
+                "encoding": {
+                  "type": "string",
+                  "example": "7bit"
+                },
+                "mimetype": {
+                  "type": "string",
+                  "example": "image/png"
+                },
+                "size": {
+                  "type": "number",
+                  "example": 107704
+                },
+                "bucket": {
+                  "type": "string",
+                  "example": "new-aws-project"
+                },
+                "key": {
+                  "type": "string",
+                  "example": "avatar-1f01f46dc20b6c30840278b2a77d7f50"
+                },
+                "acl": {
+                  "type": "string",
+                  "example": "private"
+                },
+                "contentType": {
+                  "type": "string",
+                  "example": "image/png"
+                },
+                "contentDisposition": {
+                  "type": "null",
+                  "example": null
+                },
+                "contentEncoding": {
+                  "type": "null",
+                  "example": null
+                },
+                "storageClass": {
+                  "type": "string",
+                  "example": "STANDARD"
+                },
+                "serverSideEncryption": {
+                  "type": "null",
+                  "example": null
+                },
+                "location": {
+                  "type": "string",
+                  "example": "https://new-aws-project.s3.us-east-1.amazonaws.com/avatar-1f01f46dc20b6c30840278b2a77d7f50"
+                },
+                "etag": {
+                  "type": "string",
+                  "example": "\"6dd4c37120786bed1cbe10f83e03faa7\""
+                }
+              }
+            }
+          }
+        },
+        "tags": ["users"],
+        "produces": ["application/json"]
+      }
+    },
+    "/api/users/test/{filename}": {
+      "get": {
+        "summary": "/api/users/test/{filename}",
+        "consumes": ["application/json"],
+        "parameters": [
+          {
+            "name": "filename",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {},
+        "tags": ["users"]
+      }
+    },
+    "/api/pastes/summary/mine": {
+      "get": {
+        "summary": "/api/pastes/summary/mine",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "size": {
+                        "type": "number"
+                      },
+                      "syntax": {
+                        "type": "string"
+                      },
+                      "exposure": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["id", "title", "date", "size", "syntax", "exposure"]
+                  },
+                  "example": [
+                    {
+                      "id": "112f6b9a-b9af-46a1-a9cb-83b34b56e7f9",
+                      "title": "User Analytics Query",
+                      "date": "2025-04-10T08:49:38.836Z",
+                      "size": 125,
+                      "syntax": "CSS",
+                      "exposure": "private"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Authentication required"
+                }
+              }
+            }
+          }
+        },
+        "tags": ["pastes"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    },
+    "/api/pastes/summary/public": {
+      "get": {
+        "summary": "/api/pastes/summary/public",
+        "consumes": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "date": {
+                        "type": "string"
+                      },
+                      "size": {
+                        "type": "number"
+                      },
+                      "syntax": {
+                        "type": "string"
+                      },
+                      "exposure": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["id", "title", "date", "size", "syntax", "exposure"]
+                  },
+                  "example": [
+                    {
+                      "id": "d402388d-c6fd-4d3f-a871-5d8ccadc84d6",
+                      "title": "Meeting Notes 2024-04-15",
+                      "date": "2025-04-10T08:48:06.056Z",
+                      "size": 101,
+                      "syntax": "text",
+                      "exposure": "public"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": ["pastes"],
+        "produces": ["application/json"],
+        "security": [
+          {
+            "authorization": []
+          }
+        ]
+      }
+    }
+  },
+  "schemes": ["https", "http"],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "securityDefinitions": {
+    "bearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Please enter your token with 'Bearer ' prefix (e.g., 'Bearer your-token-here')."
+    },
+    "authorization": {
+      "name": "authorization",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-browser-channel": {
+      "name": "x-browser-channel",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-browser-year": {
+      "name": "x-browser-year",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-browser-validation": {
+      "name": "x-browser-validation",
+      "in": "header",
+      "type": "apiKey"
+    },
+    "x-browser-copyright": {
+      "name": "x-browser-copyright",
+      "in": "header",
+      "type": "apiKey"
+    }
+  },
+  "swagger": "2.0",
+  "tags": [
+    {
+      "name": "auth"
+    },
+    {
+      "name": "users"
+    },
+    {
+      "name": "pastes"
+    }
+  ]
+}

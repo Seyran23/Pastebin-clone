@@ -1,4 +1,4 @@
-import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional, type Sequelize } from 'sequelize';
 
 export interface UserAttributes {
   id: string;
@@ -45,7 +45,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
         avatar: { type: DataTypes.STRING, defaultValue: null, allowNull: true },
         location: { type: DataTypes.STRING, defaultValue: null, allowNull: true },
       },
-      { sequelize, tableName: 'users', timestamps: true }
+      { sequelize, tableName: 'users', timestamps: true },
     );
     return User;
   }
