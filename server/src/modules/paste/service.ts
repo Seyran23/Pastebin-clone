@@ -1,19 +1,31 @@
-import { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
-import redisClient from '../../utils/redis';
-import { deleteFileFromS3 } from '../cloud/service';
-import { PasteDto } from './dto';
+import { Op } from 'sequelize';
+
 import {
-  User, Paste, SyntaxHighlights, PasteCategory,
-  ExpirationTime, LikeStats, Comment, sequelize,
+  Comment,
+  ExpirationTime,
+  LikeStats,
+  Paste,
+  PasteCategory,
+  sequelize,
+  SyntaxHighlights,
+  User,
 } from '../../db/models';
 import type { PasteCreationAttributes } from '../../db/models/paste';
-import { validateExpiration } from './validator';
-import {
-  formatPasteContent, formatPasteResponse, calculateRemainingTime,
-  formatPasteSummaries, buildOrder, parseTimeFilter,
-} from './utils';
 import { AppError } from '../../middlewares/error-handler';
+import redisClient from '../../utils/redis';
+import { deleteFileFromS3 } from '../cloud/service';
+
+import { PasteDto } from './dto';
+import {
+  buildOrder,
+  calculateRemainingTime,
+  formatPasteContent,
+  formatPasteResponse,
+  formatPasteSummaries,
+  parseTimeFilter,
+} from './utils';
+import { validateExpiration } from './validator';
 
 // ─── Lookup caches ───────────────────────────────────────────────────────────
 
@@ -58,11 +70,12 @@ export const getPasteMetadataService = async (link: string) => {
   });
 
   if (!paste) throw new AppError(404, 'Paste not found');
+  if (!paste.user) throw new AppError(500, 'Paste owner not found');
 
   return {
     paste,
     requiresPassword: !!paste.password,
-    owner: paste.user!,
+    owner: paste.user,
     exposure: paste.exposure,
     expiration: paste.expiration_time,
   };
@@ -72,7 +85,7 @@ export const processPasteContentService = async (paste: Paste) => {
   validateExpiration(paste.expiration_time);
   const fileData = await formatPasteContent(paste);
   const remainingTime = calculateRemainingTime(paste.expiration_time);
-  return formatPasteResponse(paste as Paste & { user?: User | null }, fileData, remainingTime);
+  return formatPasteResponse(paste, fileData, remainingTime);
 };
 
 export const getProfilePastesService = async (username: string, requestingUser?: string) => {
@@ -91,7 +104,12 @@ export const getProfilePastesService = async (username: string, requestingUser?:
       { model: SyntaxHighlights, attributes: ['language'], as: 'syntaxHighlight' },
     ],
     attributes: [
-      'id', 'name', 'link_endpoint', 'exposure', 'createdAt', 'expiration_time',
+      'id',
+      'name',
+      'link_endpoint',
+      'exposure',
+      'createdAt',
+      'expiration_time',
       [sequelize.fn('COUNT', sequelize.col('comments.id')), 'commentsCount'],
     ],
     group: ['Paste.id', 'syntaxHighlight.id'],
@@ -132,7 +150,10 @@ export const createPasteService = async (pasteData: PasteCreationAttributes) => 
   return new PasteDto(newPaste);
 };
 
-export const updatePasteByLinkService = async (link: string, updateData: Record<string, unknown>) => {
+export const updatePasteByLinkService = async (
+  link: string,
+  updateData: Record<string, unknown>,
+) => {
   const paste = await Paste.findOne({ where: { link_endpoint: link } });
   if (!paste) return null;
 
@@ -169,7 +190,7 @@ export const searchPastesService = async (query: Record<string, string>) => {
   } = query;
 
   const order = buildOrder(sort) as [[string, string]];
-  const [orderField, defaultDir] = order[0]!;
+  const [orderField, defaultDir] = order[0];
   const isDesc = defaultDir.toUpperCase() === 'DESC';
   const useDesc = direction === 'next' ? isDesc : !isDesc;
 
@@ -179,28 +200,36 @@ export const searchPastesService = async (query: Record<string, string>) => {
     name: { [Op.iLike]: `%${searchTerm}%` },
   };
 
-  if (category) where['category_id'] = category;
+  if (category) where.category_id = category;
 
   const timeFilter = parseTimeFilter(time);
-  if (timeFilter) where['createdAt'] = { [Op.gte]: timeFilter };
+  if (timeFilter) where.createdAt = { [Op.gte]: timeFilter };
 
   if (cursor) {
     const cursorDate = new Date(cursor);
     where[orderField] = {
-      ...(where[orderField] as object || {}),
+      ...(where[orderField] ?? {}),
       [useDesc ? Op.lt : Op.gt]: cursorDate,
     };
   }
 
   const results = await Paste.findAll({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
     where: where as any,
     include: [
       { model: User, as: 'user', attributes: ['username', 'avatar', 'id'] },
       { model: PasteCategory, as: 'category', attributes: ['id', 'category_name'] },
       { model: SyntaxHighlights, as: 'syntaxHighlight', attributes: ['id', 'language'] },
     ],
-    attributes: ['id', 'name', 'link_endpoint', 'createdAt', 'size', 'expiration_time', 'cloud_name'],
+    attributes: [
+      'id',
+      'name',
+      'link_endpoint',
+      'createdAt',
+      'size',
+      'expiration_time',
+      'cloud_name',
+    ],
     order: [[orderField, useDesc ? 'DESC' : 'ASC']],
     limit: Number(limit) + 1,
   });
@@ -231,7 +260,7 @@ export const searchPastesService = async (query: Record<string, string>) => {
         remainingTime: processed.remainingTime,
         starCount: stats.likes + stats.dislikes,
       };
-    })
+    }),
   );
 
   return {
@@ -239,8 +268,13 @@ export const searchPastesService = async (query: Record<string, string>) => {
     pagination: {
       hasNextPage: direction === 'next' ? hasMore : Boolean(cursor),
       hasPrevPage: direction === 'prev' ? hasMore : Boolean(cursor),
-      nextCursor: hasMore ? (finalData[finalData.length - 1] as unknown as Record<string, unknown>)[orderField] : null,
-      prevCursor: finalData.length > 0 ? (finalData[0] as unknown as Record<string, unknown>)[orderField] : null,
+      nextCursor: hasMore
+        ? (finalData[finalData.length - 1] as unknown as Record<string, unknown>)[orderField]
+        : null,
+      prevCursor:
+        finalData.length > 0
+          ? (finalData[0] as unknown as Record<string, unknown>)[orderField]
+          : null,
       itemsPerPage: Number(limit),
     },
   };
@@ -254,7 +288,11 @@ export const searchMyPastesService = async (userId: string, title: string) => {
       { model: SyntaxHighlights, attributes: ['language'], as: 'syntaxHighlight' },
     ],
     attributes: [
-      'id', 'name', 'link_endpoint', 'createdAt', 'expiration_time',
+      'id',
+      'name',
+      'link_endpoint',
+      'createdAt',
+      'expiration_time',
       [sequelize.fn('COUNT', sequelize.col('comments.id')), 'commentsCount'],
     ],
     group: ['Paste.id', 'syntaxHighlight.id'],
@@ -288,10 +326,10 @@ export const getUserPasteSummariesService = async (userId: string) => {
 
 export const getPublicPasteSummariesService = async (excludeUserId?: string) => {
   const where: Record<string, unknown> = { exposure: 'public', password: null };
-  if (excludeUserId) where['createdBy'] = { [Op.ne]: excludeUserId };
+  if (excludeUserId) where.createdBy = { [Op.ne]: excludeUserId };
 
   const pastes = await Paste.findAll({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment
     where: where as any,
     include: [
       { model: SyntaxHighlights, as: 'syntaxHighlight', attributes: ['id', 'language'] },
