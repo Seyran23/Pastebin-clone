@@ -1,37 +1,57 @@
-import type { Request, Response, NextFunction } from 'express';
-import { User, ExpirationTime } from '../../db/models';
-import {
-  getCategoriesService, getHighlightsService, getExpirationTimeService,
-  toggleLikeService, getLikeStatsService, createCommentService,
-  createPasteService, deletePasteService, deleteCommentService,
-  unlockPasteService, getPasteMetadataService, processPasteContentService,
-  getUserPasteSummariesService, getPublicPasteSummariesService,
-  searchPastesService, searchMyPastesService, getProfilePastesService,
-  updatePasteByLinkService,
-} from './service';
+import type { NextFunction, Request, Response } from 'express';
+
+import { ExpirationTime, User } from '../../db/models';
+import { AppError } from '../../middlewares/error-handler';
+import attachAvatarImage from '../../utils/attachAvatar';
+import { getAuthUser } from '../../utils/getAuthUser';
 import hashingPassword from '../../utils/passwordHashing';
 import randomFileName from '../../utils/randomFileName';
 import { uploadFileToS3 } from '../cloud/service';
+
 import { getLinksFromCache, removeLinkFromCache } from './paste-link.service';
-import { AppError } from '../../middlewares/error-handler';
-import attachAvatarImage from '../../utils/attachAvatar';
+import {
+  createCommentService,
+  createPasteService,
+  deleteCommentService,
+  deletePasteService,
+  getCategoriesService,
+  getExpirationTimeService,
+  getHighlightsService,
+  getLikeStatsService,
+  getPasteMetadataService,
+  getProfilePastesService,
+  getPublicPasteSummariesService,
+  getUserPasteSummariesService,
+  processPasteContentService,
+  searchMyPastesService,
+  searchPastesService,
+  toggleLikeService,
+  unlockPasteService,
+  updatePasteByLinkService,
+} from './service';
 
 export const getCategories = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.status(200).json(await getCategoriesService());
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getSyntaxHighlights = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.status(200).json(await getHighlightsService());
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getExpirationTime = async (_req: Request, res: Response, next: NextFunction) => {
   try {
     res.status(200).json(await getExpirationTimeService());
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getPasteByLink = async (req: Request, res: Response, next: NextFunction) => {
@@ -65,7 +85,9 @@ export const getPasteByLink = async (req: Request, res: Response, next: NextFunc
 
     // Bug fix: removed dangling `await` that caused TypeError
     res.status(200).json({ ...content, requiresPassword: false });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getProfilePastes = async (req: Request, res: Response, next: NextFunction) => {
@@ -73,14 +95,18 @@ export const getProfilePastes = async (req: Request, res: Response, next: NextFu
     const { username } = req.params as { username: string };
     const requestingUser = req.user?.username;
     res.status(200).json(await getProfilePastesService(username, requestingUser));
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const unlockPaste = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { link, password } = req.body as { link: string; password: string };
     res.status(200).json(await unlockPasteService(link, password));
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const createPaste = async (req: Request, res: Response, next: NextFunction) => {
@@ -102,7 +128,7 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
     };
 
     let { password } = req.body as { password?: string };
-    const { username } = req.user!;
+    const { username } = getAuthUser(req);
 
     const randomName = randomFileName('text');
     await uploadFileToS3(randomName, content, 'text/plain');
@@ -142,26 +168,35 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
 
     await removeLinkFromCache();
     res.status(200).json(newPaste);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const deletePaste = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json(await deletePasteService(String(req.params['id'])));
-  } catch (err) { next(err); }
+    res.status(200).json(await deletePasteService(String(req.params.id)));
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const searchPastes = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.status(200).json(await searchPastesService(req.query as Record<string, string>));
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const searchMyPastes = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { title = '' } = req.query as { title?: string };
-    res.status(200).json(await searchMyPastesService(req.user!.id, title));
-  } catch (err) { next(err); }
+    const { id } = getAuthUser(req);
+    res.status(200).json(await searchMyPastesService(id, title));
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getPasteSummary = async (req: Request, res: Response, next: NextFunction) => {
@@ -171,7 +206,7 @@ export const getPasteSummary = async (req: Request, res: Response, next: NextFun
 
     let result;
     if (type === 'mine') {
-      result = await getUserPasteSummariesService(userId!);
+      result = await getUserPasteSummariesService(getAuthUser(req).id);
     } else if (type === 'public') {
       result = await getPublicPasteSummariesService(userId);
     } else {
@@ -179,7 +214,9 @@ export const getPasteSummary = async (req: Request, res: Response, next: NextFun
     }
 
     res.status(200).json(result);
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const updatePasteByLink = async (req: Request, res: Response, next: NextFunction) => {
@@ -188,33 +225,45 @@ export const updatePasteByLink = async (req: Request, res: Response, next: NextF
     const updated = await updatePasteByLinkService(link, req.body as Record<string, unknown>);
     if (!updated) throw new AppError(404, 'Paste not found');
     res.status(200).json({ message: 'Paste updated successfully', paste: updated });
-  } catch (err) { next(err); }
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const togglePasteLike = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params as { id: string };
     const { isLike } = req.body as { isLike: boolean };
-    res.status(200).json(await toggleLikeService(req.user!.username, id, isLike));
-  } catch (err) { next(err); }
+    const { username } = getAuthUser(req);
+    res.status(200).json(await toggleLikeService(username, id, isLike));
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const getLikeStats = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json(await getLikeStatsService(String(req.params['id'])));
-  } catch (err) { next(err); }
+    res.status(200).json(await getLikeStatsService(String(req.params.id)));
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const createComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { content } = req.body as { content: string };
     const { id } = req.params as { id: string };
-    res.status(200).json(await createCommentService(content, id, req.user!.username));
-  } catch (err) { next(err); }
+    const { username } = getAuthUser(req);
+    res.status(200).json(await createCommentService(content, id, username));
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json(await deleteCommentService(String(req.params['id'])));
-  } catch (err) { next(err); }
+    res.status(200).json(await deleteCommentService(String(req.params.id)));
+  } catch (err) {
+    next(err);
+  }
 };
