@@ -17,6 +17,7 @@ import {
   resetPasswordToken,
   saveToken,
   validateRefreshToken,
+  validateResetToken,
 } from '@/services/token.service';
 import attachAvatarImage from '@/utils/attachAvatar';
 import { API_URL, CLIENT_URL } from '@/utils/env';
@@ -135,6 +136,19 @@ export const forgotUsernameService = async (email: string) => {
     message:
       'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
   };
+};
+
+export const resetPasswordService = async (token: string, newPassword: string) => {
+  const payload = validateResetToken(token);
+  if (!payload) throw new AppError(400, 'Invalid or expired reset token');
+
+  const user = await User.findByPk(payload.id);
+  if (!user) throw new AppError(404, 'User not found');
+
+  const hashed = await hashingPassword(newPassword);
+  await user.update({ password: hashed });
+
+  return { message: 'Password has been reset successfully' };
 };
 
 export const resendActivationEmailService = async (username: string, email: string) => {

@@ -42,3 +42,12 @@ export const validateEmail = [
     .isEmail()
     .withMessage('Invalid email format'),
 ];
+
+export const validateResetPassword = [
+  body('token').notEmpty().withMessage('Reset token is required'),
+  body('newPassword')
+    .notEmpty()
+    .withMessage('New password is required')
+    .isLength({ min: 6, max: 20 })
+    .withMessage('Password must be between 6 and 20 characters'),
+];

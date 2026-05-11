@@ -8,6 +8,7 @@ import {
   logoutService,
   refreshService,
   resendActivationEmailService,
+  resetPasswordService,
   signupService,
 } from './service';
 
@@ -92,6 +93,15 @@ export const resendActivationLink = async (req: Request, res: Response, next: Ne
   try {
     const { username, email } = req.body as { username: string; email: string };
     res.status(200).json(await resendActivationEmailService(username, email));
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const resetPassword = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { token, newPassword } = req.body as { token: string; newPassword: string };
+    res.status(200).json(await resetPasswordService(token, newPassword));
   } catch (err) {
     next(err);
   }

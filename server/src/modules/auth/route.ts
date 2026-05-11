@@ -10,12 +10,14 @@ import {
   logout,
   refresh,
   resendActivationLink,
+  resetPassword,
   signup,
 } from './controller';
 import { authMiddleware } from './middleware';
 import {
   validateEmail,
   validateLogin,
+  validateResetPassword,
   validateSignup,
   validateUsername,
   validateUUIDParam,
@@ -30,6 +32,7 @@ router.post('/forgot-password', validateUsername, handleValidationErrors, forgot
 router.post('/forgot-username', validateEmail, handleValidationErrors, forgotUsername);
 
 router.post('/resend-activation', validateUsername, handleValidationErrors, resendActivationLink);
+router.post('/reset-password', validateResetPassword, handleValidationErrors, resetPassword);
 
 router.get('/refresh', refresh);
 router.get(
