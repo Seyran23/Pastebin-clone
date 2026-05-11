@@ -30,6 +30,15 @@ export default tseslint.config(
       import: importPlugin,
     },
 
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
+        },
+      },
+    },
+
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
