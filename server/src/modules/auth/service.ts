@@ -57,6 +57,7 @@ export const loginService = async (username: string, password: string) => {
   const user = await User.findOne({ where: { username } });
   if (!user) throw new AppError(404, "User with this username doesn't exist");
 
+  if (!user.password) throw new AppError(401, 'This account uses Google sign-in');
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new AppError(401, 'Incorrect password');
 

@@ -119,7 +119,8 @@ export const changePasswordService = async (
   const user = await User.findOne({ where: { username } });
   if (!user) throw new AppError(404, 'User not found');
 
-  const isValid = bcrypt.compareSync(currentPassword, user.password);
+  if (!user.password) throw new AppError(400, 'This account uses Google sign-in');
+  const isValid = await bcrypt.compare(currentPassword, user.password);
   if (!isValid) throw new AppError(401, 'Current password is incorrect');
 
   const hashed = await hashingPassword(newPassword);
