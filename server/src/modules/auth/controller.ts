@@ -1,5 +1,8 @@
 import type { NextFunction, Request, Response } from 'express';
 
+import { CLIENT_URL } from '@/utils/env';
+
+import type { findOrCreateGoogleUser } from './google.service';
 import {
   activateProfileService,
   forgotPasswordService,
@@ -105,4 +108,13 @@ export const resetPassword = async (req: Request, res: Response, next: NextFunct
   } catch (err) {
     next(err);
   }
+};
+
+export const googleCallback = (req: Request, res: Response) => {
+  const result = req.user as unknown as Awaited<ReturnType<typeof findOrCreateGoogleUser>>;
+  const params = new URLSearchParams({
+    accessToken: result.accessToken,
+    refreshToken: result.refreshToken,
+  });
+  res.redirect(`${CLIENT_URL}/oauth/callback?${params.toString()}`);
 };
