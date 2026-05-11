@@ -10,11 +10,11 @@ import {
   sequelize,
   SyntaxHighlights,
   User,
-} from '../../db/models';
-import type { PasteCreationAttributes } from '../../db/models/paste';
-import { AppError } from '../../middlewares/error-handler';
-import redisClient from '../../utils/redis';
-import { deleteFileFromS3 } from '../cloud/service';
+} from '@/db/models';
+import type { PasteCreationAttributes } from '@/db/models/paste';
+import { AppError } from '@/middlewares/error-handler';
+import { deleteFileFromS3 } from '@/modules/cloud/service';
+import redisClient from '@/utils/redis';
 
 import { PasteDto } from './dto';
 import {

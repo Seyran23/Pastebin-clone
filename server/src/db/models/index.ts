@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-import { DB_LOCALHOST, DB_NAME, DB_PASSWORD, DB_USERNAME, NODE_ENV } from '../../utils/env';
+import { DB_LOCALHOST, DB_NAME, DB_PASSWORD, DB_USERNAME, NODE_ENV } from '@/utils/env';
 
 import { Comment } from './comment';
 import { ExpirationTime } from './expirationtime';

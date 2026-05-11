@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken';
 
-import { Token } from '../db/models';
-import type { AuthUser } from '../types/express';
+import { Token } from '@/db/models';
+import type { AuthUser } from '@/types/express';
 import {
   JWT_ACCESS_TOKEN,
   JWT_ACCESS_TOKEN_EXPIRATION_TIME,
   JWT_REFRESH_TOKEN,
   JWT_REFRESH_TOKEN_EXPIRATION_TIME,
   JWT_RESET_TOKEN,
-} from '../utils/env';
+} from '@/utils/env';
 
 type TokenPayload = AuthUser;
 

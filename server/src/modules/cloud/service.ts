@@ -1,8 +1,8 @@
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import type { Readable } from 'stream';
 
-import { AppError } from '../../middlewares/error-handler';
-import { S3_BUCKET_NAME } from '../../utils/env';
+import { AppError } from '@/middlewares/error-handler';
+import { S3_BUCKET_NAME } from '@/utils/env';
 
 import s3 from './s3Client';
 import { type FileResult, formatImageFile, formatTextFile } from './utils';

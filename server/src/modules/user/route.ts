@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
-import upload from '../../middlewares/multer.middleware';
-import handleValidationErrors from '../../middlewares/validation-error.middleware';
-import { authMiddleware } from '../auth/middleware';
-import { getProfilePastes } from '../paste/controller';
+import upload from '@/middlewares/multer.middleware';
+import handleValidationErrors from '@/middlewares/validation-error.middleware';
+import { authMiddleware } from '@/modules/auth/middleware';
+import { getProfilePastes } from '@/modules/paste/controller';
 
 import {
   changePassword,
@@ -37,7 +37,6 @@ router.patch(
   changePassword,
 );
 
-// Route uses :username so controller can enforce ownership
 router.delete('/:username', authMiddleware, deleteUser);
 
 export default router;

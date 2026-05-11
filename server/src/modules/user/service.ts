@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
-import { LikeStats, Paste, User } from '../../db/models';
-import { AppError } from '../../middlewares/error-handler';
-import attachAvatarImage from '../../utils/attachAvatar';
-import { API_URL } from '../../utils/env';
-import hashingPassword from '../../utils/passwordHashing';
-import { deleteFileFromS3 } from '../cloud/service';
-import { sendEmailAddressChangeEmail } from '../mail/controller';
+import { LikeStats, Paste, User } from '@/db/models';
+import { AppError } from '@/middlewares/error-handler';
+import { deleteFileFromS3 } from '@/modules/cloud/service';
+import { sendEmailAddressChangeEmail } from '@/modules/mail/controller';
+import attachAvatarImage from '@/utils/attachAvatar';
+import { API_URL } from '@/utils/env';
+import hashingPassword from '@/utils/passwordHashing';
 
 import { UserDto } from './dto';
 
@@ -122,7 +122,6 @@ export const changePasswordService = async (
   const isValid = bcrypt.compareSync(currentPassword, user.password);
   if (!isValid) throw new AppError(401, 'Current password is incorrect');
 
-  // Bug fix: was missing `await`, stored a Promise object instead of the hash
   const hashed = await hashingPassword(newPassword);
   await user.update({ password: hashed });
   await user.save();

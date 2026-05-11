@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import attachAvatarImage from '../../utils/attachAvatar';
-import { getAuthUser } from '../../utils/getAuthUser';
+import attachAvatarImage from '@/utils/attachAvatar';
+import { getAuthUser } from '@/utils/getAuthUser';
 
 import { UserDto } from './dto';
 import {

@@ -1,4 +1,4 @@
-import { SMTP_USER } from '../../utils/env';
+import { SMTP_USER } from '@/utils/env';
 
 import type { MailAction } from './constants';
 import EMAIL_TEMPLATES from './templates';

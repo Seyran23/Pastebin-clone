@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 
-import { Paste } from '../db/models';
-import { deleteFileFromS3 } from '../modules/cloud/service';
+import { Paste } from '@/db/models';
+import { deleteFileFromS3 } from '@/modules/cloud/service';
 
 const markExpiredPastes = async (): Promise<void> => {
   const now = Date.now();

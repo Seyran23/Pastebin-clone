@@ -1,8 +1,8 @@
-import { sequelize } from '../../db/models';
-import type { Paste } from '../../db/models/paste';
-import type { User } from '../../db/models/user';
-import { AppError } from '../../middlewares/error-handler';
-import { getFileFromS3 } from '../cloud/service';
+import { sequelize } from '@/db/models';
+import type { Paste } from '@/db/models/paste';
+import type { User } from '@/db/models/user';
+import { AppError } from '@/middlewares/error-handler';
+import { getFileFromS3 } from '@/modules/cloud/service';
 
 import { PasteDto } from './dto';
 

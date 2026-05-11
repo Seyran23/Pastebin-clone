@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import handleValidationErrors from '../../middlewares/validation-error.middleware';
-import { authMiddleware, optionalAuth } from '../auth/middleware';
+import handleValidationErrors from '@/middlewares/validation-error.middleware';
+import { authMiddleware, optionalAuth } from '@/modules/auth/middleware';
 
 import {
   createComment,

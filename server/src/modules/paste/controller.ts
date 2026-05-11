@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { ExpirationTime, User } from '../../db/models';
-import { AppError } from '../../middlewares/error-handler';
-import attachAvatarImage from '../../utils/attachAvatar';
-import { getAuthUser } from '../../utils/getAuthUser';
-import hashingPassword from '../../utils/passwordHashing';
-import randomFileName from '../../utils/randomFileName';
-import { uploadFileToS3 } from '../cloud/service';
+import { ExpirationTime, User } from '@/db/models';
+import { AppError } from '@/middlewares/error-handler';
+import { uploadFileToS3 } from '@/modules/cloud/service';
+import attachAvatarImage from '@/utils/attachAvatar';
+import { getAuthUser } from '@/utils/getAuthUser';
+import hashingPassword from '@/utils/passwordHashing';
+import randomFileName from '@/utils/randomFileName';
 
 import { getLinksFromCache, removeLinkFromCache } from './paste-link.service';
 import {
@@ -83,7 +83,6 @@ export const getPasteByLink = async (req: Request, res: Response, next: NextFunc
     const stats = await getLikeStatsService(paste.id);
     content.pasteData = { ...content.pasteData, ...stats };
 
-    // Bug fix: removed dangling `await` that caused TypeError
     res.status(200).json({ ...content, requiresPassword: false });
   } catch (err) {
     next(err);

@@ -1,4 +1,4 @@
-import { getFileFromS3 } from '../modules/cloud/service';
+import { getFileFromS3 } from '@/modules/cloud/service';
 
 interface WithAvatar {
   avatar?: string | null;

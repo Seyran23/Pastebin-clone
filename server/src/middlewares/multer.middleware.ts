@@ -1,9 +1,9 @@
 import multer from 'multer';
 import multerS3 from 'multer-s3';
 
-import s3 from '../modules/cloud/s3Client';
-import { S3_BUCKET_NAME } from '../utils/env';
-import randomFileName from '../utils/randomFileName';
+import s3 from '@/modules/cloud/s3Client';
+import { S3_BUCKET_NAME } from '@/utils/env';
+import randomFileName from '@/utils/randomFileName';
 
 import { AppError } from './error-handler';
 

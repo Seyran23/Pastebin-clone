@@ -1,4 +1,4 @@
-import type { User } from '../../db/models/user';
+import type { User } from '@/db/models/user';
 
 export class UserDto {
   id: string;

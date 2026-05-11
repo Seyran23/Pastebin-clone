@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { AppError } from '../../middlewares/error-handler';
-import { validateAccessToken } from '../../services/token.service';
+import { AppError } from '@/middlewares/error-handler';
+import { validateAccessToken } from '@/services/token.service';
 
 export const authMiddleware = (req: Request, _res: Response, next: NextFunction): void => {
   try {

@@ -1,6 +1,6 @@
-import type { Paste } from '../../db/models/paste';
-import type { PasteCategory } from '../../db/models/pastecategory';
-import type { SyntaxHighlights } from '../../db/models/syntaxhighlights';
+import type { Paste } from '@/db/models/paste';
+import type { PasteCategory } from '@/db/models/pastecategory';
+import type { SyntaxHighlights } from '@/db/models/syntaxhighlights';
 
 export class PasteDto {
   id: string;

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import handleValidationErrors from '../../middlewares/validation-error.middleware';
+import handleValidationErrors from '@/middlewares/validation-error.middleware';
 
 import {
   activateProfile,
@@ -29,7 +29,6 @@ router.post('/logout', logout);
 router.post('/forgot-password', validateUsername, handleValidationErrors, forgotPassword);
 router.post('/forgot-username', validateEmail, handleValidationErrors, forgotUsername);
 
-// Bug fix: was "resend-activation" (missing leading slash) — Express 5 is strict about this
 router.post('/resend-activation', validateUsername, handleValidationErrors, resendActivationLink);
 
 router.get('/refresh', refresh);

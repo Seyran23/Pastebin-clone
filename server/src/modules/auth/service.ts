@@ -1,8 +1,15 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
-import { User } from '../../db/models';
-import { AppError } from '../../middlewares/error-handler';
+import { User } from '@/db/models';
+import { AppError } from '@/middlewares/error-handler';
+import {
+  resendActivationEmail,
+  sendForgotPasswordEmail,
+  sendForgotUsernameEmail,
+  sendRegistrationEmail,
+} from '@/modules/mail/controller';
+import { UserDto } from '@/modules/user/dto';
 import {
   findToken,
   generateTokens,
@@ -10,17 +17,10 @@ import {
   resetPasswordToken,
   saveToken,
   validateRefreshToken,
-} from '../../services/token.service';
-import attachAvatarImage from '../../utils/attachAvatar';
-import { API_URL, CLIENT_URL } from '../../utils/env';
-import hashingPassword from '../../utils/passwordHashing';
-import {
-  resendActivationEmail,
-  sendForgotPasswordEmail,
-  sendForgotUsernameEmail,
-  sendRegistrationEmail,
-} from '../mail/controller';
-import { UserDto } from '../user/dto';
+} from '@/services/token.service';
+import attachAvatarImage from '@/utils/attachAvatar';
+import { API_URL, CLIENT_URL } from '@/utils/env';
+import hashingPassword from '@/utils/passwordHashing';
 
 export const signupService = async (username: string, email: string, password: string) => {
   const [existingUsername, existingEmail] = await Promise.all([
@@ -113,10 +113,8 @@ export const forgotPasswordService = async (username: string) => {
   const user = await User.findOne({ where: { username } });
   if (!user) throw new AppError(404, "User with this username doesn't exist");
 
-  // Bug fix: was using undefined `email` variable — now correctly uses user.email
   const token = resetPasswordToken({ id: user.id, email: user.email });
 
-  // Bug fix: was `http//localhost:3000` — now uses CLIENT_URL from env
   const link = `${CLIENT_URL}/resetpassword?token=${token}`;
 
   await sendForgotPasswordEmail(user.email, username, link);
@@ -131,7 +129,6 @@ export const forgotUsernameService = async (email: string) => {
   const user = await User.findOne({ where: { email } });
   if (!user) throw new AppError(404, "User with this email doesn't exist");
 
-  // Bug fix: was passing undefined `link` variable — forgotUsername email doesn't need a link
   await sendForgotUsernameEmail(email, user.username);
 
   return {

@@ -1,6 +1,6 @@
 import type { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 
-import { NODE_ENV } from '../utils/env';
+import { NODE_ENV } from '@/utils/env';
 
 export class AppError extends Error {
   statusCode: number;
