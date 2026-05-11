@@ -174,7 +174,8 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
 
 export const deletePaste = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json(await deletePasteService(String(req.params.id)));
+    const { id } = getAuthUser(req);
+    res.status(200).json(await deletePasteService(String(req.params.id), id));
   } catch (err) {
     next(err);
   }
@@ -221,8 +222,8 @@ export const getPasteSummary = async (req: Request, res: Response, next: NextFun
 export const updatePasteByLink = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { link } = req.params as { link: string };
-    const updated = await updatePasteByLinkService(link, req.body as Record<string, unknown>);
-    if (!updated) throw new AppError(404, 'Paste not found');
+    const { id } = getAuthUser(req);
+    const updated = await updatePasteByLinkService(link, req.body as Record<string, unknown>, id);
     res.status(200).json({ message: 'Paste updated successfully', paste: updated });
   } catch (err) {
     next(err);
@@ -261,7 +262,8 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
 
 export const deleteComment = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.status(200).json(await deleteCommentService(String(req.params.id)));
+    const { id } = getAuthUser(req);
+    res.status(200).json(await deleteCommentService(String(req.params.id), id));
   } catch (err) {
     next(err);
   }

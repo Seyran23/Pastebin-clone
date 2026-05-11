@@ -153,9 +153,11 @@ export const createPasteService = async (pasteData: PasteCreationAttributes) => 
 export const updatePasteByLinkService = async (
   link: string,
   updateData: Record<string, unknown>,
+  requestingUserId: string,
 ) => {
   const paste = await Paste.findOne({ where: { link_endpoint: link } });
-  if (!paste) return null;
+  if (!paste) throw new AppError(404, 'Paste not found');
+  if (paste.createdBy !== requestingUserId) throw new AppError(403, 'Forbidden');
 
   const allowed = ['name', 'exposure', 'password'] as const;
   for (const key of allowed) {
@@ -167,9 +169,10 @@ export const updatePasteByLinkService = async (
   return paste;
 };
 
-export const deletePasteService = async (pasteId: string) => {
+export const deletePasteService = async (pasteId: string, requestingUserId: string) => {
   const paste = await Paste.findByPk(pasteId);
   if (!paste) throw new AppError(404, 'Paste not found');
+  if (paste.createdBy !== requestingUserId) throw new AppError(403, 'Forbidden');
 
   await deleteFileFromS3(paste.cloud_name);
   await paste.destroy();
@@ -390,9 +393,10 @@ export const createCommentService = async (content: string, pasteId: string, use
   return Comment.create({ content, paste_id: pasteId, user_id: user.id });
 };
 
-export const deleteCommentService = async (commentId: string) => {
+export const deleteCommentService = async (commentId: string, requestingUserId: string) => {
   const comment = await Comment.findByPk(commentId);
   if (!comment) throw new AppError(404, 'Comment not found');
+  if (comment.user_id !== requestingUserId) throw new AppError(403, 'Forbidden');
   await comment.destroy();
   return { message: 'Comment was deleted successfully!' };
 };
