@@ -58,3 +58,11 @@ export const findToken = async (refreshToken: string) => {
 export const resetPasswordToken = (payload: { id: string; email: string }): string => {
   return jwt.sign(payload, JWT_RESET_TOKEN, { expiresIn: '10m' });
 };
+
+export const validateResetToken = (token: string): { id: string; email: string } | null => {
+  try {
+    return jwt.verify(token, JWT_RESET_TOKEN) as { id: string; email: string };
+  } catch {
+    return null;
+  }
+};
