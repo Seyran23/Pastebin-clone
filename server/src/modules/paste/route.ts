@@ -8,6 +8,7 @@ import {
   createPaste,
   deleteComment,
   deletePaste,
+  getArchive,
   getCategories,
   getExpirationTime,
   getLikeStats,
@@ -33,6 +34,7 @@ router.get('/categories', getCategories);
 router.get('/expiration-time', getExpirationTime);
 router.get('/syntax-highlights', getSyntaxHighlights);
 router.get('/summary', optionalAuth, getPasteSummary);
+router.get('/archive', getArchive);
 router.get('/search', authMiddleware, searchPastes);
 router.get('/search-self', authMiddleware, searchMyPastes);
 router.get('/like-stats/:id', validateUUIDParam, handleValidationErrors, getLikeStats);

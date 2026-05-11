@@ -179,6 +179,53 @@ export const deletePasteService = async (pasteId: string, requestingUserId: stri
   return { message: 'Paste was deleted successfully!' };
 };
 
+// ─── Archive ─────────────────────────────────────────────────────────────────
+
+export const getArchiveService = async (cursor?: string, limit = 20) => {
+  const where: Record<string, unknown> = {
+    exposure: 'public',
+    password: null,
+    expired: false,
+  };
+
+  if (cursor) {
+    where.createdAt = { [Op.lt]: new Date(cursor) };
+  }
+
+  const rows = await Paste.findAll({
+    where,
+    include: [
+      { model: User, as: 'user', attributes: ['username'] },
+      { model: PasteCategory, as: 'category', attributes: ['category_name'] },
+      { model: SyntaxHighlights, as: 'syntaxHighlight', attributes: ['language'] },
+    ],
+    attributes: ['id', 'name', 'link_endpoint', 'size', 'createdAt', 'expiration_time'],
+    order: [['createdAt', 'DESC']],
+    limit: limit + 1,
+  });
+
+  const hasMore = rows.length > limit;
+  const data = rows.slice(0, limit);
+
+  return {
+    data: data.map((p) => ({
+      id: p.id,
+      name: p.name,
+      link: p.link_endpoint,
+      size: p.size,
+      createdAt: p.createdAt,
+      expiresAt: p.expiration_time,
+      author: p.user?.username ?? null,
+      category: p.category?.category_name ?? null,
+      syntax: p.syntaxHighlight?.language ?? null,
+    })),
+    pagination: {
+      hasNextPage: hasMore,
+      nextCursor: hasMore ? (data[data.length - 1]?.createdAt.toISOString() ?? null) : null,
+    },
+  };
+};
+
 // ─── Search ───────────────────────────────────────────────────────────────────
 
 export const searchPastesService = async (query: Record<string, string>) => {

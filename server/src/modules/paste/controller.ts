@@ -14,6 +14,7 @@ import {
   createPasteService,
   deleteCommentService,
   deletePasteService,
+  getArchiveService,
   getCategoriesService,
   getExpirationTimeService,
   getHighlightsService,
@@ -29,6 +30,15 @@ import {
   unlockPasteService,
   updatePasteByLinkService,
 } from './service';
+
+export const getArchive = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { cursor, limit } = req.query as { cursor?: string; limit?: string };
+    res.status(200).json(await getArchiveService(cursor, limit ? Number(limit) : undefined));
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const getCategories = async (_req: Request, res: Response, next: NextFunction) => {
   try {
