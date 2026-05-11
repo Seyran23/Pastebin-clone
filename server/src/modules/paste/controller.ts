@@ -83,9 +83,11 @@ export const getPasteByLink = async (req: Request, res: Response, next: NextFunc
       return;
     }
 
-    const content = await processPasteContentService(paste);
+    const [content] = await Promise.all([
+      processPasteContentService(paste),
+      paste.increment('view_count'),
+    ]);
 
-    // Attach avatar to owner object in-place
     if (content.owner) {
       await attachAvatarImage(content.owner, content.owner as unknown as Record<string, unknown>);
     }
@@ -93,7 +95,7 @@ export const getPasteByLink = async (req: Request, res: Response, next: NextFunc
     const stats = await getLikeStatsService(paste.id);
     content.pasteData = { ...content.pasteData, ...stats };
 
-    res.status(200).json({ ...content, requiresPassword: false });
+    res.status(200).json({ ...content, requiresPassword: false, viewCount: paste.view_count + 1 });
   } catch (err) {
     next(err);
   }
@@ -112,7 +114,9 @@ export const getProfilePastes = async (req: Request, res: Response, next: NextFu
 export const unlockPaste = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { link, password } = req.body as { link: string; password: string };
-    res.status(200).json(await unlockPasteService(link, password));
+    const { content, paste } = await unlockPasteService(link, password);
+    await paste.increment('view_count');
+    res.status(200).json({ ...content, viewCount: paste.view_count + 1 });
   } catch (err) {
     next(err);
   }

@@ -142,7 +142,8 @@ export const unlockPasteService = async (link: string, inputPassword: string) =>
   const isCorrect = await bcrypt.compare(inputPassword, paste.password);
   if (!isCorrect) throw new AppError(403, 'Invalid password');
 
-  return processPasteContentService(paste);
+  const content = await processPasteContentService(paste);
+  return { content, paste };
 };
 
 export const createPasteService = async (pasteData: PasteCreationAttributes) => {

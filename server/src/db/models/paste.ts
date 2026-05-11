@@ -20,6 +20,7 @@ export interface PasteAttributes {
   expired: boolean;
   size: number;
   preview: string | null;
+  view_count: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -34,6 +35,7 @@ export type PasteCreationAttributes = Optional<
   | 'expired'
   | 'size'
   | 'preview'
+  | 'view_count'
 >;
 
 export class Paste
@@ -53,6 +55,7 @@ export class Paste
   declare expired: boolean;
   declare size: number;
   declare preview: string | null;
+  declare view_count: number;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
@@ -92,6 +95,7 @@ export class Paste
         expired: { type: DataTypes.BOOLEAN, defaultValue: false },
         size: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
         preview: { type: DataTypes.STRING(300), allowNull: true },
+        view_count: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
       },
       { sequelize, tableName: 'pastes', timestamps: true },
     );
