@@ -6,6 +6,7 @@ import pinoHttp from 'pino-http';
 import { sequelize } from './db/models';
 import { errorHandler } from './middlewares/error-handler';
 import authRouter from './modules/auth/route';
+import healthRouter from './modules/health/route';
 import pasteRouter from './modules/paste/route';
 import userRouter from './modules/user/route';
 import { startExpiredPasteJobs } from './services/expiredPastes.service';
@@ -22,6 +23,7 @@ app.use(cors({ credentials: true, origin: CLIENT_URL }));
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/pastes', pasteRouter);
+app.use('/health', healthRouter);
 
 app.use(errorHandler);
 
