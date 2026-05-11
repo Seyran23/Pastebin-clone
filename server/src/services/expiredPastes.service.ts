@@ -2,6 +2,7 @@ import { Op } from 'sequelize';
 
 import { Paste } from '@/db/models';
 import { deleteFileFromS3 } from '@/modules/cloud/service';
+import logger from '@/utils/logger';
 
 const markExpiredPastes = async (): Promise<void> => {
   const now = Date.now();
@@ -22,7 +23,7 @@ const deleteExpiredPastes = async (): Promise<void> => {
     try {
       await deleteFileFromS3(paste.cloud_name);
     } catch (err) {
-      console.error(`Failed to delete S3 file for paste ${paste.id}:`, err);
+      logger.error({ pasteId: paste.id, err }, 'Failed to delete S3 file for paste');
     }
   }
 

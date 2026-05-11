@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 
 import { NODE_ENV } from '@/utils/env';
+import logger from '@/utils/logger';
 
 export class AppError extends Error {
   statusCode: number;
@@ -28,7 +29,7 @@ export const errorHandler: ErrorRequestHandler = (
   const status = err.status || 'error';
 
   if (NODE_ENV === 'development') {
-    console.error('Error:', err.stack);
+    logger.error({ stack: err.stack }, err.message);
   }
 
   res.status(statusCode).json({
