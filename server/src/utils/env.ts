@@ -16,7 +16,8 @@ export const CLIENT_URL = requireEnv('CLIENT_URL');
 export const DB_NAME = requireEnv('DB_NAME');
 export const DB_USERNAME = requireEnv('DB_USERNAME');
 export const DB_PASSWORD = requireEnv('DB_PASSWORD');
-export const DB_LOCALHOST = process.env.DB_LOCALHOST ?? 'localhost';
+export const DB_HOST = process.env.DB_HOST ?? 'localhost';
+export const DB_PORT = Number(process.env.DB_PORT ?? '5432');
 
 export const JWT_ACCESS_TOKEN = requireEnv('JWT_ACCESS_TOKEN');
 export const JWT_REFRESH_TOKEN = requireEnv('JWT_REFRESH_TOKEN');

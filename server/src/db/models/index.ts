@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 
-import { DB_LOCALHOST, DB_NAME, DB_PASSWORD, DB_USERNAME, NODE_ENV } from '@/utils/env';
+import { DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME, NODE_ENV } from '@/utils/env';
 
 import { Comment } from './comment';
 import { ExpirationTime } from './expirationtime';
@@ -12,7 +12,8 @@ import { Token } from './token';
 import { User } from './user';
 
 const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
-  host: DB_LOCALHOST,
+  host: DB_HOST,
+  port: DB_PORT,
   dialect: 'postgres',
   logging: NODE_ENV === 'development' ? false : false,
 });
