@@ -19,13 +19,21 @@ export interface PasteAttributes {
   expiration_time: number | null;
   expired: boolean;
   size: number;
+  preview: string | null;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 export type PasteCreationAttributes = Optional<
   PasteAttributes,
-  'id' | 'syntax_highlight_id' | 'category_id' | 'password' | 'expiration_time' | 'expired' | 'size'
+  | 'id'
+  | 'syntax_highlight_id'
+  | 'category_id'
+  | 'password'
+  | 'expiration_time'
+  | 'expired'
+  | 'size'
+  | 'preview'
 >;
 
 export class Paste
@@ -44,6 +52,7 @@ export class Paste
   declare expiration_time: number | null;
   declare expired: boolean;
   declare size: number;
+  declare preview: string | null;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
 
@@ -82,6 +91,7 @@ export class Paste
         expiration_time: { type: DataTypes.BIGINT, allowNull: true },
         expired: { type: DataTypes.BOOLEAN, defaultValue: false },
         size: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
+        preview: { type: DataTypes.STRING(300), allowNull: true },
       },
       { sequelize, tableName: 'pastes', timestamps: true },
     );

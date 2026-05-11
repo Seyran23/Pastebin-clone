@@ -247,7 +247,10 @@ export const searchPastesService = async (query: Record<string, string>) => {
   const where: Record<string, unknown> = {
     exposure: 'public',
     password: null,
-    name: { [Op.iLike]: `%${searchTerm}%` },
+    [Op.or]: [
+      { name: { [Op.iLike]: `%${searchTerm}%` } },
+      { preview: { [Op.iLike]: `%${searchTerm}%` } },
+    ],
   };
 
   if (category) where.category_id = category;
@@ -271,7 +274,7 @@ export const searchPastesService = async (query: Record<string, string>) => {
       { model: PasteCategory, as: 'category', attributes: ['id', 'category_name'] },
       { model: SyntaxHighlights, as: 'syntaxHighlight', attributes: ['id', 'language'] },
     ],
-    attributes: ['id', 'name', 'link_endpoint', 'createdAt', 'size', 'expiration_time'],
+    attributes: ['id', 'name', 'link_endpoint', 'createdAt', 'size', 'expiration_time', 'preview'],
     order: [[orderField, useDesc ? 'DESC' : 'ASC']],
     limit: Number(limit) + 1,
   });
@@ -294,6 +297,7 @@ export const searchPastesService = async (query: Record<string, string>) => {
         category: paste.category?.category_name,
         syntaxHighlight: paste.syntaxHighlight?.language,
         author: paste.user?.username,
+        preview: paste.preview,
         remainingTime: calculateRemainingTime(paste.expiration_time),
         likes: stats.likes,
       };

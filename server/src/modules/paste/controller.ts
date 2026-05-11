@@ -161,6 +161,7 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
     }
 
     const size = Buffer.byteLength(content, 'utf-8');
+    const preview = content.slice(0, 300);
 
     const newPaste = await createPasteService({
       createdBy: user.id,
@@ -173,6 +174,7 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
       cloud_name: randomName,
       expiration_time: expirationDate,
       size,
+      preview,
     });
 
     await removeLinkFromCache();
