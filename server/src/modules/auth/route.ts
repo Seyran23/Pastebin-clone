@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import { forgotPasswordLimiter, loginLimiter, signupLimiter } from '@/middlewares/rate-limit';
 import handleValidationErrors from '@/middlewares/validation-error.middleware';
 
 import {
@@ -25,10 +26,16 @@ import {
 
 const router = Router();
 
-router.post('/signup', validateSignup, handleValidationErrors, signup);
-router.post('/login', validateLogin, handleValidationErrors, login);
+router.post('/signup', signupLimiter, validateSignup, handleValidationErrors, signup);
+router.post('/login', loginLimiter, validateLogin, handleValidationErrors, login);
 router.post('/logout', logout);
-router.post('/forgot-password', validateUsername, handleValidationErrors, forgotPassword);
+router.post(
+  '/forgot-password',
+  forgotPasswordLimiter,
+  validateUsername,
+  handleValidationErrors,
+  forgotPassword,
+);
 router.post('/forgot-username', validateEmail, handleValidationErrors, forgotUsername);
 
 router.post('/resend-activation', validateUsername, handleValidationErrors, resendActivationLink);
