@@ -34,6 +34,10 @@ export const S3_SECRET_ACCESS_KEY = requireEnv('S3_SECRET_ACCESS_KEY');
 
 export const REDIS_URL = requireEnv('REDIS_URL');
 
+export const GOOGLE_CLIENT_ID = requireEnv('GOOGLE_CLIENT_ID');
+export const GOOGLE_CLIENT_SECRET = requireEnv('GOOGLE_CLIENT_SECRET');
+export const GOOGLE_CALLBACK_URL = requireEnv('GOOGLE_CALLBACK_URL');
+
 export const SMTP_HOST = requireEnv('SMTP_HOST');
 export const SMTP_PORT = Number(process.env.SMTP_PORT ?? '465');
 export const SMTP_USER = requireEnv('SMTP_USER');
