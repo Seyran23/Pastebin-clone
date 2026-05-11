@@ -20,7 +20,7 @@ import {
   validateResetToken,
 } from '@/services/token.service';
 import attachAvatarImage from '@/utils/attachAvatar';
-import { API_URL, CLIENT_URL } from '@/utils/env';
+import { CLIENT_URL } from '@/utils/env';
 import hashingPassword from '@/utils/passwordHashing';
 
 export const signupService = async (username: string, email: string, password: string) => {
@@ -163,7 +163,7 @@ export const resendActivationEmailService = async (username: string, email: stri
   await resendActivationEmail(
     email,
     username,
-    `${API_URL}/api/auth/verify-email/${activationLink}`,
+    `${CLIENT_URL}/verify-email?activationLink=${activationLink}`,
   );
 
   return {

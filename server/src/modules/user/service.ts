@@ -6,7 +6,7 @@ import { AppError } from '@/middlewares/error-handler';
 import { deleteFileFromS3 } from '@/modules/cloud/service';
 import { sendEmailAddressChangeEmail } from '@/modules/mail/controller';
 import attachAvatarImage from '@/utils/attachAvatar';
-import { API_URL } from '@/utils/env';
+import { CLIENT_URL } from '@/utils/env';
 import hashingPassword from '@/utils/passwordHashing';
 
 import { UserDto } from './dto';
@@ -43,7 +43,7 @@ export const userProfileUpdateService = async (
     await sendEmailAddressChangeEmail(
       email,
       user.username,
-      `${API_URL}/api/users/verify-email/${newActivationLink}`,
+      `${CLIENT_URL}/verify-email?activationLink=${newActivationLink}`,
     );
   }
 
