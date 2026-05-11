@@ -134,7 +134,16 @@ export const deleteUserService = async (username: string) => {
   const user = await User.findOne({ where: { username } });
   if (!user) throw new AppError(404, 'User not found');
 
-  if (user.avatar) await deleteFileFromS3(user.avatar);
+  const pastes = await Paste.findAll({
+    where: { createdBy: user.id },
+    attributes: ['cloud_name'],
+  });
+
+  await Promise.all([
+    ...pastes.map((p) => deleteFileFromS3(p.cloud_name)),
+    user.avatar ? deleteFileFromS3(user.avatar) : Promise.resolve(),
+  ]);
+
   await user.destroy();
 
   return { message: 'User deleted successfully' };
