@@ -1,18 +1,16 @@
-export interface AuthUser {
-  id: string;
-  username: string;
-  role: 'user' | 'admin';
-  isActivated: boolean;
-  email?: string;
-}
-
 declare global {
   namespace Express {
-    interface Request {
-      user?: AuthUser;
+    interface User {
+      id: string;
+      username: string;
+      role: 'user' | 'admin';
+      isActivated: boolean;
+      email?: string;
     }
   }
 }
+
+export type AuthUser = Express.User;
 
 declare module 'multer-s3' {
   interface File extends Express.Multer.File {
