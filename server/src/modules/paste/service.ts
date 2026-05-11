@@ -271,15 +271,7 @@ export const searchPastesService = async (query: Record<string, string>) => {
       { model: PasteCategory, as: 'category', attributes: ['id', 'category_name'] },
       { model: SyntaxHighlights, as: 'syntaxHighlight', attributes: ['id', 'language'] },
     ],
-    attributes: [
-      'id',
-      'name',
-      'link_endpoint',
-      'createdAt',
-      'size',
-      'expiration_time',
-      'cloud_name',
-    ],
+    attributes: ['id', 'name', 'link_endpoint', 'createdAt', 'size', 'expiration_time'],
     order: [[orderField, useDesc ? 'DESC' : 'ASC']],
     limit: Number(limit) + 1,
   });
@@ -290,10 +282,7 @@ export const searchPastesService = async (query: Record<string, string>) => {
 
   const enrichedData = await Promise.all(
     finalData.map(async (paste) => {
-      const [processed, stats] = await Promise.all([
-        processPasteContentService(paste),
-        getLikeStatsService(paste.id),
-      ]);
+      const stats = await getLikeStatsService(paste.id);
 
       return {
         id: paste.id,
@@ -305,10 +294,8 @@ export const searchPastesService = async (query: Record<string, string>) => {
         category: paste.category?.category_name,
         syntaxHighlight: paste.syntaxHighlight?.language,
         author: paste.user?.username,
-        content: processed.pasteData.content,
-        contentType: processed.pasteData.contentType,
-        remainingTime: processed.remainingTime,
-        starCount: stats.likes + stats.dislikes,
+        remainingTime: calculateRemainingTime(paste.expiration_time),
+        likes: stats.likes,
       };
     }),
   );
