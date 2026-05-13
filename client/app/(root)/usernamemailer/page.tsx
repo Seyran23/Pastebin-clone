@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -11,11 +13,12 @@ import {
   FormLabel,
   FormControl,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import RelatedPages from "@/components/RelatedPages";
+import { Input } from "@/components/ui/input";
 import InfoBox from "@/components/InfoBox";
+import RelatedPages from "@/components/RelatedPages";
+import { forgotUsername } from "@/lib/api";
 
 const authLinks = [
   { href: "/passmailer", label: "Forgot Password" },
@@ -30,28 +33,45 @@ const formSchema = z.object({
 });
 
 const ForgotUsernamePage = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      emailAddress: "",
-    },
+    defaultValues: { emailAddress: "" },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    form.reset(); // Reset the form after submission
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmitting(true);
+    try {
+      await forgotUsername(values.emailAddress);
+      setSent(true);
+      form.reset();
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
+        "Something went wrong. Please try again.";
+      toast.error(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
+
   return (
-    <div className="container max-w-[1024px] mx-auto  px-4 text-white">
+    <div className="container max-w-[1024px] mx-auto px-4 text-white">
       <h1 className="text-2xl font-bold mb-3 border-zinc-600">
         Pastebin Username Emailer
       </h1>
 
-      {/* Info Alert */}
-
       <InfoBox>
-        If you have forgotten your username you can request a reminder via the
-        form below.
+        If you have forgotten your username you can request a reminder via the form below.
       </InfoBox>
+
+      {sent && (
+        <InfoBox>
+          Username reminder sent! Check your inbox.
+        </InfoBox>
+      )}
 
       {Object.keys(form.formState.errors).length > 0 && (
         <InfoBox variant="error">
@@ -63,22 +83,16 @@ const ForgotUsernamePage = () => {
         </InfoBox>
       )}
 
-      {/* Content Layout */}
-      <div className="flex flex-col md:flex-row gap-8   ">
-        {/* Left - Form */}
+      <div className="flex flex-col md:flex-row gap-8">
         <Card className="flex-1 bg-neutral-800 border-none">
-          <CardContent className=" space-y-4">
-            {/* Form */}
+          <CardContent className="space-y-4">
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="emailAddress"
                   render={({ field }) => (
-                    <FormItem className=" flex gap-13 text-neutral-200">
+                    <FormItem className="flex gap-13 text-neutral-200">
                       <FormLabel className="whitespace-nowrap">
                         Email Address: <span className="text-red-500">*</span>
                       </FormLabel>
@@ -93,19 +107,18 @@ const ForgotUsernamePage = () => {
                     </FormItem>
                   )}
                 />
-
                 <Button
                   type="submit"
+                  disabled={isSubmitting}
                   className="px-6 py-2 bg-white text-black hover:bg-zinc-200 self-start"
                 >
-                  Fetch Username
+                  {isSubmitting ? "Sending..." : "Fetch Username"}
                 </Button>
               </form>
             </Form>
           </CardContent>
         </Card>
 
-        {/* Right - Related Pages */}
         <RelatedPages links={authLinks} />
       </div>
     </div>
