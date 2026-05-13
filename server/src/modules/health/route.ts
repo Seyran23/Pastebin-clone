@@ -5,6 +5,26 @@ import redisClient from '@/utils/redis';
 
 const router = Router();
 
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Check API, database, and Redis health
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: All services healthy
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/HealthStatus'
+ *       503:
+ *         description: One or more services degraded
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/HealthStatus'
+ */
 router.get('/', (_req, res) => {
   void (async () => {
     const [db, redis] = await Promise.allSettled([sequelize.authenticate(), redisClient.ping()]);
