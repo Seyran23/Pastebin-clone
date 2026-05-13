@@ -115,4 +115,27 @@ export async function getExpirationTimes(): Promise<string[]> {
 
 export async function getSyntaxHighlights(): Promise<string[]> {
   return await api.get("/pastes/syntax-highlights");
-}   
+}
+
+export const forgotPassword = async (username: string): Promise<{ message: string }> => {
+  return await api.post('/auth/forgot-password', { username });
+};
+
+export const forgotUsername = async (email: string): Promise<{ message: string }> => {
+  return await api.post('/auth/forgot-username', { email });
+};
+
+export const resendActivation = async (username: string): Promise<{ message: string }> => {
+  return await api.post('/auth/resend-activation', { username });
+};
+
+export const changePassword = async (data: {
+  currentPassword: string;
+  newPassword: string;
+}): Promise<{ message: string }> => {
+  return await api.patch('/users/change-password', data);
+};
+
+export const deleteAccount = async (username: string): Promise<{ message: string }> => {
+  return await api.delete(`/users/${username}`);
+};
