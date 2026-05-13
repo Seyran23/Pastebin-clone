@@ -61,7 +61,13 @@ export const loginService = async (username: string, password: string) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new AppError(401, 'Incorrect password');
 
-  const payload = { id: user.id, username, role: user.role, isActivated: user.isActivated };
+  const payload = {
+    id: user.id,
+    username,
+    email: user.email,
+    role: user.role,
+    isActivated: user.isActivated,
+  };
   const tokens = generateTokens(payload);
   await saveToken(user.id, tokens.refreshToken);
 
