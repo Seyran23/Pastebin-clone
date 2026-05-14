@@ -1,4 +1,5 @@
-import {
+import type {
+  ArchiveResponse,
   CreatePastePayload,
   CreatePasteResponse,
   IPasteInfo,
@@ -43,4 +44,8 @@ export const getExpirationTimes = async (): Promise<string[]> => {
 
 export const getSyntaxHighlights = async (): Promise<string[]> => {
   return await api.get('/pastes/syntax-highlights');
+};
+
+export const getArchive = async (cursor?: string, limit = 20): Promise<ArchiveResponse> => {
+  return await api.get('/pastes/archive', { params: { cursor, limit } });
 };
