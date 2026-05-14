@@ -59,6 +59,14 @@ export interface IPasteInfo {
   viewCount: number;
 }
 
+export interface IComment {
+  id: number;
+  content: string;
+  createdAt: string;
+  author: string;
+  avatar: string | null;
+}
+
 export interface ArchiveItem {
   id: string;
   name: string;

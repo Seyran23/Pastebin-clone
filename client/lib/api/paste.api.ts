@@ -2,6 +2,7 @@ import type {
   ArchiveResponse,
   CreatePastePayload,
   CreatePasteResponse,
+  IComment,
   IPasteInfo,
   IRecentPublicPaste,
   SearchPastesQuery,
@@ -55,4 +56,15 @@ export const toggleLike = async (
   isLike: boolean,
 ): Promise<{ message: string; likedStatus: boolean }> => {
   return await api.post(`/pastes/like/${pasteId}`, { isLike });
+};
+
+export const getComments = async (pasteId: string): Promise<IComment[]> => {
+  return await api.get(`/pastes/comments/${pasteId}`);
+};
+
+export const postComment = async (
+  pasteId: string,
+  content: string,
+): Promise<IComment> => {
+  return await api.post(`/pastes/comment/${pasteId}`, { content });
 };
