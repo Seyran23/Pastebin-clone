@@ -59,6 +59,26 @@ export interface IPasteInfo {
   viewCount: number;
 }
 
+export interface ArchiveItem {
+  id: string;
+  name: string;
+  link: string;
+  size: number;
+  createdAt: string;
+  expiresAt: string | null;
+  author: string | null;
+  category: string | null;
+  syntax: string | null;
+}
+
+export interface ArchiveResponse {
+  data: ArchiveItem[];
+  pagination: {
+    hasNextPage: boolean;
+    nextCursor: string | null;
+  };
+}
+
 export interface SearchPastesQuery {
   searchTerm?: string;
   category?: string;
