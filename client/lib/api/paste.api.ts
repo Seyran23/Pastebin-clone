@@ -49,3 +49,10 @@ export const getSyntaxHighlights = async (): Promise<string[]> => {
 export const getArchive = async (cursor?: string, limit = 20): Promise<ArchiveResponse> => {
   return await api.get('/pastes/archive', { params: { cursor, limit } });
 };
+
+export const toggleLike = async (
+  pasteId: string,
+  isLike: boolean,
+): Promise<{ message: string; likedStatus: boolean }> => {
+  return await api.post(`/pastes/like/${pasteId}`, { isLike });
+};
