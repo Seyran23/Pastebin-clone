@@ -1,47 +1,41 @@
+import { Facebook, X } from 'lucide-react';
+import Link from 'next/link';
 
-import { Facebook, X } from "lucide-react";
-import Link from "next/link";
-
- const Footer = () => {
-    const currentYear = new Date().getFullYear();
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-[150px] bg-neutral-800">
-      <div className="border-t border-borderCustom py-8">
+    <footer className="mt-16 bg-neutral-800">
+      <div className="border-t border-zinc-700 py-8">
         <div className="max-w-[1340px] mx-auto px-4 flex flex-col md:flex-row justify-between gap-8">
-          {/* Left Links */}
-          <div className="flex flex-col gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-col gap-4 text-sm text-neutral-400">
             <div className="flex flex-wrap gap-4">
-              <Link href="#">Create Paste</Link>
-              <Link href="#">Syntax Languages</Link>
-              <Link href="#">Archive</Link>
-              <Link href="#">FAQ</Link>
+              <Link href="/create" className="hover:text-neutral-200 transition-colors">Create Paste</Link>
+              <Link href="/archive" className="hover:text-neutral-200 transition-colors">Archive</Link>
+              <Link href="#" className="hover:text-neutral-200 transition-colors">FAQ</Link>
             </div>
             <div className="flex flex-wrap gap-4">
-              <Link href="#">Privacy Statement</Link>
-              <Link href="#">Cookie Policy</Link>
-              <Link href="#">Terms of Service</Link>
+              <Link href="#" className="hover:text-neutral-200 transition-colors">Privacy Statement</Link>
+              <Link href="#" className="hover:text-neutral-200 transition-colors">Terms of Service</Link>
             </div>
           </div>
 
-          {/* Right Icons */}
-          <div className="flex items-center gap-4 text-muted-foreground text-xl">
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <X  />
+          <div className="flex items-center gap-4 text-neutral-400">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-200 transition-colors">
+              <X size={18} />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-              <Facebook />
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-200 transition-colors">
+              <Facebook size={18} />
             </a>
           </div>
         </div>
       </div>
 
-      {/* Bottom Notice */}
-      <div className="text-xs text-muted-foreground px-4 py-6">
+      <div className="text-xs text-neutral-500 px-4 py-4">
         <div className="max-w-[1340px] mx-auto">
-          By using Pastebin.com you agree to our cookies policy to enhance your experience.  
+          By using Pastebin you agree to our cookies policy to enhance your experience.
           <br />
-          Site design & logo © {currentYear} Pastebin
+          Site design &amp; logo &copy; {currentYear} Pastebin
         </div>
       </div>
     </footer>

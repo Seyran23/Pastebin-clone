@@ -43,7 +43,7 @@ export default function PastesTable({
           <TableHead className="w-[300px] text-neutral-300">
             Name / Title
           </TableHead>
-          <TableHead className="text-neutral-300">AddedAt</TableHead>
+          <TableHead className="text-neutral-300">Added At</TableHead>
           <TableHead className="text-neutral-300">Expires</TableHead>
           <TableHead className="text-neutral-300">Comments</TableHead>
           <TableHead className="text-right text-neutral-300">
@@ -74,7 +74,7 @@ export default function PastesTable({
               )}
               <Link
                 href={`/${paste.link}`}
-                className="text-[#81b6de] hover:text-sky-500 transition"
+                className="text-sky-300 hover:text-sky-400 transition"
               >
                 {paste.name}
               </Link>
@@ -95,12 +95,14 @@ export default function PastesTable({
                   <Link
                     href={`/edit/${paste.id}`}
                     className="hover:text-green-400"
+                    title="Edit paste"
                   >
                     <Pencil size={16} />
                   </Link>
                   <button
                     onClick={() => onDelete?.(paste.id)}
                     className="hover:text-red-500"
+                    title="Delete paste"
                   >
                     <XIcon size={16} />
                   </button>

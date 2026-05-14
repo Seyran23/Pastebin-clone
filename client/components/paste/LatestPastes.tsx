@@ -14,8 +14,8 @@ const LastestPastes = () => {
     queryFn: getPublicPastes,
   });
 
-  if (isLoading) return <Loader2 className="animate-spin" />;
-  if (isError) return <div>Sorry There was an Error</div>;
+  if (isLoading) return <Loader2 className="animate-spin w-6 h-6 mx-auto mt-4 text-neutral-400" />;
+  if (isError) return <p className="text-sm text-red-400 p-3">Failed to load pastes.</p>;
 
   return (
     <div className="bg-neutral-800 p-3">
@@ -47,7 +47,7 @@ const LastestPastes = () => {
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="font-normal text-neutral-300 truncate transition-colors hover:text-sky-400">
+                <div className="font-normal text-sky-300 truncate transition-colors hover:text-sky-400">
                   <Link
                     href={`/${paste.linkEndpoint}`}
                     className="flex items-center gap-1"
