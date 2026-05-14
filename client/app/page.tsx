@@ -1,9 +1,8 @@
 "use client";
 
+import Editor from '@monaco-editor/react';
 import Link from 'next/link';
 import Select from 'react-select';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 import InfoBox from '@/components/shared/InfoBox';
 import { Button } from '@/components/ui/button';
@@ -23,6 +22,7 @@ export default function NewPastePage() {
     categoryOptions,
     syntaxOptions,
     expirationOptions,
+    syntaxLanguage,
     isPending,
     handleChange,
     handleSelect,
@@ -35,54 +35,32 @@ export default function NewPastePage() {
       <div className="flex flex-col gap-6">
 
         {/* Header */}
-        <div className="flex justify-between items-center pb-2 border-b border-zinc-700">
+        <div className="flex items-center pb-2 border-b border-zinc-700">
           <h1 className="text-xl font-semibold">New Paste</h1>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="toggle-highlight" className="text-sm text-zinc-400">
-              Syntax Preview
-            </Label>
-            <Switch
-              id="toggle-highlight"
-              checked={formData.highlightingEnabled}
-              onCheckedChange={(on) => setFormData((p) => ({ ...p, highlightingEnabled: on }))}
+        </div>
+
+        {/* Monaco Editor */}
+        <div className="flex flex-col gap-1">
+          <Label className="text-sm text-zinc-400">Content</Label>
+          <div className="rounded-md border border-zinc-700 overflow-hidden h-72">
+            <Editor
+              height="100%"
+              language={syntaxLanguage}
+              theme="vs-dark"
+              value={formData.content}
+              onChange={(value) => setFormData((p) => ({ ...p, content: value ?? '' }))}
+              options={{
+                fontSize: 13,
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                lineNumbers: 'on',
+                wordWrap: 'on',
+                padding: { top: 12, bottom: 12 },
+                renderLineHighlight: 'none',
+              }}
             />
           </div>
         </div>
-
-        {/* Editor */}
-        <div className="flex flex-col gap-1">
-          <Label className="text-sm text-zinc-400">Content</Label>
-          <textarea
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            placeholder="Enter your paste content here…"
-            className="w-full h-64 bg-zinc-900 text-white resize-none p-4 font-mono text-sm rounded-md border border-zinc-700 focus:outline-none focus:border-zinc-500"
-          />
-        </div>
-
-        {/* Syntax Preview */}
-        {formData.highlightingEnabled && (
-          <div className="flex flex-col gap-1">
-            <Label className="text-sm text-zinc-400">Preview</Label>
-            <div className="h-64 overflow-auto border border-zinc-700 rounded-md bg-zinc-900">
-              {formData.syntax !== 'none' ? (
-                <SyntaxHighlighter
-                  language={formData.syntax}
-                  style={dracula}
-                  wrapLongLines
-                  customStyle={{ padding: '1rem', minHeight: '100%', margin: 0, fontSize: '0.8rem' }}
-                >
-                  {formData.content || '// Your code preview will appear here'}
-                </SyntaxHighlighter>
-              ) : (
-                <pre className="p-4 font-mono text-sm whitespace-pre-wrap break-words text-zinc-300 h-full m-0">
-                  {formData.content || 'Your preview will appear here'}
-                </pre>
-              )}
-            </div>
-          </div>
-        )}
 
         {/* Settings Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">

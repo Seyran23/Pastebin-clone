@@ -98,12 +98,19 @@ export function useNewPasteForm() {
     });
   };
 
+  const syntaxLanguage = useMemo(() => {
+    if (formData.syntax === 'none') return 'plaintext';
+    const found = syntaxOptions.find((o) => String(o.value) === String(formData.syntax));
+    return found ? found.label.toLowerCase() : 'plaintext';
+  }, [formData.syntax, syntaxOptions]);
+
   return {
     formData,
     setFormData,
     categoryOptions,
     syntaxOptions,
     expirationOptions,
+    syntaxLanguage,
     isPending: createPasteMutation.isPending,
     handleChange,
     handleSelect,
