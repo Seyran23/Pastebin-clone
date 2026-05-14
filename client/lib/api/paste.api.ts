@@ -58,6 +58,13 @@ export const toggleLike = async (
   return await api.post(`/pastes/like/${pasteId}`, { isLike });
 };
 
+export const updatePaste = async (
+  link: string,
+  data: { name?: string; exposure?: string; password?: string | null },
+): Promise<{ id: string; name: string; exposure: string }> => {
+  return await api.patch(`/pastes/${link}`, data);
+};
+
 export const getComments = async (pasteId: string): Promise<IComment[]> => {
   return await api.get(`/pastes/comments/${pasteId}`);
 };

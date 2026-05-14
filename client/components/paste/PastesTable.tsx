@@ -93,7 +93,7 @@ export default function PastesTable({
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Link
-                    href={`/edit/${paste.id}`}
+                    href={`/edit/${paste.link}`}
                     className="hover:text-green-400"
                     title="Edit paste"
                   >
