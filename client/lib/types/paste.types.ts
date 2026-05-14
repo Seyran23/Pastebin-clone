@@ -1,30 +1,4 @@
-export interface CustomError {
-  message: string;
-  errors: { field: string; message: string; cause?: string }[] | [];
-}
-
-export type Exposure = "public" | "unlisted" | "private";
-
-export interface IRelatedPage {
-  href: string;
-  label: string;
-}
-
-export interface IUserInfo {
-  id: string;
-  email: string;
-  username: string;
-  isActivated: boolean;
-  avatar: string;
-  location: string;
-  createdAt: string;
-}
-
-export interface IAuthResponse {
-  accessToken: string;
-  refreshToken: string;
-  user: IUserInfo;
-}
+import { Exposure } from './common.types';
 
 export interface IRecentPublicPaste {
   id: string;
@@ -33,14 +7,8 @@ export interface IRecentPublicPaste {
   exposure: Exposure;
   createdAt: string;
   size: number;
-  category: {
-    id: number;
-    name: string;
-  } | null;
-  syntaxHighlight: {
-    id: number;
-    name: string;
-  } | null;
+  category: { id: number; name: string } | null;
+  syntaxHighlight: { id: number; name: string } | null;
 }
 
 export interface CreatePastePayload {
@@ -59,7 +27,7 @@ export interface CreatePasteResponse {
   createdAt: string;
   createdBy: string;
   expirationTime: string | null;
-  exposure: "public" | "unlisted" | "private";
+  exposure: Exposure;
   linkEndpoint: string;
   size: number;
   syntaxHighlight: number | null;
@@ -78,62 +46,27 @@ export interface IPasteInfo {
     updatedAt: string;
     expirationTime: number | null;
     size: number;
-    category: {
-      id: number;
-      name: string;
-    } | null;
-    syntaxHighlight: {
-      id: number;
-      name: string;
-    } | null;
-
+    category: { id: number; name: string } | null;
+    syntaxHighlight: { id: number; name: string } | null;
     content: string;
     contentType: string;
     likes: number;
     dislikes: number;
   } | null;
-  owner: {
-    id: string;
-    username: string;
-    avatar: string;
-  } | null;
+  owner: { id: string; username: string; avatar: string } | null;
   remainingTime: number | null;
   requiresPassword: boolean;
   viewCount: number;
 }
 
-export interface IUserPaste {
-  id: string;
-  name: string;
-  link: string;
-  exposure: "public" | "unlisted" | "private";
-  addedAt: string;
-  expires: string;
-  comments: string;
-  syntax: string;
-}
-
-export interface IUserPastesStats {
-  totalActivePastes: number;
-  publicPastes: number;
-  unlistedPastes: number;
-  privatePastes: number;
-  totalLikes: number;
-}
-
-export interface IUserProfile {
-  id: string;
-  avatar: string;
-}
-
 export interface SearchPastesQuery {
   searchTerm?: string;
   category?: string;
-  sort?: "newest" | "oldest" | "comments" | "likes";
-  time?: "all" | "day" | "week" | "month" | "year";
+  sort?: 'newest' | 'oldest' | 'comments' | 'likes';
+  time?: 'all' | 'day' | 'week' | 'month' | 'year';
   cursor?: string;
   limit?: number;
-  direction?: "next" | "prev";
+  direction?: 'next' | 'prev';
 }
 
 export interface SearchPastesResponse {
@@ -152,8 +85,8 @@ export interface SearchPastesResponse {
     likes: number;
   }[];
   pagination: {
-    hasNextPage: false;
-    hasPrevPage: false;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
     nextCursor: string | null;
     prevCursor: string | null;
     itemsPerPage: number;
