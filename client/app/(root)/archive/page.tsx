@@ -6,7 +6,6 @@ import { CalendarDays, CircleUserRound, Clock, GlobeIcon, Loader2 } from 'lucide
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { getArchive } from '@/lib/api';
 import type { ArchiveItem } from '@/lib/types';
 import { bytesToKilobytes, formatRemainingTime } from '@/lib/utils';
@@ -114,18 +113,17 @@ export default function ArchivePage() {
 
       {hasNextPage && (
         <div className="flex justify-center mt-8">
-          <Button
-            variant="outline"
+          <button
             onClick={loadMore}
             disabled={isLoadingMore}
-            className="w-40"
+            className="flex items-center gap-2 px-6 py-2 text-sm text-zinc-400 border border-zinc-700 rounded-md hover:border-zinc-500 hover:text-zinc-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoadingMore ? (
               <Loader2 className="animate-spin w-4 h-4" />
             ) : (
               'Load more'
             )}
-          </Button>
+          </button>
         </div>
       )}
     </div>
