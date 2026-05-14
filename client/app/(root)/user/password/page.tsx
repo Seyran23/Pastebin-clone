@@ -19,13 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { changePassword } from '@/lib/api';
+import { userSettingsLinks } from '@/lib/constants/auth-links';
 
-const authLinks = [
-  { href: "/user/profile", label: "Profile" },
-  { href: "/user/change-avatar", label: "Avatar" },
-  { href: "/user/password", label: "Password" },
-  { href: "/user/delete-account", label: "Delete Account" },
-];
 
 const formSchema = z
   .object({
@@ -158,7 +153,7 @@ const ChangePasswordPage = () => {
           </CardContent>
         </Card>
 
-        <RelatedPages links={authLinks} />
+        <RelatedPages links={userSettingsLinks} />
       </div>
     </div>
   );

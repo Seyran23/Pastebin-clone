@@ -19,11 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { forgotPassword } from '@/lib/api';
+import { passmailerPageLinks } from '@/lib/constants/auth-links';
 
-const authLinks = [
-  { href: "/usernamemailer", label: "Forgot Username" },
-  { href: "/resend", label: "No Activation Mail" },
-];
 
 const formSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters." }),
@@ -115,7 +112,7 @@ const ForgotPasswordPage = () => {
           </CardContent>
         </Card>
 
-        <RelatedPages links={authLinks} />
+        <RelatedPages links={passmailerPageLinks} />
       </div>
     </div>
   );

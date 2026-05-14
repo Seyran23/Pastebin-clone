@@ -1,29 +1,26 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { toast } from "sonner";
+import { z } from "zod";
 
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import InfoBox from '@/components/shared/InfoBox';
-import RelatedPages from '@/components/shared/RelatedPages';
 import { forgotUsername } from '@/lib/api';
+import { usermailerPageLinks } from '@/lib/constants/auth-links';
 
-const authLinks = [
-  { href: "/passmailer", label: "Forgot Password" },
-  { href: "/resend", label: "No Activation Mail" },
-];
 
 const formSchema = z.object({
   emailAddress: z
@@ -119,7 +116,7 @@ const ForgotUsernamePage = () => {
           </CardContent>
         </Card>
 
-        <RelatedPages links={authLinks} />
+        <RelatedPages links={usermailerPageLinks} />
       </div>
     </div>
   );

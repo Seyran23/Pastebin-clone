@@ -19,11 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { resendActivation } from '@/lib/api';
+import { resendPageLinks } from '@/lib/constants/auth-links';
 
-const authLinks = [
-  { href: "/usernamemailer", label: "Forgot Username" },
-  { href: "/passmailer", label: "Forgot Password" },
-];
 
 const formSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters." }),
@@ -115,7 +112,7 @@ const ResendActivationMailPage = () => {
           </CardContent>
         </Card>
 
-        <RelatedPages links={authLinks} />
+        <RelatedPages links={resendPageLinks} />
       </div>
     </div>
   );
