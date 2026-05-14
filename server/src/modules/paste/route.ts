@@ -9,6 +9,7 @@ import {
   deleteComment,
   deletePaste,
   getArchive,
+  getComments,
   getCategories,
   getExpirationTime,
   getLikeStats,
@@ -235,6 +236,36 @@ router.get('/search-self', authMiddleware, searchMyPastes);
  *               $ref: '#/components/schemas/LikeStats'
  */
 router.get('/like-stats/:id', validateUUIDParam, handleValidationErrors, getLikeStats);
+
+/**
+ * @swagger
+ * /pastes/comments/{id}:
+ *   get:
+ *     summary: Get all comments for a paste
+ *     tags: [Pastes]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Paste UUID
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *     responses:
+ *       200:
+ *         description: List of comments ordered by newest first
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/CommentWithAuthor'
+ *       400:
+ *         description: Invalid UUID format
+ *       404:
+ *         description: Paste not found
+ */
+router.get('/comments/:id', validateUUIDParam, handleValidationErrors, getComments);
 
 /**
  * @swagger

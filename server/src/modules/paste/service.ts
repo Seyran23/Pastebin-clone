@@ -432,6 +432,22 @@ export const createCommentService = async (content: string, pasteId: string, use
   return Comment.create({ content, paste_id: pasteId, user_id: user.id });
 };
 
+export const getCommentsService = async (pasteId: string) => {
+  const comments = await Comment.findAll({
+    where: { paste_id: pasteId },
+    include: [{ model: User, as: 'user', attributes: ['username', 'avatar'] }],
+    order: [['createdAt', 'DESC']],
+  });
+
+  return comments.map((c) => ({
+    id: c.id,
+    content: c.content,
+    createdAt: c.createdAt,
+    author: (c as Comment & { user?: { username: string; avatar: string } }).user?.username ?? 'Anonymous',
+    avatar: (c as Comment & { user?: { username: string; avatar: string } }).user?.avatar ?? null,
+  }));
+};
+
 export const deleteCommentService = async (commentId: string, requestingUserId: string) => {
   const comment = await Comment.findByPk(commentId);
   if (!comment) throw new AppError(404, 'Comment not found');

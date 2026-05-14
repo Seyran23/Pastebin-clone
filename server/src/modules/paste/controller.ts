@@ -13,6 +13,7 @@ import {
   createCommentService,
   createPasteService,
   deleteCommentService,
+  getCommentsService,
   deletePasteService,
   getArchiveService,
   getCategoriesService,
@@ -260,6 +261,15 @@ export const togglePasteLike = async (req: Request, res: Response, next: NextFun
 export const getLikeStats = async (req: Request, res: Response, next: NextFunction) => {
   try {
     res.status(200).json(await getLikeStatsService(String(req.params.id)));
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getComments = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params as { id: string };
+    res.status(200).json(await getCommentsService(id));
   } catch (err) {
     next(err);
   }
