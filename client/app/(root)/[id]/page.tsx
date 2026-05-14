@@ -9,6 +9,7 @@ import { useEffect, useRef } from 'react';
 
 import InfoBox from '@/components/shared/InfoBox';
 import { Textarea } from '@/components/ui/textarea';
+import { useLike } from '@/hooks/useLike';
 import { usePasteUnlock } from '@/hooks/usePasteUnlock';
 import { getPaste } from '@/lib/api';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -34,6 +35,12 @@ export default function PasteView() {
 
   const { password, setPassword, unlockError, isUnlocking, handleUnlock } = usePasteUnlock(
     id as string,
+  );
+
+  const { userVote, likes, dislikes, isPending: likePending, handleVote } = useLike(
+    data?.pasteData?.id ?? '',
+    data?.pasteData?.likes ?? 0,
+    data?.pasteData?.dislikes ?? 0,
   );
 
   useEffect(() => {
@@ -86,7 +93,15 @@ export default function PasteView() {
         </InfoBox>
       )}
 
-      <PasteCodeBlock data={data!} />
+      <PasteCodeBlock
+        data={data!}
+        likes={likes}
+        dislikes={dislikes}
+        userVote={userVote}
+        isPending={likePending}
+        isAuthenticated={isAuthenticated}
+        onVote={handleVote}
+      />
 
       <div className="mt-6">
         <h3 className="text-sm font-semibold mb-2 text-zinc-300">Raw Paste Data</h3>
