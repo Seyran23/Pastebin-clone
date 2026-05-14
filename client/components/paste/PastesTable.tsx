@@ -1,8 +1,6 @@
 // components/PastesTable.tsx
 "use client";
 
-import React from "react";
-import Link from "next/link";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import {
@@ -12,15 +10,18 @@ import {
   Pencil,
   X as XIcon,
 } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import { IUserPaste } from "@/lib/models";
+import { IUserPaste } from '@/lib/types';
 
 dayjs.extend(advancedFormat);
 

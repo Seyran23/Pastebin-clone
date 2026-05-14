@@ -1,11 +1,11 @@
-import { useCategories } from "@/hooks/useCategories";
 import {
   Select,
-  SelectTrigger,
-  SelectValue,
   SelectContent,
   SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
+import { useCategories } from "@/hooks/useCategories";
 
 interface CategoryFilterProps {
   value: string;

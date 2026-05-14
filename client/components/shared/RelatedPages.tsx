@@ -1,7 +1,8 @@
-import { IRelatedPage } from "@/lib/models";
-import { useAuthStore } from "@/store/useAuthStore";
 import Link from "next/link";
 import React from "react";
+
+import { IRelatedPage } from '@/lib/types';
+import { useAuthStore } from "@/store/useAuthStore";
 
 const RelatedPages = ({ links }: { links: IRelatedPage[] }) => {
   const {user} = useAuthStore()

@@ -1,7 +1,5 @@
 "use client";
-import Link from "next/link";
-import Image from "next/image";
-
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import {
   ChevronDown,
   ClipboardList,
@@ -12,10 +10,12 @@ import {
   SearchIcon,
   UserPen,
 } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import React from "react";
 
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,8 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import React from "react";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { Input } from '@/components/ui/input';
 import { useAuthStore } from "@/store/useAuthStore";
 
 const getDropdownItems = (username: string) => [

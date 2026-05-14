@@ -1,4 +1,4 @@
-import { Info, AlertCircle, ShieldCheck } from "lucide-react";
+import { AlertCircle, Info, ShieldCheck } from "lucide-react";
 
 type InfoBoxProps = {
   variant?: "info" | "error" | "success";

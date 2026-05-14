@@ -1,11 +1,12 @@
 // components/LatestPastes.jsx
 "use client";
-import { getPublicPastes } from "@/lib/api";
-import { IRecentPublicPaste } from "@/lib/models";
-import { bytesToKilobytes, timeAgo } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { GlobeIcon, LinkIcon, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
+
+import { getPublicPastes } from '@/lib/api';
+import { IRecentPublicPaste } from '@/lib/types';
+import { bytesToKilobytes, timeAgo } from "@/lib/utils";
 
 const LastestPastes = () => {
   const { data, isLoading, isError } = useQuery({

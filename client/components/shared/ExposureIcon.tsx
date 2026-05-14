@@ -1,4 +1,3 @@
-// components/ExposureIcon.tsx
 "use client";
 import { GlobeIcon, LinkIcon, Lock } from "lucide-react";
 
