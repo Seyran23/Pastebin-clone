@@ -113,7 +113,7 @@ export default function PasteView() {
         />
       </div>
 
-      <CommentSection />
+      <CommentSection pasteId={data?.pasteData?.id ?? ''} />
     </div>
   );
 }
