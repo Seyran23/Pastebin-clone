@@ -1,8 +1,10 @@
 export interface IUserProfile {
   id: string;
+  username: string;
   avatar: string;
   location: string;
   createdAt: string;
+  starCount: number;
 }
 
 export interface IUserPaste {
