@@ -258,6 +258,16 @@ const options: swaggerJsdoc.Options = {
             updatedAt: { type: 'string', format: 'date-time' },
           },
         },
+        CommentWithAuthor: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer', example: 1 },
+            content: { type: 'string', example: 'Great paste!' },
+            createdAt: { type: 'string', format: 'date-time' },
+            author: { type: 'string', example: 'john_doe' },
+            avatar: { type: 'string', nullable: true, example: 'https://…/avatar.jpg' },
+          },
+        },
 
         // ─── Likes ────────────────────────────────────────────────────────────
         LikeStats: {
