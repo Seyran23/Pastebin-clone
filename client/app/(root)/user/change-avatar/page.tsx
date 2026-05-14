@@ -13,11 +13,11 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import RelatedPages from "@/components/RelatedPages";
-import InfoBox from "@/components/InfoBox";
+import RelatedPages from '@/components/shared/RelatedPages';
+import InfoBox from '@/components/shared/InfoBox';
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
-import { updateAvatar } from "@/lib/api";
+import { updateAvatar } from '@/lib/api';
 import { useAuthStore } from "@/store/useAuthStore";
 import { useRouter } from "next/navigation";
 

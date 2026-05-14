@@ -1,10 +1,12 @@
 // src/app/layout.tsx
-import Header from "@/components/Header";
 import "./globals.css";
+
 import type { Metadata } from "next";
-import Footer from "@/components/Footer";
-import LastestPastes from "@/components/LatestPastes";
-import QueryProvider from "@/components/QueryProvider";
+
+import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
+import QueryProvider from '@/components/layout/QueryProvider';
+import LastestPastes from '@/components/paste/LatestPastes';
 
 export const metadata: Metadata = {
   title: "Pastebin Clone",

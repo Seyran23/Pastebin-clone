@@ -1,27 +1,27 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { jwtDecode } from "jwt-decode";
+import {  useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import RelatedPages from "@/components/RelatedPages";
-import InfoBox from "@/components/InfoBox";
-import { signupUser } from "@/lib/api";
-import { useMutation } from "@tanstack/react-query";
-import {  useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { CustomError } from "@/lib/models";
-import { jwtDecode } from "jwt-decode";
+import { signupUser } from '@/lib/api';
+import { CustomError } from '@/lib/types';
 import { useAuthStore } from "@/store/useAuthStore";
 
 const authLinks = [

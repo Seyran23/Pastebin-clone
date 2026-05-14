@@ -1,6 +1,7 @@
-import { searchPastes } from "@/lib/api";
-import { SearchPastesQuery } from "@/lib/models";
 import { useQuery } from "@tanstack/react-query";
+
+import { searchPastes } from '@/lib/api';
+import { SearchPastesQuery } from '@/lib/types';
 
 export function useSearchPastes(opts: SearchPastesQuery, enabled: boolean = false) {
   return useQuery({

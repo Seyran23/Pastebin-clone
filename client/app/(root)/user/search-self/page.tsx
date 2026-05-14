@@ -4,10 +4,10 @@
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
-import PastesTable from "@/components/PastesTable";
-import { searchSelfPastes } from "@/lib/api";
+import PastesTable from '@/components/paste/PastesTable';
+import { searchSelfPastes } from '@/lib/api';
 import { Loader2 } from "lucide-react";
-import InfoBox from "@/components/InfoBox";
+import InfoBox from '@/components/shared/InfoBox';
 import { useState } from "react";
 
 export default function SearchSelfPage() {

@@ -1,21 +1,22 @@
 "use client";
 
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import Select from "react-select";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
-import Select from "react-select";
+
+import InfoBox from '@/components/shared/InfoBox';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { generateRandomPassword } from "@/lib/utils";
 import { useCategories } from "@/hooks/useCategories";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createPaste, getExpirationTimes, getSyntaxHighlights } from "@/lib/api";
-import InfoBox from "@/components/InfoBox";
-import Link from "next/link";
-import { CreatePastePayload } from "@/lib/models";
-import { useRouter } from "next/navigation";
+import { createPaste, getExpirationTimes, getSyntaxHighlights } from '@/lib/api';
+import { CreatePastePayload } from '@/lib/types';
+import { generateRandomPassword } from "@/lib/utils";
 
 
 const customSelectStyles = {

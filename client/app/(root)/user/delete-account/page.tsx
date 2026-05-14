@@ -7,8 +7,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import InfoBox from "@/components/InfoBox";
-import RelatedPages from "@/components/RelatedPages";
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -19,7 +19,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { deleteAccount } from "@/lib/api";
+import { deleteAccount } from '@/lib/api';
 import { useAuthStore } from "@/store/useAuthStore";
 
 const authLinks = [

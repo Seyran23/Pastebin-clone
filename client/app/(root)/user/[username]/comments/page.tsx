@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import InfoBox from "@/components/InfoBox";
+import InfoBox from '@/components/shared/InfoBox';
 import { Input } from "@/components/ui/input";
 
 const user = {

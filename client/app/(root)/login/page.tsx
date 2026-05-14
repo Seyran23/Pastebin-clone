@@ -1,25 +1,26 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import RelatedPages from "@/components/RelatedPages";
-import InfoBox from "@/components/InfoBox";
-import { useMutation } from "@tanstack/react-query";
-import { loginUser } from "@/lib/api";
+import { loginUser } from '@/lib/api';
+import { CustomError } from '@/lib/types';
 import { useAuthStore } from "@/store/useAuthStore";
-import { useRouter } from "next/navigation";
 
 const authLinks = [
   { href: "/signup", label: "Create New Account" },
@@ -59,7 +60,7 @@ const LoginPage = () => {
 
       router.push(`/user/${data.user.username}`);
     },
-    onError: (error) => {
+    onError: (error: unknown) => {
       const customError = error as CustomError;
 
       if (customError.errors.length > 0) {

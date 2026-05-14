@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import InfoBox from "@/components/InfoBox";
-import { verifyEmail } from "@/lib/api";
+import InfoBox from '@/components/shared/InfoBox';
+import { verifyEmail } from '@/lib/api';
 import { useAuthStore } from "@/store/useAuthStore";
 
 const VerifyEmailPage = () => {

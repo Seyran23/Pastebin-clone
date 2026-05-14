@@ -6,8 +6,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import InfoBox from "@/components/InfoBox";
-import RelatedPages from "@/components/RelatedPages";
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -18,7 +18,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { forgotPassword } from "@/lib/api";
+import { forgotPassword } from '@/lib/api';
 
 const authLinks = [
   { href: "/usernamemailer", label: "Forgot Username" },

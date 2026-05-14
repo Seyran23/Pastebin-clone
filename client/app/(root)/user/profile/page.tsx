@@ -13,14 +13,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import RelatedPages from "@/components/RelatedPages";
-import InfoBox from "@/components/InfoBox";
+import RelatedPages from '@/components/shared/RelatedPages';
+import InfoBox from '@/components/shared/InfoBox';
 import { useAuthStore } from "@/store/useAuthStore";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import { useMutation } from "@tanstack/react-query";
-import { updateProfile } from "@/lib/api";
-import { CustomError } from "@/lib/models";
+import { updateProfile } from '@/lib/api';
+import { CustomError } from '@/lib/types';
 import { useState } from "react";
 
 const authLinks = [

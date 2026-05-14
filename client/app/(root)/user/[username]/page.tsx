@@ -1,38 +1,36 @@
 // pages/user/[username].tsx
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { useAuthStore } from "@/store/useAuthStore";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  CalendarDays,
-  MapPin,
-  Star,
-} from "lucide-react";
-
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@radix-ui/react-avatar";
-
-import InfoBox from "@/components/InfoBox";
-import { Input } from "@/components/ui/input";
-
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
 import {
-  getUserProfile,
+  CalendarDays,
+  MapPin,
+  Star,
+} from "lucide-react";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+
+import PastesTable from '@/components/paste/PastesTable';
+import InfoBox from '@/components/shared/InfoBox';
+import { Input } from "@/components/ui/input";
+import { Toaster } from "@/components/ui/sonner";
+import {
+  deletePaste,
   getPastesByProfile,
   getUserPasteStats,
-  deletePaste,
-} from "@/lib/api";
-import PastesTable from "@/components/PastesTable";
-import { Toaster } from "@/components/ui/sonner";
-import { toast } from "sonner";
-import { IUserPaste } from "@/lib/models";
-import { useState } from "react";
+  getUserProfile,
+} from '@/lib/api';
+import { IUserPaste } from '@/lib/types';
+import { useAuthStore } from "@/store/useAuthStore";
 
 dayjs.extend(advancedFormat);
 

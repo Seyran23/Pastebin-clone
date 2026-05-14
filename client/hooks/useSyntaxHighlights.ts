@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSyntaxHighlights } from "@/lib/api";
+
+import { getSyntaxHighlights } from '@/lib/api';
 
 export function useSyntaxHighlights() {
   return useQuery({

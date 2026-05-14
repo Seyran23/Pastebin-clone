@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { getExpirationTimes } from "@/lib/api";
+
+import { getExpirationTimes } from '@/lib/api';
 
 export function useExpirationTimes() {
   return useQuery({

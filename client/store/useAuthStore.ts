@@ -1,6 +1,7 @@
 import { create } from 'zustand';
+
 import { refreshingTokens } from '@/lib/api';
-import { IUserInfo } from '@/lib/models';
+import { IUserInfo } from '@/lib/types';
 
 interface AuthState {
   accessToken: string | null;

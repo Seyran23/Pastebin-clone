@@ -1,43 +1,44 @@
 "use client";
-import { useParams } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
-import {
-  ClipboardCopy,
-  Download,
-  Eye,
-  Star,
-  Clock,
-  CircleUserRound,
-  CalendarDays,
-  MessageSquareText,
-  ThumbsUp,
-  ThumbsDown,
-} from "lucide-react";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { useQuery } from "@tanstack/react-query";
+import autosize from "autosize"; // Import autosize for growing textarea
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
-import InfoBox from "@/components/InfoBox";
-import Link from "next/link";
-import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import autosize from "autosize"; // Import autosize for growing textarea
+  CalendarDays,
+  CircleUserRound,
+  ClipboardCopy,
+  Clock,
+  Download,
+  Eye,
+  MessageSquareText,
+  Star,
+  ThumbsDown,
+  ThumbsUp,
+} from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useRef,useState } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism"; // Example theme
-import { useQuery } from "@tanstack/react-query";
-import { getPaste } from "@/lib/api";
-import { useAuthStore } from "@/store/useAuthStore";
-import api from "@/lib/interceptor";
-import { formatRemainingTime } from "@/lib/utils";
+
+import { queryClient } from '@/components/layout/QueryProvider';
+import InfoBox from '@/components/shared/InfoBox';
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { queryClient } from "@/components/QueryProvider";
-import { IPasteInfo } from "@/lib/models";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { getPaste } from '@/lib/api';
+import api from '@/lib/api/interceptor';
+import { IPasteInfo } from '@/lib/types';
+import { formatRemainingTime } from "@/lib/utils";
+import { useAuthStore } from "@/store/useAuthStore";
 
 dayjs.extend(advancedFormat);
 

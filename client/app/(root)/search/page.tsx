@@ -1,29 +1,30 @@
 "use client";
 
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import { CalendarDays, CircleUserRound, Star } from "lucide-react";
+// import { useQuery } from "@tanstack/react-query";
+// import { searchPastesService } from '@/lib/api'; // your paginated search API
+import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect,useState } from "react";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism"; // Example theme
+
+import CategoryFilter from '@/components/shared/CategoryFilter';
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
     Select,
-    SelectTrigger,
-    SelectValue,
     SelectContent,
     SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
-import { CalendarDays, CircleUserRound, Star } from "lucide-react";
-import Link from "next/link";
-import { bytesToKilobytes } from "@/lib/utils";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism"; // Example theme
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-// import { useQuery } from "@tanstack/react-query";
-// import { searchPastesService } from "@/lib/api"; // your paginated search API
-import { Loader2 } from "lucide-react";
-import CategoryFilter from "@/components/CategoryFilter";
-import { SearchPastesQuery } from "@/lib/models";
 import { useSearchPastes } from "@/hooks/useSearch";
+import { SearchPastesQuery } from '@/lib/types';
+import { bytesToKilobytes } from "@/lib/utils";
 
 
 // const mockPastes = {

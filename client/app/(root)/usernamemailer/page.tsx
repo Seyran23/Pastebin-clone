@@ -16,9 +16,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import InfoBox from "@/components/InfoBox";
-import RelatedPages from "@/components/RelatedPages";
-import { forgotUsername } from "@/lib/api";
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
+import { forgotUsername } from '@/lib/api';
 
 const authLinks = [
   { href: "/passmailer", label: "Forgot Password" },
