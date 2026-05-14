@@ -4,7 +4,6 @@ import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
 import { useSearchPastes } from '@/hooks/useSearch';
 import { SearchPastesQuery } from '@/lib/types';
 
@@ -31,7 +30,20 @@ export default function SearchPage() {
     setCategory(urlCategory);
     setTime(urlTime);
     setSort(urlSort);
-    setSearchQuery(null);
+    
+    if (urlQ) {
+      setSearchQuery({
+        searchTerm: urlQ,
+        category: urlCategory !== 'all' ? urlCategory : undefined,
+        time: urlTime !== 'all' ? (urlTime as SearchPastesQuery['time']) : undefined,
+        sort: urlSort as SearchPastesQuery['sort'],
+        limit: 10,
+        direction: 'next',
+        cursor: undefined,
+      });
+    } else {
+      setSearchQuery(null);
+    }
   }, [urlQ, urlCategory, urlTime, urlSort]);
 
   const { data, isLoading, isError } = useSearchPastes(searchQuery!, !!searchQuery);
@@ -89,27 +101,27 @@ export default function SearchPage() {
 
       {data?.pagination && (
         <div className="flex justify-between items-center mt-8">
-          <Button
-            variant="outline"
+          <button
             disabled={!data.pagination.hasPrevPage}
             onClick={() =>
               setSearchQuery((q) => q ? { ...q, direction: 'prev', cursor: data.pagination.prevCursor ?? undefined } : q)
             }
+            className="text-xs px-4 py-1.5 border border-zinc-700 rounded text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             ← Previous
-          </Button>
-          <span className="text-sm text-neutral-400">
+          </button>
+          <span className="text-xs text-zinc-500">
             {data.pagination.itemsPerPage} per page
           </span>
-          <Button
-            variant="outline"
+          <button
             disabled={!data.pagination.hasNextPage}
             onClick={() =>
               setSearchQuery((q) => q ? { ...q, direction: 'next', cursor: data.pagination.nextCursor ?? undefined } : q)
             }
+            className="text-xs px-4 py-1.5 border border-zinc-700 rounded text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Next →
-          </Button>
+          </button>
         </div>
       )}
     </div>

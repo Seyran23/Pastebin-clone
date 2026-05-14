@@ -5,7 +5,6 @@ import Link from 'next/link';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
-import { Button } from '@/components/ui/button';
 import { bytesToKilobytes } from '@/lib/utils';
 
 dayjs.extend(advancedFormat);
@@ -30,8 +29,11 @@ export default function PasteSearchCard({ paste }: PasteSearchCardProps) {
     <div className="p-4 bg-zinc-800 rounded-lg border border-zinc-700 hover:bg-zinc-700 transition-colors">
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-base font-semibold truncate">{paste.name}</h2>
-        <Link href={`/${paste.link}`}>
-          <Button size="sm" variant="outline">View</Button>
+        <Link
+          href={`/${paste.link}`}
+          className="text-xs px-3 py-1 border border-zinc-600 rounded text-zinc-300 hover:border-zinc-400 hover:text-white transition-colors shrink-0"
+        >
+          View
         </Link>
       </div>
 
