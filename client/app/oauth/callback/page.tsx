@@ -22,6 +22,12 @@ export default function OAuthCallbackPage() {
 
     try {
       const payload = JSON.parse(atob(accessToken.split('.')[1]));
+
+      if (!payload.exp || Date.now() / 1000 > payload.exp) {
+        router.replace('/login?error=oauth_expired');
+        return;
+      }
+
       setUserInfo({
         id: payload.id,
         username: payload.username,
