@@ -32,16 +32,35 @@ const deleteExpiredPastes = async (): Promise<void> => {
   });
 };
 
+const scheduleMarkExpired = (): void => {
+  const run = async () => {
+    try {
+      await markExpiredPastes();
+    } catch (err) {
+      logger.error({ err }, 'markExpiredPastes failed');
+    } finally {
+      setTimeout(run, 60 * 1000);
+    }
+  };
+  setTimeout(run, 60 * 1000);
+};
+
+const scheduleDeleteExpired = (): void => {
+  const run = async () => {
+    try {
+      await deleteExpiredPastes();
+    } catch (err) {
+      logger.error({ err }, 'deleteExpiredPastes failed');
+    } finally {
+      setTimeout(run, 2 * 60 * 1000);
+    }
+  };
+  setTimeout(run, 2 * 60 * 1000);
+};
+
 export const startExpiredPasteJobs = (): void => {
-  setInterval(() => {
-    void markExpiredPastes();
-  }, 60 * 1000);
-  setInterval(
-    () => {
-      void deleteExpiredPastes();
-    },
-    2 * 60 * 1000,
-  );
+  scheduleMarkExpired();
+  scheduleDeleteExpired();
 };
 
 export { deleteExpiredPastes, markExpiredPastes };

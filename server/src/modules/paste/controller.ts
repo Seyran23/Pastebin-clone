@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 
 import { ExpirationTime, User } from '@/db/models';
 import { AppError } from '@/middlewares/error-handler';
-import { uploadFileToS3 } from '@/modules/cloud/service';
+import { deleteFileFromS3, uploadFileToS3 } from '@/modules/cloud/service';
 import attachAvatarImage from '@/utils/attachAvatar';
 import { getAuthUser } from '@/utils/getAuthUser';
 import hashingPassword from '@/utils/passwordHashing';
@@ -149,9 +149,6 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
     let { password } = req.body as { password?: string };
     const { username } = getAuthUser(req);
 
-    const randomName = randomFileName('text');
-    await uploadFileToS3(randomName, content, 'text/plain');
-
     const user = await User.findOne({ attributes: ['id'], where: { username } });
     if (!user) throw new AppError(404, 'User not found!');
 
@@ -172,23 +169,32 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
 
     const size = Buffer.byteLength(content, 'utf-8');
     const preview = content.slice(0, 300);
+    const randomName = randomFileName('text');
 
-    const newPaste = await createPasteService({
-      createdBy: user.id,
-      category_id: category ?? null,
-      syntax_highlight_id: syntaxHighlight ?? null,
-      exposure,
-      password: password ?? null,
-      name,
-      link_endpoint: endpointLink,
-      cloud_name: randomName,
-      expiration_time: expirationDate,
-      size,
-      preview,
-    });
+    await uploadFileToS3(randomName, content, 'text/plain');
+
+    let newPaste;
+    try {
+      newPaste = await createPasteService({
+        createdBy: user.id,
+        category_id: category ?? null,
+        syntax_highlight_id: syntaxHighlight ?? null,
+        exposure,
+        password: password ?? null,
+        name,
+        link_endpoint: endpointLink,
+        cloud_name: randomName,
+        expiration_time: expirationDate,
+        size,
+        preview,
+      });
+    } catch (dbErr) {
+      void deleteFileFromS3(randomName).catch(() => {});
+      throw dbErr;
+    }
 
     await removeLinkFromCache();
-    res.status(200).json(newPaste);
+    res.status(201).json(newPaste);
   } catch (err) {
     next(err);
   }
