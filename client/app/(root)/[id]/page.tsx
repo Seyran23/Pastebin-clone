@@ -41,6 +41,7 @@ export default function PasteView() {
     data?.pasteData?.id ?? '',
     data?.pasteData?.likes ?? 0,
     data?.pasteData?.dislikes ?? 0,
+    data?.pasteData?.userVote ?? null,
   );
 
   useEffect(() => {

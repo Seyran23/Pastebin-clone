@@ -52,6 +52,7 @@ export interface IPasteInfo {
     contentType: string;
     likes: number;
     dislikes: number;
+    userVote: boolean | null;
   } | null;
   owner: { id: string; username: string; avatar: string } | null;
   remainingTime: number | null;
@@ -111,6 +112,8 @@ export interface SearchPastesResponse {
     preview: string | null;
     remainingTime: number | null;
     likes: number;
+    viewCount: number;
+    commentsCount: number;
   }[];
   pagination: {
     hasNextPage: boolean;

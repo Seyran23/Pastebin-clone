@@ -5,8 +5,13 @@ import { toast } from 'sonner';
 
 import { toggleLike } from '@/lib/api';
 
-export function useLike(pasteId: string, initialLikes: number, initialDislikes: number) {
-  const [userVote, setUserVote] = useState<boolean | null>(null);
+export function useLike(
+  pasteId: string,
+  initialLikes: number,
+  initialDislikes: number,
+  initialUserVote: boolean | null = null,
+) {
+  const [userVote, setUserVote] = useState<boolean | null>(initialUserVote);
   const [likes, setLikes] = useState(initialLikes);
   const [dislikes, setDislikes] = useState(initialDislikes);
   const [isPending, setIsPending] = useState(false);
@@ -15,9 +20,9 @@ export function useLike(pasteId: string, initialLikes: number, initialDislikes: 
     if (pasteId) {
       setLikes(initialLikes);
       setDislikes(initialDislikes);
-      setUserVote(null);
+      setUserVote(initialUserVote);
     }
-  }, [pasteId]);
+  }, [pasteId, initialLikes, initialDislikes, initialUserVote]);
 
   const handleVote = async (isLike: boolean) => {
     if (isPending || userVote === isLike) return;

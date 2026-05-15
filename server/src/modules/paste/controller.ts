@@ -93,7 +93,7 @@ export const getPasteByLink = async (req: Request, res: Response, next: NextFunc
       await attachAvatarImage(content.owner, content.owner as unknown as Record<string, unknown>);
     }
 
-    const stats = await getLikeStatsService(paste.id);
+    const stats = await getLikeStatsService(paste.id, req.user?.id);
     content.pasteData = { ...content.pasteData, ...stats };
 
     res.status(200).json({ ...content, requiresPassword: false, viewCount: paste.view_count + 1 });
@@ -116,7 +116,11 @@ export const unlockPaste = async (req: Request, res: Response, next: NextFunctio
   try {
     const { link, password } = req.body as { link: string; password: string };
     const { content, paste } = await unlockPasteService(link, password);
-    await paste.increment('view_count');
+    const [, stats] = await Promise.all([
+      paste.increment('view_count'),
+      getLikeStatsService(paste.id, req.user?.id),
+    ]);
+    content.pasteData = { ...content.pasteData, ...stats };
     res.status(200).json({ ...content, viewCount: paste.view_count + 1 });
   } catch (err) {
     next(err);

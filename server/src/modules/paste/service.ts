@@ -275,7 +275,7 @@ export const searchPastesService = async (query: Record<string, string>) => {
       { model: PasteCategory, as: 'category', attributes: ['id', 'category_name'] },
       { model: SyntaxHighlights, as: 'syntaxHighlight', attributes: ['id', 'language'] },
     ],
-    attributes: ['id', 'name', 'link_endpoint', 'createdAt', 'size', 'expiration_time', 'preview'],
+    attributes: ['id', 'name', 'link_endpoint', 'createdAt', 'size', 'expiration_time', 'preview', 'view_count'],
     order: [[orderField, useDesc ? 'DESC' : 'ASC']],
     limit: Number(limit) + 1,
   });
@@ -286,7 +286,10 @@ export const searchPastesService = async (query: Record<string, string>) => {
 
   const enrichedData = await Promise.all(
     finalData.map(async (paste) => {
-      const stats = await getLikeStatsService(paste.id);
+      const [stats, commentsCount] = await Promise.all([
+        getLikeStatsService(paste.id),
+        Comment.count({ where: { paste_id: paste.id } }),
+      ]);
 
       return {
         id: paste.id,
@@ -301,6 +304,8 @@ export const searchPastesService = async (query: Record<string, string>) => {
         preview: paste.preview,
         remainingTime: calculateRemainingTime(paste.expiration_time),
         likes: stats.likes,
+        viewCount: paste.view_count,
+        commentsCount,
       };
     }),
   );
@@ -410,12 +415,13 @@ export const toggleLikeService = async (username: string, pasteId: string, isLik
   };
 };
 
-export const getLikeStatsService = async (pasteId: string) => {
-  const [likes, dislikes] = await Promise.all([
+export const getLikeStatsService = async (pasteId: string, userId?: string) => {
+  const [likes, dislikes, userRecord] = await Promise.all([
     LikeStats.count({ where: { paste_id: pasteId, is_liked: true } }),
     LikeStats.count({ where: { paste_id: pasteId, is_liked: false } }),
+    userId ? LikeStats.findOne({ where: { paste_id: pasteId, user_id: userId } }) : Promise.resolve(null),
   ]);
-  return { likes, dislikes };
+  return { likes, dislikes, userVote: userRecord ? userRecord.is_liked : null };
 };
 
 // ─── Comments ─────────────────────────────────────────────────────────────────
