@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import advancedFormat from 'dayjs/plugin/advancedFormat';
-import { CalendarDays, CircleUserRound, Star } from 'lucide-react';
+import { CalendarDays, CircleUserRound, Eye, MessageSquare, Star } from 'lucide-react';
 import Link from 'next/link';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -21,6 +21,8 @@ interface PasteSearchCardProps {
     author: string | null;
     preview: string | null;
     likes: number;
+    viewCount: number;
+    commentsCount: number;
   };
 }
 
@@ -40,7 +42,13 @@ export default function PasteSearchCard({ paste }: PasteSearchCardProps) {
       <div className="flex gap-4 text-zinc-400 text-xs mb-3 flex-wrap">
         <div className="flex items-center gap-1">
           <CircleUserRound size={14} />
-          <span>{paste.author ?? 'Anonymous'}</span>
+          {paste.author ? (
+            <Link href={`/user/${paste.author}`} className="hover:text-zinc-200 transition-colors">
+              {paste.author}
+            </Link>
+          ) : (
+            <span>Anonymous</span>
+          )}
         </div>
         <div className="flex items-center gap-1">
           <CalendarDays size={14} />
@@ -49,6 +57,14 @@ export default function PasteSearchCard({ paste }: PasteSearchCardProps) {
         <div className="flex items-center gap-1">
           <Star size={14} />
           <span>{paste.likes}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <Eye size={14} />
+          <span>{paste.viewCount}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <MessageSquare size={14} />
+          <span>{paste.commentsCount}</span>
         </div>
       </div>
 
