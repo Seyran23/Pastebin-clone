@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
+import { GENERIC_EMAIL_RESPONSE } from './constants';
+
 import { User } from '@/db/models';
 import { AppError } from '@/middlewares/error-handler';
 import {
@@ -119,30 +121,22 @@ export const refreshService = async (refreshToken: string) => {
 
 export const forgotPasswordService = async (username: string) => {
   const user = await User.findOne({ where: { username } });
-  if (!user) throw new AppError(404, "User with this username doesn't exist");
+  if (!user) return GENERIC_EMAIL_RESPONSE;
 
   const token = resetPasswordToken({ id: user.id, email: user.email });
-
   const link = `${CLIENT_URL}/resetpassword?token=${token}`;
-
   await sendForgotPasswordEmail(user.email, username, link);
 
-  return {
-    message:
-      'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
-  };
+  return GENERIC_EMAIL_RESPONSE;
 };
 
 export const forgotUsernameService = async (email: string) => {
   const user = await User.findOne({ where: { email } });
-  if (!user) throw new AppError(404, "User with this email doesn't exist");
+  if (!user) return GENERIC_EMAIL_RESPONSE;
 
   await sendForgotUsernameEmail(email, user.username);
 
-  return {
-    message:
-      'We have sent you an email! It can sometimes take a few minutes before the email arrives.',
-  };
+  return GENERIC_EMAIL_RESPONSE;
 };
 
 export const resetPasswordService = async (token: string, newPassword: string) => {
