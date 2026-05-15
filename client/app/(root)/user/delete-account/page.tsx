@@ -17,28 +17,30 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { deleteAccount } from '@/lib/api';
 import { userSettingsLinks } from '@/lib/constants/auth-links';
 import { useAuthStore } from "@/store/useAuthStore";
 
-
-const formSchema = z.object({
-  password: z.string().min(6, { message: "Password is required." }),
-});
-
 const DeleteAccountPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const { user, logout } = useAuthStore();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { password: "" },
+  const formSchema = z.object({
+    confirm: z.string().refine((val) => val === user?.username, {
+      message: `Type your username exactly to confirm.`,
+    }),
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { confirm: "" },
+  });
+
+  async function onSubmit() {
     if (!user?.username) return;
     setIsSubmitting(true);
     try {
@@ -47,8 +49,7 @@ const DeleteAccountPage = () => {
       router.push("/");
     } catch (err: unknown) {
       const message =
-        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ??
-        "Something went wrong. Please try again.";
+        (err as { message?: string })?.message ?? "Something went wrong. Please try again.";
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -78,7 +79,7 @@ const DeleteAccountPage = () => {
       <InfoBox>
         <ul className="list-decimal p-2">
           <li>
-            By clicking the &quot;DELETE MY ACCOUNT&quot; button you accept the points made above
+            By clicking the &quot;DELETE MY ACCOUNT&quot; button you accept the points made above.
           </li>
           <li>You will be logged out immediately and redirected to the Pastebin index page.</li>
           <li>
@@ -88,16 +89,6 @@ const DeleteAccountPage = () => {
         </ul>
       </InfoBox>
 
-      {Object.keys(form.formState.errors).length > 0 && (
-        <InfoBox variant="error">
-          <div className="space-y-1">
-            {Object.entries(form.formState.errors).map(([field, error]) => (
-              <div key={field}>{(error as Record<string, string>).message}</div>
-            ))}
-          </div>
-        </InfoBox>
-      )}
-
       <div className="flex flex-col md:flex-row gap-8">
         <Card className="flex-1 bg-neutral-800 border-none">
           <CardContent className="space-y-4">
@@ -105,20 +96,22 @@ const DeleteAccountPage = () => {
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
-                  name="password"
+                  name="confirm"
                   render={({ field }) => (
-                    <FormItem className="flex gap-13 text-neutral-200">
-                      <FormLabel className="whitespace-nowrap">
-                        Password: <span className="text-red-500">*</span>
+                    <FormItem className="flex flex-col gap-1 text-neutral-200">
+                      <FormLabel className="text-sm text-zinc-400">
+                        Type <span className="font-mono font-semibold text-zinc-200">{user?.username}</span> to confirm:
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="password"
-                          placeholder="Enter your password"
-                          className="bg-zinc-800 border-zinc-700 focus:outline-none focus:ring-0"
+                          type="text"
+                          placeholder={user?.username}
+                          autoComplete="off"
+                          className="bg-zinc-800 border-zinc-700 focus:outline-none focus:ring-0 font-mono"
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage className="text-red-400 text-xs" />
                     </FormItem>
                   )}
                 />
