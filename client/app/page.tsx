@@ -79,6 +79,7 @@ export default function NewPastePage() {
             <div className="flex flex-col gap-1">
               <Label className="text-sm text-zinc-400">Category</Label>
               <Select
+                instanceId="category"
                 options={categoryOptions}
                 value={categoryOptions.find((o) => o.value === formData.category) ?? null}
                 styles={customSelectStyles}
@@ -90,6 +91,7 @@ export default function NewPastePage() {
             <div className="flex flex-col gap-1">
               <Label className="text-sm text-zinc-400">Syntax Highlight</Label>
               <Select
+                instanceId="syntax"
                 options={syntaxOptions}
                 value={syntaxOptions.find((o) => o.value === formData.syntax) ?? null}
                 styles={customSelectStyles}
@@ -102,6 +104,7 @@ export default function NewPastePage() {
             <div className="flex flex-col gap-1">
               <Label className="text-sm text-zinc-400">Expiration</Label>
               <Select
+                instanceId="expiration"
                 options={expirationOptions}
                 value={expirationOptions.find((o) => o.value === formData.expiration) ?? null}
                 styles={customSelectStyles}
@@ -112,6 +115,7 @@ export default function NewPastePage() {
             <div className="flex flex-col gap-1">
               <Label className="text-sm text-zinc-400">Exposure</Label>
               <Select
+                instanceId="exposure"
                 options={exposureOptions}
                 value={exposureOptions.find((o) => o.value === formData.exposure) ?? null}
                 styles={customSelectStyles}
