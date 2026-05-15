@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Op } from 'sequelize';
+import { Op, fn, col, literal } from 'sequelize';
 
 import {
   Comment,
@@ -160,11 +160,12 @@ export const updatePasteByLinkService = async (
   if (!paste) throw new AppError(404, 'Paste not found');
   if (paste.createdBy !== requestingUserId) throw new AppError(403, 'Forbidden');
 
-  const allowed = ['name', 'exposure', 'password'] as const;
-  for (const key of allowed) {
-    if (key in updateData && updateData[key] !== undefined) {
-      (paste as unknown as Record<string, unknown>)[key] = updateData[key];
-    }
+  if ('name' in updateData && updateData.name !== undefined) paste.name = updateData.name as string;
+  if ('exposure' in updateData && updateData.exposure !== undefined) paste.exposure = updateData.exposure as 'public' | 'private' | 'unlisted';
+  if ('password' in updateData) {
+    paste.password = updateData.password
+      ? await bcrypt.hash(updateData.password as string, 12)
+      : null;
   }
   await paste.save();
   return paste;
@@ -284,31 +285,58 @@ export const searchPastesService = async (query: Record<string, string>) => {
   const sliced = results.slice(0, Number(limit));
   const finalData = direction === 'prev' ? sliced.reverse() : sliced;
 
-  const enrichedData = await Promise.all(
-    finalData.map(async (paste) => {
-      const [stats, commentsCount] = await Promise.all([
-        getLikeStatsService(paste.id),
-        Comment.count({ where: { paste_id: paste.id } }),
-      ]);
+  const pasteIds = finalData.map((p) => p.id);
 
-      return {
-        id: paste.id,
-        name: paste.name,
-        link: paste.link_endpoint,
-        size: paste.size,
-        createdAt: paste.createdAt,
-        expiresAt: paste.expiration_time,
-        category: paste.category?.category_name,
-        syntaxHighlight: paste.syntaxHighlight?.language,
-        author: paste.user?.username,
-        preview: paste.preview,
-        remainingTime: calculateRemainingTime(paste.expiration_time),
-        likes: stats.likes,
-        viewCount: paste.view_count,
-        commentsCount,
-      };
+  const [likeRows, commentRows] = await Promise.all([
+    LikeStats.findAll({
+      where: { paste_id: { [Op.in]: pasteIds } },
+      attributes: [
+        'paste_id',
+        [fn('SUM', literal(`CASE WHEN is_liked = true THEN 1 ELSE 0 END`)), 'likes'],
+        [fn('SUM', literal(`CASE WHEN is_liked = false THEN 1 ELSE 0 END`)), 'dislikes'],
+      ],
+      group: ['paste_id'],
+      raw: true,
     }),
+    Comment.findAll({
+      where: { paste_id: { [Op.in]: pasteIds } },
+      attributes: ['paste_id', [fn('COUNT', col('id')), 'count']],
+      group: ['paste_id'],
+      raw: true,
+    }),
+  ]);
+
+  const likesMap = new Map(
+    (likeRows as unknown as Array<{ paste_id: string; likes: string; dislikes: string }>).map(
+      (r) => [r.paste_id, { likes: Number(r.likes), dislikes: Number(r.dislikes) }],
+    ),
   );
+  const commentsMap = new Map(
+    (commentRows as unknown as Array<{ paste_id: string; count: string }>).map((r) => [
+      r.paste_id,
+      Number(r.count),
+    ]),
+  );
+
+  const enrichedData = finalData.map((paste) => {
+    const stats = likesMap.get(paste.id) ?? { likes: 0, dislikes: 0 };
+    return {
+      id: paste.id,
+      name: paste.name,
+      link: paste.link_endpoint,
+      size: paste.size,
+      createdAt: paste.createdAt,
+      expiresAt: paste.expiration_time,
+      category: paste.category?.category_name,
+      syntaxHighlight: paste.syntaxHighlight?.language,
+      author: paste.user?.username,
+      preview: paste.preview,
+      remainingTime: calculateRemainingTime(paste.expiration_time),
+      likes: stats.likes,
+      viewCount: paste.view_count,
+      commentsCount: commentsMap.get(paste.id) ?? 0,
+    };
+  });
 
   return {
     data: enrichedData,
