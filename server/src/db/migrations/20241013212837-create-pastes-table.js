@@ -8,7 +8,7 @@ module.exports = {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.fn("uuid_generate_v4"), 
+        defaultValue: Sequelize.UUIDV4, 
       },
       createdBy: {
         type: Sequelize.UUID,
