@@ -25,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from '@/components/ui/input';
+import pastebinLogo from "@/public/pastebin-logo.svg";
 import { useAuthStore } from "@/store/useAuthStore";
 
 const getDropdownItems = (username: string) => [
@@ -46,13 +47,13 @@ const Header = () => {
       <div className="container max-w-[1340px] mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
-            <Image alt="logo" src="/pastebin-logo.svg" width={40} height={40} />
+            <Image alt="logo" src={pastebinLogo} width={50} height={50} />
             <span className="text-neutral-50 text-2xl font-semibold tracking-wider uppercase">
               Pastebin
             </span>
           </Link>
 
-          <Link href="/create">
+          <Link href="/">
             <Button
               variant="default"
               className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 transition-colors"
@@ -94,6 +95,8 @@ const Header = () => {
             </Avatar>
             <UserDropdown username={user.username} />
           </div>
+        ) : user ? (
+          <UnactivatedBanner username={user.username} />
         ) : (
           <div className="flex items-center gap-3">
             <Link href="/login">
@@ -118,6 +121,31 @@ const Header = () => {
     </header>
   );
 };
+
+function UnactivatedBanner({ username }: { username: string }) {
+  const { logout } = useAuthStore();
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex flex-col items-end">
+        <span className="text-neutral-100 text-sm">{username}</span>
+        <span className="text-amber-400 text-xs">
+          ⚠ Account not activated —{' '}
+          <Link href="/resend" className="underline hover:text-amber-300">
+            resend email
+          </Link>
+        </span>
+      </div>
+      <Button
+        variant="outline"
+        size="sm"
+        className="text-zinc-300 border-zinc-600 hover:bg-zinc-800"
+        onClick={() => logout()}
+      >
+        <LogOut size={14} />
+      </Button>
+    </div>
+  );
+}
 
 function UserDropdown({ username }: { username: string }) {
   const { logout } = useAuthStore();
