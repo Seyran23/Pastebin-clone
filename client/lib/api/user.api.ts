@@ -14,7 +14,9 @@ export const updateProfile = async (data: {
 };
 
 export const updateAvatar = async (file: File): Promise<{ message: string; newAvatar: string }> => {
-  return await api.patch('/users/edit/profile-avatar', file, {
+  const formData = new FormData();
+  formData.append('avatar', file);
+  return await api.patch('/users/edit/profile-avatar', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 };

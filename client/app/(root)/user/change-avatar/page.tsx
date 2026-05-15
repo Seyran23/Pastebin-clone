@@ -73,7 +73,7 @@ const ChangeAvatarPage = () => {
 
   // Handle form submission
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    mutation.mutate(values)
+    mutation.mutate(values.avatar)
   }
 
   return (
