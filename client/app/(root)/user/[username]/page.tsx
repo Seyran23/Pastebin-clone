@@ -13,8 +13,8 @@ import { deletePaste, getPastesByProfile, getUserPasteStats, getUserProfile } fr
 import { IUserPaste } from '@/lib/types';
 import { useAuthStore } from '@/store/useAuthStore';
 
+import OwnerStatsSection from './_components/OwnerStatsSection';
 import UserProfileHeader from './_components/UserProfileHeader';
-import UserStatsBox from './_components/UserStatsBox';
 
 const Skeleton = ({ className }: { className: string }) => (
   <div className={`bg-zinc-700 rounded animate-pulse ${className}`} />
@@ -125,15 +125,7 @@ export default function UserProfilePage() {
       )}
 
       {isOwner && (
-        <>
-          {loadingStats ? (
-            <div className="space-y-2 mt-4">
-              {[...Array(3)].map((_, i) => <Skeleton key={i} className="h-4 w-3/4" />)}
-            </div>
-          ) : stats ? (
-            <UserStatsBox username={usernameStr} stats={stats} />
-          ) : null}
-        </>
+        <OwnerStatsSection username={usernameStr} stats={stats} isLoading={loadingStats} />
       )}
 
       <Toaster richColors position="bottom-right" />
