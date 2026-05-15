@@ -17,12 +17,12 @@ export function useLike(
   const [isPending, setIsPending] = useState(false);
 
   useEffect(() => {
-    if (pasteId) {
+    if (pasteId && !isPending) {
       setLikes(initialLikes);
       setDislikes(initialDislikes);
       setUserVote(initialUserVote);
     }
-  }, [pasteId, initialLikes, initialDislikes, initialUserVote]);
+  }, [pasteId, initialLikes, initialDislikes, initialUserVote, isPending]);
 
   const handleVote = async (isLike: boolean) => {
     if (isPending || userVote === isLike) return;
