@@ -68,6 +68,15 @@ export interface IComment {
   avatar: string | null;
 }
 
+export interface IUserComment {
+  id: number;
+  content: string;
+  createdAt: string;
+  pasteId: string | null;
+  pasteTitle: string;
+  pasteLink: string | null;
+}
+
 export interface ArchiveItem {
   id: string;
   name: string;

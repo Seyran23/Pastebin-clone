@@ -4,6 +4,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { CircleUserRound, Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -19,8 +21,23 @@ interface CommentSectionProps {
   pasteId: string;
 }
 
+function CommentAvatar({ src, alt }: { src: string | null; alt: string }) {
+  if (src) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={32}
+        height={32}
+        className="rounded-sm object-cover shrink-0 mt-0.5 border border-zinc-700"
+      />
+    );
+  }
+  return <CircleUserRound size={32} className="text-zinc-600 shrink-0 mt-0.5" />;
+}
+
 export default function CommentSection({ pasteId }: CommentSectionProps) {
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
   const queryClient = useQueryClient();
   const [text, setText] = useState('');
 
@@ -49,12 +66,11 @@ export default function CommentSection({ pasteId }: CommentSectionProps) {
   return (
     <div className="mt-8 border-t border-zinc-700 pt-6">
       <h3 className="text-sm font-semibold mb-4 text-zinc-300">
-        Comments {comments && comments.length > 0 && (
-          <span className="text-zinc-500 font-normal">({comments.length})</span>
+        Comments{comments && comments.length > 0 && (
+          <span className="text-zinc-500 font-normal"> ({comments.length})</span>
         )}
       </h3>
 
-      {/* Existing comments */}
       {isLoading && (
         <div className="flex justify-center py-4">
           <Loader2 className="animate-spin w-5 h-5 text-zinc-500" />
@@ -65,7 +81,7 @@ export default function CommentSection({ pasteId }: CommentSectionProps) {
         <div className="space-y-4 mb-6">
           {comments.map((comment) => (
             <div key={comment.id} className="flex gap-3">
-              <CircleUserRound size={32} className="text-zinc-600 shrink-0 mt-0.5" />
+              <CommentAvatar src={comment.avatar} alt={comment.author} />
               <div className="flex-1 min-w-0">
                 <div className="flex items-baseline gap-2 mb-1">
                   <span className="text-sm font-medium text-zinc-300">{comment.author}</span>
@@ -82,28 +98,30 @@ export default function CommentSection({ pasteId }: CommentSectionProps) {
         <p className="text-sm text-zinc-600 mb-6">No comments yet. Be the first!</p>
       )}
 
-      {/* Submit form */}
       {isAuthenticated ? (
-        <div className="space-y-3">
-          <Textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            placeholder="Write your comment…"
-            className="resize-none min-h-[80px] max-h-[200px] text-sm bg-zinc-900 border-zinc-700 text-neutral-200 placeholder:text-zinc-500 focus:outline-none focus:ring-0"
-          />
-          <div className="flex justify-end">
-            <Button
-              onClick={handleSubmit}
-              disabled={mutation.isPending || !text.trim()}
-              className="bg-zinc-700 hover:bg-zinc-600 text-white"
-            >
-              {mutation.isPending ? 'Posting…' : 'Add Comment'}
-            </Button>
+        <div className="flex gap-3">
+          <CommentAvatar src={user?.avatar ?? null} alt={user?.username ?? ''} />
+          <div className="flex-1 space-y-2">
+            <Textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Write your comment…"
+              className="resize-none min-h-[80px] max-h-[200px] text-sm bg-zinc-900 border-zinc-700 text-neutral-200 placeholder:text-zinc-500 focus:outline-none focus:ring-0"
+            />
+            <div className="flex justify-end">
+              <Button
+                onClick={handleSubmit}
+                disabled={mutation.isPending || !text.trim()}
+                className="bg-zinc-700 hover:bg-zinc-600 text-white"
+              >
+                {mutation.isPending ? 'Posting…' : 'Add Comment'}
+              </Button>
+            </div>
           </div>
         </div>
       ) : (
         <p className="text-sm text-zinc-500">
-          <a href="/login" className="text-sky-300 hover:text-sky-400">Log in</a> to leave a comment.
+          <Link href="/login" className="text-sky-300 hover:text-sky-400">Log in</Link> to leave a comment.
         </p>
       )}
     </div>

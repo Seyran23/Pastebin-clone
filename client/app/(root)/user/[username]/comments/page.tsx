@@ -1,170 +1,90 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import dayjs from "dayjs";
-import {
-  CalendarDays,
-  GlobeIcon,
-  LinkIcon,
-  Lock,
-  MapPin,
-  Pencil,
-  Star,
-  X,
-} from "lucide-react";
-import Link from "next/link";
-import React from "react";
-import advancedFormat from "dayjs/plugin/advancedFormat";
+'use client';
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import InfoBox from '@/components/shared/InfoBox';
-import { Input } from "@/components/ui/input";
+import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import { Loader2, MessageSquare } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
-const user = {
-  avatarUrl: "https://i.imgur.com/6Z1pJzL.jpg",
-  username: "CodeMaster123",
-  location: "San Francisco, CA",
-  starCount: 450,
-  createdAt: "2021-03-15T08:30:00Z",
-};
+import { getUserComments, getUserProfile } from '@/lib/api';
 
-const comments = [
-  {
-    id: "paste_001",
-    title: "React Hook Example",
-    addedAt: "2023-09-01T10:15:00Z",
-  },
-  {
-    id: "paste_002",
-    title: "Python Flask API",
-    addedAt: "2023-08-25T14:45:00Z",
-  },
-  {
-    id: "paste_003",
-    title: "CSS Grid Layout",
-    addedAt: "2023-07-10T09:20:00Z",
-  },
-  {
-    id: "paste_004",
-    title: "SQL Query for Reporting",
-    addedAt: "2023-06-18T16:30:00Z",
-  },
-  {
-    id: "paste_005",
-    title: "Docker Compose File",
-    addedAt: "2023-05-05T12:00:00Z",
-  },
-  {
-    id: "paste_006",
-    title: "Shell Script for Automation",
-    addedAt: "2023-04-22T18:10:00Z",
-  },
-];
+import UserProfileHeader from '../_components/UserProfileHeader';
 
 dayjs.extend(advancedFormat);
 
-const UserCommentsPage = () => {
-  const capitalizedUsername =
-    user.username.charAt(0).toUpperCase() + user.username.slice(1);
+export default function UserCommentsPage() {
+  const { username } = useParams();
+  const usernameStr = Array.isArray(username) ? username[0] : username ?? '';
 
-  const isOwner = true; // <-- Check if owner
+  const { data: profile, isLoading: loadingProfile } = useQuery({
+    queryKey: ['user', usernameStr],
+    queryFn: () => getUserProfile(usernameStr),
+    enabled: !!usernameStr,
+  });
+
+  const { data: comments, isLoading: loadingComments, isError } = useQuery({
+    queryKey: ['userComments', usernameStr],
+    queryFn: () => getUserComments(usernameStr),
+    enabled: !!usernameStr,
+  });
 
   return (
     <div>
-      {/* USER INFO */}
-      <div className="flex justify-between items-center mb-6 text-sm">
-        {/* Left: User Info */}
-        <div className="flex gap-3">
-          <div>
-            <Avatar>
-              <AvatarImage
-                src={user.avatarUrl}
-                alt={user.username}
-                className="w-12 h-12 object-cover p-1 border border-zinc-500 rounded-xs"
-              />
-              <AvatarFallback className="bg-gray-500 text-white w-10 h-10 flex items-center justify-center border border-zinc-500">
-                {user.username?.[0]?.toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-          <div className="flex flex-col justify-between text-white">
-            <div className="flex gap-1 items-center">
-              <h2 className="text-lg font-semibold">
-                {capitalizedUsername}&apos;s Pastebin
-              </h2>
-            </div>
+      {loadingProfile ? (
+        <div className="h-16 bg-zinc-700 rounded animate-pulse mb-6" />
+      ) : profile ? (
+        <UserProfileHeader profile={profile} isOwner={false} />
+      ) : null}
 
-            <div className="flex gap-3 text-gray-400 text-xs">
-              <div className="flex items-center gap-1">
-                <MapPin className="w-5 h-5" /> {user.location}
-              </div>
-              <div className="flex gap-1 items-center">
-                <CalendarDays size={18} />
-                {dayjs(user.createdAt).format("MMM Do, YYYY")}
-              </div>
-              <div className="flex items-center gap-1">
-                <Star size={18} /> {user.starCount || 0}
-              </div>
-            </div>
+      <div className="mt-6">
+        <h2 className="flex items-center gap-2 text-sm font-semibold text-zinc-300 mb-4 pb-2 border-b border-zinc-700">
+          <MessageSquare size={15} />
+          Comments by {usernameStr}
+          {comments && (
+            <span className="text-zinc-500 font-normal">({comments.length})</span>
+          )}
+        </h2>
+
+        {(loadingComments) && (
+          <div className="flex justify-center py-10">
+            <Loader2 className="animate-spin w-6 h-6 text-zinc-500" />
           </div>
-        </div>
+        )}
+
+        {isError && (
+          <p className="text-sm text-red-400 py-4">Failed to load comments.</p>
+        )}
+
+        {comments?.length === 0 && !loadingComments && (
+          <p className="text-sm text-zinc-500 py-4">No comments yet.</p>
+        )}
+
+        {comments && comments.length > 0 && (
+          <div className="divide-y divide-zinc-800">
+            {comments.map((comment) => (
+              <div key={comment.id} className="py-3 flex flex-col gap-1">
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  {comment.pasteLink ? (
+                    <Link
+                      href={`/${comment.pasteLink}`}
+                      className="text-sky-300 hover:text-sky-400 text-sm font-medium truncate"
+                    >
+                      {comment.pasteTitle}
+                    </Link>
+                  ) : (
+                    <span className="text-zinc-500 text-sm italic">[deleted paste]</span>
+                  )}
+                  <span className="text-xs text-zinc-600 shrink-0">
+                    {dayjs(comment.createdAt).format('MMM Do, YYYY')}
+                  </span>
+                </div>
+                <p className="text-sm text-zinc-400 whitespace-pre-wrap">{comment.content}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-
-      {/* PASTES TABLE */}
-      <Table className="text-white bg-transparent ">
-        <TableHeader>
-          <TableRow className=" hover:bg-zinc-700 transition-colors">
-            <TableHead className="w-[300px] text-neutral-300">
-              Name / Title
-            </TableHead>
-            <TableHead className="text-neutral-300">Added</TableHead>
-            {isOwner && (
-              <TableHead className="text-right text-neutral-300">
-                Actions
-              </TableHead>
-            )}
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {comments.map((comment) => (
-            <TableRow
-              key={comment.id}
-              className="text-neutral-300 hover:bg-zinc-700 transition-colors"
-            >
-              <TableCell className="font-medium flex items-center gap-1">
-                <Link
-                  href={`/paste/${comment.id}`}
-                  className="text-[#81b6de]  hover:text-sky-500 transition"
-                >
-                  {comment.title}
-                </Link>
-              </TableCell>
-
-              <TableCell>
-                {dayjs(comment.addedAt).format("MMM Do, YYYY")}
-              </TableCell>
-
-              {isOwner && (
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <button className="hover:text-red-500 cursor-pointer">
-                      <X size={16} />
-                    </button>
-                  </div>
-                </TableCell>
-              )}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
     </div>
   );
-};
-
-export default UserCommentsPage;
+}

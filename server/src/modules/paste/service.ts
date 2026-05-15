@@ -435,7 +435,14 @@ export const createCommentService = async (content: string, pasteId: string, use
   if (!paste) throw new AppError(404, 'Paste not found');
   if (!user) throw new AppError(404, 'User not found');
 
-  return Comment.create({ content, paste_id: pasteId, user_id: user.id });
+  const comment = await Comment.create({ content, paste_id: pasteId, user_id: user.id });
+  return {
+    id: comment.id,
+    content: comment.content,
+    createdAt: comment.createdAt,
+    author: user.username,
+    avatar: user.avatar ?? null,
+  };
 };
 
 export const getCommentsService = async (pasteId: string) => {
@@ -452,6 +459,29 @@ export const getCommentsService = async (pasteId: string) => {
     author: (c as Comment & { user?: { username: string; avatar: string } }).user?.username ?? 'Anonymous',
     avatar: (c as Comment & { user?: { username: string; avatar: string } }).user?.avatar ?? null,
   }));
+};
+
+export const getUserCommentsService = async (username: string) => {
+  const user = await User.findOne({ where: { username } });
+  if (!user) throw new AppError(404, 'User not found');
+
+  const comments = await Comment.findAll({
+    where: { user_id: user.id },
+    include: [{ model: Paste, as: 'paste', attributes: ['id', 'name', 'link_endpoint'] }],
+    order: [['createdAt', 'DESC']],
+  });
+
+  return comments.map((c) => {
+    const paste = (c as Comment & { paste?: { id: string; name: string; link_endpoint: string } }).paste;
+    return {
+      id: c.id,
+      content: c.content,
+      createdAt: c.createdAt,
+      pasteId: paste?.id ?? null,
+      pasteTitle: paste?.name ?? 'Untitled',
+      pasteLink: paste?.link_endpoint ?? null,
+    };
+  });
 };
 
 export const deleteCommentService = async (commentId: string, requestingUserId: string) => {

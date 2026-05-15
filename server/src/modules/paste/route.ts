@@ -10,6 +10,7 @@ import {
   deletePaste,
   getArchive,
   getComments,
+  getUserComments,
   getCategories,
   getExpirationTime,
   getLikeStats,
@@ -269,6 +270,49 @@ router.get('/comments/:id', validateUUIDParam, handleValidationErrors, getCommen
 
 /**
  * @swagger
+ * /pastes/user-comments/{username}:
+ *   get:
+ *     summary: Get all comments made by a user
+ *     tags: [Pastes]
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Username of the user
+ *     responses:
+ *       200:
+ *         description: List of comments with paste info ordered by newest first
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   content:
+ *                     type: string
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *                   pasteId:
+ *                     type: string
+ *                     nullable: true
+ *                   pasteTitle:
+ *                     type: string
+ *                   pasteLink:
+ *                     type: string
+ *                     nullable: true
+ *       404:
+ *         description: User not found
+ */
+router.get('/user-comments/:username', getUserComments);
+
+/**
+ * @swagger
  * /pastes/{link}:
  *   get:
  *     summary: Get a paste by its link endpoint
@@ -293,7 +337,7 @@ router.get('/comments/:id', validateUUIDParam, handleValidationErrors, getCommen
  *       404:
  *         description: Paste not found
  */
-router.get('/:link', authMiddleware, validateLinkWithRegex, handleValidationErrors, getPasteByLink);
+router.get('/:link', optionalAuth, validateLinkWithRegex, handleValidationErrors, getPasteByLink);
 
 /**
  * @swagger

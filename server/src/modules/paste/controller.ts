@@ -30,6 +30,7 @@ import {
   toggleLikeService,
   unlockPasteService,
   updatePasteByLinkService,
+  getUserCommentsService,
 } from './service';
 
 export const getArchive = async (req: Request, res: Response, next: NextFunction) => {
@@ -294,6 +295,14 @@ export const deleteComment = async (req: Request, res: Response, next: NextFunct
   try {
     const { id } = getAuthUser(req);
     res.status(200).json(await deleteCommentService(String(req.params.id), id));
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getUserComments = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(200).json(await getUserCommentsService(String(req.params.username)));
   } catch (err) {
     next(err);
   }

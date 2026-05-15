@@ -5,6 +5,7 @@ import type {
   IComment,
   IPasteInfo,
   IRecentPublicPaste,
+  IUserComment,
   SearchPastesQuery,
   SearchPastesResponse,
 } from '@/lib/types';
@@ -67,6 +68,10 @@ export const updatePaste = async (
 
 export const getComments = async (pasteId: string): Promise<IComment[]> => {
   return await api.get(`/pastes/comments/${pasteId}`);
+};
+
+export const getUserComments = async (username: string): Promise<IUserComment[]> => {
+  return await api.get(`/pastes/user-comments/${username}`);
 };
 
 export const postComment = async (

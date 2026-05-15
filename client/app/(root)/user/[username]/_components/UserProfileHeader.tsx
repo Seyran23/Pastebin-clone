@@ -12,13 +12,13 @@ dayjs.extend(advancedFormat);
 interface UserProfileHeaderProps {
   profile: IUserProfile;
   isOwner: boolean;
-  searchInput: string;
-  onSearchChange: (v: string) => void;
-  onSearchKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  searchInput?: string;
+  onSearchChange?: (v: string) => void;
+  onSearchKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export default function UserProfileHeader({
-  profile, isOwner, searchInput, onSearchChange, onSearchKeyDown,
+  profile, isOwner, searchInput = '', onSearchChange, onSearchKeyDown,
 }: UserProfileHeaderProps) {
   return (
     <div className="flex justify-between items-center mb-6 text-sm">
@@ -62,7 +62,7 @@ export default function UserProfileHeader({
         <Input
           placeholder="Search your pastes…"
           value={searchInput}
-          onChange={(e) => onSearchChange(e.currentTarget.value)}
+          onChange={(e) => onSearchChange?.(e.currentTarget.value)}
           onKeyDown={onSearchKeyDown}
           className="text-neutral-300 border-zinc-700 focus:outline-none focus:ring-0 text-sm w-56 hidden md:block"
         />
