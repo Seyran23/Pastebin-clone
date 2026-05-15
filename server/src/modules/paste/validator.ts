@@ -2,7 +2,11 @@ import bcrypt from 'bcrypt';
 import { body, param } from 'express-validator';
 
 export const validateCreatePaste = [
-  body('content').isLength({ min: 1 }).withMessage('Content is required'),
+  body('content')
+    .isLength({ min: 1 })
+    .withMessage('Content is required')
+    .isLength({ max: 1_000_000 })
+    .withMessage('Content must not exceed 1 MB'),
   body('category')
     .isInt()
     .withMessage('Category must be an integer ID')
