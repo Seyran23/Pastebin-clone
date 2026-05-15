@@ -25,11 +25,15 @@ const CategoryFilter = ({
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="all">All</SelectItem>
-        {cats?.map((c) => (
-          <SelectItem key={c} value={c}>
-            {c}
-          </SelectItem>
-        ))}
+        {cats?.map((c: { id: number; category_name: string } | string) => {
+          const id = typeof c === 'string' ? c : String(c.id);
+          const name = typeof c === 'string' ? c : c.category_name;
+          return (
+            <SelectItem key={id} value={name}>
+              {name}
+            </SelectItem>
+          );
+        })}
       </SelectContent>
     </Select>
   );
