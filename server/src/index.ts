@@ -14,6 +14,7 @@ import healthRouter from './modules/health/route';
 import pasteRouter from './modules/paste/route';
 import userRouter from './modules/user/route';
 import { startExpiredPasteJobs } from './services/expiredPastes.service';
+import { GRACEFUL_SHUTDOWN_TIMEOUT_MS } from './config/timing';
 import { CLIENT_URL, NODE_ENV, PORT } from './utils/env';
 import logger from './utils/logger';
 import redisClient from './utils/redis';
@@ -83,7 +84,7 @@ const startServer = async (): Promise<void> => {
     setTimeout(() => {
       logger.error('Shutdown timed out — force killing');
       process.exit(1);
-    }, 10_000);
+    }, GRACEFUL_SHUTDOWN_TIMEOUT_MS);
   };
 
   process.on('SIGTERM', () => { void shutdown('SIGTERM'); });

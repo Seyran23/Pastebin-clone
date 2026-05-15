@@ -1,66 +1,48 @@
+import cron from 'node-cron';
 import { Op } from 'sequelize';
 
 import { Paste } from '@/db/models';
 import { deleteFileFromS3 } from '@/modules/cloud/service';
 import logger from '@/utils/logger';
 
-const markExpiredPastes = async (): Promise<void> => {
-  const now = Date.now();
-  await Paste.update(
-    { expired: true },
-    { where: { expiration_time: { [Op.lte]: now }, expired: false } },
-  );
-};
-
-const deleteExpiredPastes = async (): Promise<void> => {
+export const deleteExpiredPastes = async (): Promise<void> => {
   const now = Date.now();
 
   const expiredPastes = await Paste.findAll({
-    where: { expiration_time: { [Op.lte]: now }, expired: true },
+    where: { expiration_time: { [Op.lte]: now }, expired: false },
+    attributes: ['id', 'cloud_name'],
   });
+
+  if (expiredPastes.length === 0) return;
+
+  logger.info(`Cleaning up ${expiredPastes.length} expired paste(s)`);
 
   for (const paste of expiredPastes) {
     try {
       await deleteFileFromS3(paste.cloud_name);
     } catch (err) {
-      logger.error({ pasteId: paste.id, err }, 'Failed to delete S3 file for paste');
+      logger.error({ pasteId: paste.id, err }, 'Failed to delete S3 file for expired paste');
     }
   }
 
   await Paste.destroy({
-    where: { expiration_time: { [Op.lte]: now }, expired: true },
+    where: { expiration_time: { [Op.lte]: now }, expired: false },
   });
 };
 
-const scheduleMarkExpired = (): void => {
-  const run = async () => {
-    try {
-      await markExpiredPastes();
-    } catch (err) {
-      logger.error({ err }, 'markExpiredPastes failed');
-    } finally {
-      setTimeout(run, 60 * 1000);
-    }
-  };
-  setTimeout(run, 60 * 1000);
-};
-
-const scheduleDeleteExpired = (): void => {
-  const run = async () => {
-    try {
-      await deleteExpiredPastes();
-    } catch (err) {
-      logger.error({ err }, 'deleteExpiredPastes failed');
-    } finally {
-      setTimeout(run, 2 * 60 * 1000);
-    }
-  };
-  setTimeout(run, 2 * 60 * 1000);
-};
-
+// Runs at midnight and 6am daily as a safety sweep
 export const startExpiredPasteJobs = (): void => {
-  scheduleMarkExpired();
-  scheduleDeleteExpired();
-};
+  cron.schedule('0 0 * * *', () => {
+    void deleteExpiredPastes().catch((err) =>
+      logger.error({ err }, 'Midnight expired paste cleanup failed'),
+    );
+  });
 
-export { deleteExpiredPastes, markExpiredPastes };
+  cron.schedule('0 6 * * *', () => {
+    void deleteExpiredPastes().catch((err) =>
+      logger.error({ err }, '6am expired paste cleanup failed'),
+    );
+  });
+
+  logger.info('Expired paste cleanup scheduled (midnight + 6am daily)');
+};
