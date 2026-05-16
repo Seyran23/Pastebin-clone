@@ -3,6 +3,7 @@ export interface IUserInfo {
   email: string;
   username: string;
   isActivated: boolean;
+  hasPassword: boolean;
   avatar: string;
   location: string;
   createdAt: string;

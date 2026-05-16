@@ -6,6 +6,7 @@ export class UserDto {
   email: string;
   role: 'user' | 'admin';
   isActivated: boolean;
+  hasPassword: boolean;
   avatar: string | null;
   location: string | null;
   createdAt: Date | undefined;
@@ -16,6 +17,7 @@ export class UserDto {
     this.email = model.email;
     this.role = model.role;
     this.isActivated = model.isActivated;
+    this.hasPassword = !!model.password;
     this.avatar = model.avatar;
     this.location = model.location;
     this.createdAt = model.createdAt;

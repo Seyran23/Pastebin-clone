@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { changePassword } from '@/lib/api';
 import { userSettingsLinks } from '@/lib/constants/auth-links';
+import { useAuthStore } from '@/store/useAuthStore';
 
 
 const formSchema = z
@@ -34,6 +35,7 @@ const formSchema = z
   });
 
 const ChangePasswordPage = () => {
+  const { user } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,6 +60,24 @@ const ChangePasswordPage = () => {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  if (user && !user.hasPassword) {
+    return (
+      <div className="container max-w-[1024px] mx-auto px-4">
+        <h1 className="text-2xl font-bold mb-3 border-b border-zinc-300 dark:border-zinc-600">
+          Change Your Password
+        </h1>
+        <InfoBox variant="info">
+          Your account uses <strong>Google sign-in</strong> and does not have a password.
+          To manage your password, visit your{' '}
+          <a href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80">
+            Google account security settings
+          </a>.
+        </InfoBox>
+        <RelatedPages links={userSettingsLinks} />
+      </div>
+    );
   }
 
   return (

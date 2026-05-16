@@ -45,7 +45,7 @@ export const signupService = async (username: string, email: string, password: s
     `${CLIENT_URL}/verify-email?activationLink=${activationLink}`,
   );
 
-  const payload = { id: user.id, username, email, role: user.role, isActivated: user.isActivated };
+  const payload = { id: user.id, username, email, role: user.role, isActivated: user.isActivated, hasPassword: !!user.password };
   const tokens = generateTokens(payload);
 
   // Save refresh token so the user can refresh immediately after signup
@@ -69,6 +69,7 @@ export const loginService = async (username: string, password: string) => {
     email: user.email,
     role: user.role,
     isActivated: user.isActivated,
+    hasPassword: !!user.password,
   };
   const tokens = generateTokens(payload);
   await saveToken(user.id, tokens.refreshToken);
@@ -95,7 +96,7 @@ export const activateProfileService = async (activationLink: string, requestingU
   user.activationLink = null;
   await user.save();
 
-  const payload = { id: user.id, username: user.username, role: user.role, isActivated: true };
+  const payload = { id: user.id, username: user.username, role: user.role, isActivated: true, hasPassword: !!user.password };
   const tokens = generateTokens(payload);
   const userDto = new UserDto(user);
   return { ...tokens, user: userDto };

@@ -5,6 +5,7 @@ declare global {
       username: string;
       role: 'user' | 'admin';
       isActivated: boolean;
+      hasPassword: boolean;
       email?: string;
     }
   }
