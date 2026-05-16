@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="max-w-[1340px] mx-auto px-4 flex flex-col md:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4 text-sm text-neutral-400">
             <div className="flex flex-wrap gap-4">
-              <Link href="/create" className="hover:text-neutral-200 transition-colors">Create Paste</Link>
+              <Link href="/" className="hover:text-neutral-200 transition-colors">Create Paste</Link>
               <Link href="/archive" className="hover:text-neutral-200 transition-colors">Archive</Link>
               <Link href="#" className="hover:text-neutral-200 transition-colors">FAQ</Link>
             </div>
