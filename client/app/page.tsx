@@ -2,6 +2,7 @@
 
 import Editor from '@monaco-editor/react';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 import Select from 'react-select';
 
 import InfoBox from '@/components/shared/InfoBox';
@@ -11,10 +12,12 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useNewPasteForm } from '@/hooks/useNewPasteForm';
 import { exposureOptions } from '@/lib/constants/paste-options';
-import { customSelectStyles } from '@/lib/constants/select-styles';
+import { getSelectStyles } from '@/lib/constants/select-styles';
 import { useAuthStore } from '@/store/useAuthStore';
 
 export default function NewPastePage() {
+  const { theme } = useTheme();
+  const selectStyles = getSelectStyles(theme !== 'light');
   const { isAuthenticated } = useAuthStore();
   const {
     formData,
@@ -31,18 +34,18 @@ export default function NewPastePage() {
   } = useNewPasteForm();
 
   return (
-    <div className="container max-w-4xl mx-auto py-6 text-neutral-200">
+    <div className="container max-w-4xl mx-auto py-6 text-neutral-800 dark:text-neutral-200">
       <div className="flex flex-col gap-6">
 
         {/* Header */}
-        <div className="flex items-center pb-2 border-b border-zinc-700">
+        <div className="flex items-center pb-2 border-b border-zinc-300 dark:border-zinc-700">
           <h1 className="text-xl font-semibold">New Paste</h1>
         </div>
 
         {/* Monaco Editor */}
         <div className="flex flex-col gap-1">
           <Label className="text-sm text-zinc-400">Content</Label>
-          <div className="rounded-md border border-zinc-700 overflow-hidden h-72">
+          <div className="rounded-md border border-zinc-300 dark:border-zinc-700 overflow-hidden h-72">
             <Editor
               height="100%"
               language={syntaxLanguage}
@@ -66,35 +69,35 @@ export default function NewPastePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <Label className="text-sm text-zinc-400">Paste Title</Label>
+              <Label className="text-sm text-zinc-500 dark:text-zinc-400">Paste Title</Label>
               <Input
                 name="pasteName"
                 value={formData.pasteName}
                 onChange={handleChange}
                 placeholder="Optional title"
-                className="bg-zinc-900 border-zinc-700 focus:outline-none focus:ring-0"
+                className="bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 focus:outline-none focus:ring-0"
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <Label className="text-sm text-zinc-400">Category</Label>
+              <Label className="text-sm text-zinc-500 dark:text-zinc-400">Category</Label>
               <Select
                 instanceId="category"
                 options={categoryOptions}
                 value={categoryOptions.find((o) => o.value === formData.category) ?? null}
-                styles={customSelectStyles}
+                styles={selectStyles}
                 onChange={(o) => o && handleSelect('category', o)}
                 placeholder="Select category…"
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <Label className="text-sm text-zinc-400">Syntax Highlight</Label>
+              <Label className="text-sm text-zinc-500 dark:text-zinc-400">Syntax Highlight</Label>
               <Select
                 instanceId="syntax"
                 options={syntaxOptions}
                 value={syntaxOptions.find((o) => o.value === formData.syntax) ?? null}
-                styles={customSelectStyles}
+                styles={selectStyles}
                 onChange={(o) => o && handleSelect('syntax', o)}
               />
             </div>
@@ -102,29 +105,29 @@ export default function NewPastePage() {
 
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
-              <Label className="text-sm text-zinc-400">Expiration</Label>
+              <Label className="text-sm text-zinc-500 dark:text-zinc-400">Expiration</Label>
               <Select
                 instanceId="expiration"
                 options={expirationOptions}
                 value={expirationOptions.find((o) => o.value === formData.expiration) ?? null}
-                styles={customSelectStyles}
+                styles={selectStyles}
                 onChange={(o) => o && setFormData((p) => ({ ...p, expiration: o.value }))}
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <Label className="text-sm text-zinc-400">Exposure</Label>
+              <Label className="text-sm text-zinc-500 dark:text-zinc-400">Exposure</Label>
               <Select
                 instanceId="exposure"
                 options={exposureOptions}
                 value={exposureOptions.find((o) => o.value === formData.exposure) ?? null}
-                styles={customSelectStyles}
+                styles={selectStyles}
                 onChange={(o) => o && handleSelect('exposure', o)}
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <Label className="text-sm text-zinc-400">Password Protection</Label>
+              <Label className="text-sm text-zinc-500 dark:text-zinc-400">Password Protection</Label>
               <div className="flex items-center gap-2">
                 <Switch
                   checked={formData.passwordProtection}
@@ -136,7 +139,7 @@ export default function NewPastePage() {
                   disabled={!formData.passwordProtection}
                   value={formData.password}
                   onChange={handleChange}
-                  className={`flex-1 bg-zinc-900 border-zinc-700 focus:outline-none focus:ring-0 ${formData.passwordProtection ? 'font-mono text-xs' : ''}`}
+                  className={`flex-1 bg-zinc-100 dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 focus:outline-none focus:ring-0 ${formData.passwordProtection ? 'font-mono text-xs' : ''}`}
                 />
               </div>
             </div>

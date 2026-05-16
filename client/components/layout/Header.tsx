@@ -16,6 +16,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -43,12 +44,12 @@ const Header = () => {
   const user = useAuthStore((state) => state.user);
 
   return (
-    <header className="border-b border-zinc-600">
+    <header className="border-b border-zinc-300 dark:border-zinc-600">
       <div className="container max-w-[1340px] mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
             <Image alt="logo" src={pastebinLogo} width={50} height={50} />
-            <span className="text-neutral-50 text-2xl font-semibold tracking-wider uppercase">
+            <span className="text-neutral-900 dark:text-neutral-50 text-2xl font-semibold tracking-wider uppercase">
               Pastebin
             </span>
           </Link>
@@ -68,7 +69,7 @@ const Header = () => {
               <Input
                 type="text"
                 placeholder="Search pastes..."
-                className="pr-10 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 border-zinc-600 text-white placeholder:text-gray-400 bg-transparent"
+                className="pr-10 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 border-zinc-300 dark:border-zinc-600 text-neutral-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 bg-transparent"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     router.push(`/search?q=${encodeURIComponent(e.currentTarget.value)}`);
@@ -77,7 +78,7 @@ const Header = () => {
               />
               <SearchIcon
                 strokeWidth={2.5}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-white h-4 w-4"
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-500 dark:text-white h-4 w-4"
               />
             </div>
           )}
@@ -85,7 +86,8 @@ const Header = () => {
 
         {user?.isActivated ? (
           <div className="flex items-center gap-4">
-            <span className="text-neutral-100 text-sm">{user.username}</span>
+            <ThemeToggle />
+            <span className="text-neutral-700 dark:text-neutral-100 text-sm">{user.username}</span>
             <Avatar>
               <AvatarImage
                 src={user?.avatar || "/profile-default.svg"}
@@ -96,13 +98,17 @@ const Header = () => {
             <UserDropdown username={user.username} />
           </div>
         ) : user ? (
-          <UnactivatedBanner username={user.username} />
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <UnactivatedBanner username={user.username} />
+          </div>
         ) : (
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <Link href="/login">
               <Button
                 variant="outline"
-                className="text-white bg-transparent border-zinc-500 hover:bg-white/10 transition-colors text-sm"
+                className="text-neutral-700 dark:text-white bg-transparent border-zinc-300 dark:border-zinc-500 hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-sm"
               >
                 Login
               </Button>
@@ -110,7 +116,7 @@ const Header = () => {
             <Link href="/signup">
               <Button
                 variant="default"
-                className="bg-white text-blue-600 hover:bg-zinc-100 transition-colors text-sm"
+                className="bg-neutral-900 dark:bg-white text-white dark:text-blue-600 hover:bg-neutral-700 dark:hover:bg-zinc-100 transition-colors text-sm"
               >
                 Sign Up
               </Button>

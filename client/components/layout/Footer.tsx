@@ -5,8 +5,8 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-16 bg-neutral-800">
-      <div className="border-t border-zinc-700 py-8">
+    <footer className="mt-16 bg-zinc-200 dark:bg-neutral-800">
+      <div className="border-t border-zinc-200 dark:border-zinc-700 py-8">
         <div className="max-w-[1340px] mx-auto px-4 flex flex-col md:flex-row justify-between gap-8">
           <div className="flex flex-col gap-4 text-sm text-neutral-400">
             <div className="flex flex-wrap gap-4">
