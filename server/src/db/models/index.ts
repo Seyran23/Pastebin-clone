@@ -18,7 +18,6 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   logging: NODE_ENV === 'development' ? false : false,
 });
 
-// Initialize all models
 User.initModel(sequelize);
 Paste.initModel(sequelize);
 Comment.initModel(sequelize);
@@ -28,7 +27,6 @@ PasteCategory.initModel(sequelize);
 SyntaxHighlights.initModel(sequelize);
 ExpirationTime.initModel(sequelize);
 
-// Associations
 User.hasMany(Paste, { foreignKey: 'createdBy', as: 'pastes' });
 User.hasOne(Token, { foreignKey: 'user_id', as: 'token' });
 User.hasMany(Comment, { foreignKey: 'user_id', as: 'comments' });

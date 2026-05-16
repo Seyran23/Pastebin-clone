@@ -1,27 +1,28 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { useMutation } from "@tanstack/react-query";
+import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import RelatedPages from '@/components/shared/RelatedPages';
-import InfoBox from '@/components/shared/InfoBox';
-import { useAuthStore } from "@/store/useAuthStore";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
 import { updateProfile } from '@/lib/api';
 import { CustomError } from '@/lib/types';
-import { useState } from "react";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const authLinks = [
   { href: "/user/profile", label: "Profile" },
@@ -53,13 +54,11 @@ const UserProfilePage = () => {
   const mutation = useMutation({
     mutationFn: updateProfile,
     onSuccess: (data) => {
-      // form.reset();
       setUserInfo(data.user);
       setSuccessMessage(data.message);
     },
     onError: (error) => {
       const customError = error as CustomError;
-
       if (customError.errors.length > 0) {
         customError.errors.forEach((err) => {
           form.setError(err.field as any, { message: err.message });
@@ -96,36 +95,26 @@ const UserProfilePage = () => {
         </InfoBox>
       )}
 
-      {/* Content Layout */}
       <div className="flex flex-col md:flex-row gap-8">
         <Card className="flex-1 bg-neutral-800 border-none">
           <CardContent className="space-y-4">
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4 text-white"
-              >
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-white">
                 <div className="flex items-center gap-4 w-full">
-                  <FormLabel className="w-32 whitespace-nowrap">
-                    Username:
-                  </FormLabel>
+                  <FormLabel className="w-32 whitespace-nowrap">Username:</FormLabel>
                   <p>{user?.username}</p>
                 </div>
 
-                {/* Email Field - Readonly */}
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem className="flex items-center gap-4 w-full">
-                      <FormLabel className="w-32 whitespace-nowrap">
-                        Email:
-                      </FormLabel>
+                      <FormLabel className="w-32 whitespace-nowrap">Email:</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           readOnly
-                          // value={user?.email || ''}
                           className="bg-zinc-800 border-zinc-700 focus:ring-0 text-neutral-300"
                         />
                       </FormControl>
@@ -133,44 +122,28 @@ const UserProfilePage = () => {
                   )}
                 />
 
-                {/* Email Status - Static Display */}
                 <div className="flex items-center gap-4 w-full">
-                  <FormLabel className="w-32 whitespace-nowrap">
-                    Email Status:
-                  </FormLabel>
-                  <p
-                    className={
-                      user?.isActivated ? "text-green-600" : "text-red-700"
-                    }
-                  >
+                  <FormLabel className="w-32 whitespace-nowrap">Email Status:</FormLabel>
+                  <p className={user?.isActivated ? "text-green-600" : "text-red-700"}>
                     {user?.isActivated ? "Verified" : "Not Activated"}
                   </p>
                 </div>
 
-                {/* Location Field */}
                 <FormField
                   control={form.control}
                   name="location"
                   render={({ field }) => (
                     <FormItem className="flex items-center gap-4 w-full">
-                      <FormLabel className="w-32 whitespace-nowrap">
-                        Location:
-                      </FormLabel>
+                      <FormLabel className="w-32 whitespace-nowrap">Location:</FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          className="bg-zinc-800 border-zinc-700 focus:ring-0"
-                        />
+                        <Input {...field} className="bg-zinc-800 border-zinc-700 focus:ring-0" />
                       </FormControl>
                     </FormItem>
                   )}
                 />
 
-                {/* Avatar Field */}
                 <div className="flex items-center gap-4 w-full">
-                  <FormLabel className="w-32 whitespace-nowrap">
-                    Avatar:
-                  </FormLabel>
+                  <FormLabel className="w-32 whitespace-nowrap">Avatar:</FormLabel>
                   <div className="flex items-center gap-4">
                     <Avatar>
                       <AvatarImage
@@ -179,10 +152,7 @@ const UserProfilePage = () => {
                         className="w-20 h-20 object-cover p-1 border border-zinc-500 rounded-xs"
                       />
                     </Avatar>
-                    <Link
-                      href="/user/change-avatar"
-                      className="text-blue-500 hover:text-blue-400"
-                    >
+                    <Link href="/user/change-avatar" className="text-blue-500 hover:text-blue-400">
                       Change Avatar
                     </Link>
                   </div>
@@ -202,7 +172,6 @@ const UserProfilePage = () => {
           </CardContent>
         </Card>
 
-        {/* Right - Related Pages */}
         <RelatedPages links={authLinks} />
       </div>
     </div>

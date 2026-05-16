@@ -105,7 +105,7 @@ const SignupPage = () => {
       <div className="flex flex-col md:flex-row gap-8">
         <Card className="flex-1 bg-neutral-800 border-none">
           <CardContent className="p-6 space-y-5">
-            {/* Google OAuth */}
+
             <Button
               type="button"
               variant="outline"

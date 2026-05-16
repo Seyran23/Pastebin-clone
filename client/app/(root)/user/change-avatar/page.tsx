@@ -29,53 +29,42 @@ const authLinks = [
   { href: "/user/delete-account", label: "Delete Account" },
 ];
 
-// Validation Schema
 const formSchema = z.object({
   avatar: z
-    .instanceof(File) // Ensure the uploaded value is a File object
+    .instanceof(File)
     .refine(
-      (file) => {
-        const validTypes = ["image/jpeg", "image/png", "image/jpg"];
-        return validTypes.includes(file.type); // Validate file type
-      },
-      {
-        message: "Only JPG/JPEG or PNG files are allowed.",
-      }
+      (file) => ["image/jpeg", "image/png", "image/jpg"].includes(file.type),
+      { message: "Only JPG/JPEG or PNG files are allowed." }
     )
     .refine(
-      (file) => file.size <= 3 * 1024 * 1024, // Limit file size to 3MB
-      {
-        message: "File size must be less than 3MB.",
-      }
+      (file) => file.size <= 3 * 1024 * 1024,
+      { message: "File size must be less than 3MB." }
     ),
 });
 
 const ChangeAvatarPage = () => {
-  const {updateUserAvatar, user} = useAuthStore()
-  const router = useRouter()
+  const { updateUserAvatar, user } = useAuthStore();
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      avatar: undefined, // Default value for file input
-    },
+    defaultValues: { avatar: undefined },
   });
 
   const mutation = useMutation({
     mutationFn: (file: File) => updateAvatar(file),
     onSuccess: (response) => {
-      updateUserAvatar(response.newAvatar)
-      form.reset()
-      router.push(`/user/${user?.username}`)
+      updateUserAvatar(response.newAvatar);
+      form.reset();
+      router.push(`/user/${user?.username}`);
     },
     onError: (error: any) => {
       toast.error(error?.message ?? 'Failed to update avatar.');
       setTimeout(() => mutation.reset(), 5000);
-    }
-  })
+    },
+  });
 
-  // Handle form submission
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    mutation.mutate(values.avatar)
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    mutation.mutate(values.avatar);
   }
 
   return (
@@ -84,13 +73,11 @@ const ChangeAvatarPage = () => {
         Change Your Avatar
       </h1>
 
-      {/* Info Alert */}
       <InfoBox>
         To update your avatar, select a valid JPG or PNG image. We will
         automatically resize the image for you.
       </InfoBox>
 
-      {/* Error Messages */}
       {Object.keys(form.formState.errors).length > 0 && (
         <InfoBox variant="error">
           <div className="space-y-1">
@@ -101,18 +88,11 @@ const ChangeAvatarPage = () => {
         </InfoBox>
       )}
 
-      {/* Content Layout */}
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Left - Form */}
         <Card className="flex-1 bg-neutral-800 border-none">
           <CardContent className="space-y-4">
-            {/* Form */}
             <Form {...form}>
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
-              >
-                {/* Avatar Upload Field */}
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="avatar"
@@ -123,31 +103,24 @@ const ChangeAvatarPage = () => {
                       </FormLabel>
                       <FormControl>
                         <div className="flex items-center gap-4">
-                          {/* Hidden File Input */}
                           <Input
                             id="avatar-upload"
                             type="file"
-                            accept="image/jpeg, image/png" // Restrict file types
+                            accept="image/jpeg, image/png"
                             className="hidden"
                             onChange={(e) => {
                               const file = e.target.files?.[0];
-                              if (file) {
-                                field.onChange(file); // Update form state with the selected file
-                              }
+                              if (file) field.onChange(file);
                             }}
                           />
-                          {/* Custom Button */}
                           <label
                             htmlFor="avatar-upload"
                             className="px-4 py-2 bg-zinc-500 text-white rounded cursor-pointer hover:bg-zinc-400 transition-colors"
                           >
                             Choose File
                           </label>
-                          {/* Selected File Name */}
                           <span className="text-neutral-300">
-                            {field.value
-                              ? field.value.name
-                              : "No file selected"}
+                            {field.value ? field.value.name : "No file selected"}
                           </span>
                         </div>
                       </FormControl>
@@ -155,7 +128,6 @@ const ChangeAvatarPage = () => {
                   )}
                 />
 
-                {/* Submit Button */}
                 <Button
                   type="submit"
                   className="px-6 py-2 bg-white text-black hover:bg-zinc-200 self-start"
@@ -170,7 +142,6 @@ const ChangeAvatarPage = () => {
           </CardContent>
         </Card>
 
-        {/* Right - Related Pages */}
         <RelatedPages links={authLinks} />
       </div>
     </div>

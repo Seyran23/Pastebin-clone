@@ -37,12 +37,12 @@ export default function NewPastePage() {
     <div className="container max-w-4xl mx-auto py-6 text-neutral-800 dark:text-neutral-200">
       <div className="flex flex-col gap-6">
 
-        {/* Header */}
+
         <div className="flex items-center pb-2 border-b border-zinc-300 dark:border-zinc-700">
           <h1 className="text-xl font-semibold">New Paste</h1>
         </div>
 
-        {/* Monaco Editor */}
+
         <div className="flex flex-col gap-1">
           <Label className="text-sm text-zinc-400">Content</Label>
           <div className="rounded-md border border-zinc-300 dark:border-zinc-700 overflow-hidden h-72">
@@ -65,7 +65,7 @@ export default function NewPastePage() {
           </div>
         </div>
 
-        {/* Settings Grid */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">

@@ -84,7 +84,6 @@ const LoginPage = () => {
       <div className="flex flex-col md:flex-row gap-8">
         <Card className="flex-1 bg-neutral-800 border-none">
           <CardContent className="p-6 space-y-5">
-            {/* Google OAuth */}
             <Button
               type="button"
               variant="outline"
@@ -114,7 +113,6 @@ const LoginPage = () => {
               Sign in with Google
             </Button>
 
-            {/* Divider */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-zinc-600" />
@@ -124,7 +122,6 @@ const LoginPage = () => {
               </div>
             </div>
 
-            {/* Form */}
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
