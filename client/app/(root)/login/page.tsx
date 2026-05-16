@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from 'sonner';
 import { z } from "zod";
 
 import InfoBox from '@/components/shared/InfoBox';
@@ -63,6 +64,7 @@ const LoginPage = () => {
         });
       } else {
         form.setError('root', { message: customError.message });
+        toast.error(customError.message ?? 'Login failed. Please try again.');
       }
     },
   });

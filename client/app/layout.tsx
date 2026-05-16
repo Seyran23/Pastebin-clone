@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import QueryProvider from '@/components/layout/QueryProvider';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
 import LastestPastes from '@/components/paste/LatestPastes';
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
   title: "Pastebin Clone",
@@ -32,6 +33,7 @@ export default function RootLayout({
               </div>
               <Footer />
             </div>
+            <Toaster richColors position="bottom-right" />
           </QueryProvider>
         </ThemeProvider>
       </body>

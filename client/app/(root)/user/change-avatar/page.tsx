@@ -1,25 +1,26 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { toast } from 'sonner';
 import { z } from "zod";
 
+import InfoBox from '@/components/shared/InfoBox';
+import RelatedPages from '@/components/shared/RelatedPages';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import RelatedPages from '@/components/shared/RelatedPages';
-import InfoBox from '@/components/shared/InfoBox';
 import { Input } from "@/components/ui/input";
-import { useMutation } from "@tanstack/react-query";
 import { updateAvatar } from '@/lib/api';
 import { useAuthStore } from "@/store/useAuthStore";
-import { useRouter } from "next/navigation";
 
 const authLinks = [
   { href: "/user/profile", label: "Profile" },
@@ -67,7 +68,8 @@ const ChangeAvatarPage = () => {
       router.push(`/user/${user?.username}`)
     },
     onError: (error: any) => {
-      setTimeout(() => mutation.reset(), 5000); 
+      toast.error(error?.message ?? 'Failed to update avatar.');
+      setTimeout(() => mutation.reset(), 5000);
     }
   })
 

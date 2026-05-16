@@ -3,6 +3,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 import { useCategories } from '@/hooks/useCategories';
 import { createPaste, getExpirationTimes, getSyntaxHighlights } from '@/lib/api';
@@ -70,6 +71,7 @@ export function useNewPasteForm() {
   const createPasteMutation = useMutation({
     mutationFn: (data: CreatePastePayload) => createPaste(data),
     onSuccess: (response) => router.push(`/${response.linkEndpoint}`),
+    onError: () => toast.error('Failed to create paste. Please try again.'),
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>

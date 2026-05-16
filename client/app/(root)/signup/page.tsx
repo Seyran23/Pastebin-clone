@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import InfoBox from '@/components/shared/InfoBox';
@@ -61,6 +62,7 @@ const SignupPage = () => {
         });
       } else {
         form.setError('root', { message: customError.message });
+        toast.error(customError.message ?? 'Signup failed. Please try again.');
       }
     },
   });

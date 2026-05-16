@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 
 import PastesTable from '@/components/paste/PastesTable';
 import InfoBox from '@/components/shared/InfoBox';
-import { Toaster } from '@/components/ui/sonner';
 import { deletePaste, getPastesByProfile, getUserPasteStats, getUserProfile } from '@/lib/api';
 import { IUserPaste } from '@/lib/types';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -106,7 +105,7 @@ export default function UserProfilePage() {
       {pastes?.length === 0 && (
         <InfoBox className="text-white">
           Pastebin is empty.{' '}
-          <Link href="/create" className="text-sky-300 hover:text-sky-400">
+          <Link href="/" className="text-sky-300 hover:text-sky-400">
             Create your first paste.
           </Link>
         </InfoBox>
@@ -128,7 +127,6 @@ export default function UserProfilePage() {
         <OwnerStatsSection username={usernameStr} stats={stats} isLoading={loadingStats} />
       )}
 
-      <Toaster richColors position="bottom-right" />
     </div>
   );
 }
