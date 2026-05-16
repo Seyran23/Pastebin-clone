@@ -72,8 +72,7 @@ const LastestPastes = () => {
             </div>
           ))
         ) : (
-          <div className="flex gap-2">
-            <GlobeIcon className="w-3.5 h-3.5 text-neutral-400" />
+          <div className="flex gap-2 items-center text-zinc-500 dark:text-neutral-400 font-bold">
             <span>Nothing here yet</span>
           </div>
         )}
