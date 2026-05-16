@@ -1,6 +1,5 @@
 "use client";
 
-import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -9,6 +8,7 @@ import { SearchPastesQuery } from '@/lib/types';
 
 import PasteSearchCard from './_components/PasteSearchCard';
 import SearchFilters from './_components/SearchFilters';
+import { SearchSkeletonCard } from './_components/SearchSkeletonCard';
 
 export default function SearchPage() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function SearchPage() {
     setCategory(urlCategory);
     setTime(urlTime);
     setSort(urlSort);
-    
+
     if (urlQ) {
       setSearchQuery({
         searchTerm: urlQ,
@@ -68,7 +68,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="container max-w-[1024px] mx-auto px-4 text-white">
+    <div className="container max-w-[1024px] mx-auto px-4 text-neutral-800 dark:text-white">
       <SearchFilters
         q={q}
         category={category}
@@ -82,8 +82,8 @@ export default function SearchPage() {
       />
 
       {isLoading && (
-        <div className="flex justify-center mt-10">
-          <Loader2 className="animate-spin w-8 h-8 text-neutral-400" />
+        <div className="mt-8 space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => <SearchSkeletonCard key={i} />)}
         </div>
       )}
       {isError && (
@@ -106,7 +106,7 @@ export default function SearchPage() {
             onClick={() =>
               setSearchQuery((q) => q ? { ...q, direction: 'prev', cursor: data.pagination.prevCursor ?? undefined } : q)
             }
-            className="text-xs px-4 py-1.5 border border-zinc-700 rounded text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="text-xs px-4 py-1.5 border border-zinc-300 dark:border-zinc-700 rounded text-zinc-500 dark:text-zinc-400 hover:border-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             ← Previous
           </button>
@@ -118,7 +118,7 @@ export default function SearchPage() {
             onClick={() =>
               setSearchQuery((q) => q ? { ...q, direction: 'next', cursor: data.pagination.nextCursor ?? undefined } : q)
             }
-            className="text-xs px-4 py-1.5 border border-zinc-700 rounded text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="text-xs px-4 py-1.5 border border-zinc-300 dark:border-zinc-700 rounded text-zinc-500 dark:text-zinc-400 hover:border-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             Next →
           </button>

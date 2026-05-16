@@ -10,6 +10,8 @@ import { getArchive } from '@/lib/api';
 import type { ArchiveItem } from '@/lib/types';
 import { bytesToKilobytes, formatRemainingTime } from '@/lib/utils';
 
+import { ArchiveSkeletonRow } from './_components/ArchiveSkeletonRow';
+
 dayjs.extend(advancedFormat);
 
 export default function ArchivePage() {
@@ -42,7 +44,7 @@ export default function ArchivePage() {
   };
 
   return (
-    <div className="container max-w-[1024px] mx-auto px-4 text-white">
+    <div className="container max-w-[1024px] mx-auto px-4 text-neutral-800 dark:text-white">
       {/* Header */}
       <div className="flex items-center gap-2 mb-6 pb-2 border-b border-zinc-700">
         <GlobeIcon size={20} className="text-zinc-400" />
@@ -51,8 +53,8 @@ export default function ArchivePage() {
       </div>
 
       {isLoading && (
-        <div className="flex justify-center py-20">
-          <Loader2 className="animate-spin w-8 h-8 text-neutral-400" />
+        <div className="divide-y divide-zinc-200 dark:divide-zinc-700">
+          {Array.from({ length: 10 }).map((_, i) => <ArchiveSkeletonRow key={i} />)}
         </div>
       )}
 
