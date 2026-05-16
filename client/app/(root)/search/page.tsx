@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import { useSearchPastes } from '@/hooks/useSearch';
 import { SearchPastesQuery } from '@/lib/types';
+import { useAuthStore } from '@/store/useAuthStore';
 
 import PasteSearchCard from './_components/PasteSearchCard';
 import SearchFilters from './_components/SearchFilters';
@@ -13,6 +14,13 @@ import { SearchSkeletonCard } from './_components/SearchSkeletonCard';
 export default function SearchPage() {
   const router = useRouter();
   const params = useSearchParams();
+  const { isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace('/login?redirect=/search');
+    }
+  }, [isAuthenticated, router]);
 
   const urlQ = params.get('q') || '';
   const urlCategory = params.get('category') || 'all';

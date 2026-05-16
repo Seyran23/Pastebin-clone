@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -37,6 +37,7 @@ const formSchema = z.object({
 
 const LoginPage = () => {
   const router = useRouter();
+  const params = useSearchParams();
   const { saveAccessToken, saveRefreshToken, setUserInfo } = useAuthStore();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -51,7 +52,8 @@ const LoginPage = () => {
       saveAccessToken(data.accessToken);
       saveRefreshToken(data.refreshToken);
       setUserInfo(data.user);
-      router.push(`/user/${data.user.username}`);
+      const redirect = params.get('redirect');
+      router.push(redirect ?? `/user/${data.user.username}`);
     },
     onError: (error: unknown) => {
       const customError = error as CustomError;
