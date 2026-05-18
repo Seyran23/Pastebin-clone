@@ -70,7 +70,9 @@ export default function PasteView() {
     );
   }
 
-  if (data?.requiresPassword) {
+  if (!data) return null;
+
+  if (data.requiresPassword) {
     return (
       <LockedPasteView
         password={password}
@@ -114,7 +116,7 @@ export default function PasteView() {
         />
       </div>
 
-      <CommentSection pasteId={data?.pasteData?.id ?? ''} />
+      <CommentSection pasteId={data.pasteData?.id ?? ''} />
     </div>
   );
 }
