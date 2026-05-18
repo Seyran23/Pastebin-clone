@@ -19,7 +19,8 @@ export const validateCreatePaste = [
     .optional({ nullable: true }),
   body('exposure').isIn(['public', 'private', 'unlisted']).withMessage('Invalid exposure value'),
   body('expirationTime').notEmpty().withMessage('Expiration Time is required'),
-  body('name').notEmpty().withMessage('Name is required'),
+  body('name').notEmpty().withMessage('Name is required')
+    .isLength({ max: 255 }).withMessage('Name must not exceed 255 characters'),
 ];
 
 export const validateEditPaste = [
@@ -38,7 +39,9 @@ export const validateEditPaste = [
 
 export const validateCreateComment = [
   param('id').isUUID().withMessage('Invalid ID format, must be a UUID'),
-  body('content').isLength({ min: 1 }).withMessage('Comment cannot be empty'),
+  body('content')
+    .isLength({ min: 1 }).withMessage('Comment cannot be empty')
+    .isLength({ max: 5000 }).withMessage('Comment must not exceed 5000 characters'),
 ];
 
 export const validateUUIDParam = [
