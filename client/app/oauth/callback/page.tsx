@@ -33,6 +33,7 @@ export default function OAuthCallbackPage() {
         username: payload.username,
         email: payload.email,
         isActivated: payload.isActivated,
+        hasPassword: payload.hasPassword ?? false,
         avatar: payload.avatar ?? '',
         location: payload.location ?? '',
         createdAt: payload.createdAt,
