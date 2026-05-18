@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from 'express';
 
-import { ExpirationTime, User } from '@/db/models';
+import { ExpirationTime } from '@/db/models';
 import { AppError } from '@/middlewares/error-handler';
 import { deleteFileFromS3, uploadFileToS3 } from '@/modules/cloud/service';
 import attachAvatarImage from '@/utils/attachAvatar';
@@ -147,10 +147,7 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
     };
 
     let { password } = req.body as { password?: string };
-    const { username } = getAuthUser(req);
-
-    const user = await User.findOne({ attributes: ['id'], where: { username } });
-    if (!user) throw new AppError(404, 'User not found!');
+    const { id: userId } = getAuthUser(req);
 
     if (password) {
       password = await hashingPassword(password);
@@ -176,7 +173,7 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
     let newPaste;
     try {
       newPaste = await createPasteService({
-        createdBy: user.id,
+        createdBy: userId,
         category_id: category ?? null,
         syntax_highlight_id: syntaxHighlight ?? null,
         exposure,
@@ -291,7 +288,7 @@ export const createComment = async (req: Request, res: Response, next: NextFunct
     const { content } = req.body as { content: string };
     const { id } = req.params as { id: string };
     const { username } = getAuthUser(req);
-    res.status(200).json(await createCommentService(content, id, username));
+    res.status(201).json(await createCommentService(content, id, username));
   } catch (err) {
     next(err);
   }
