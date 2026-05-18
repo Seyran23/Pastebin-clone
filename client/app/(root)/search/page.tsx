@@ -17,9 +17,7 @@ export default function SearchPage() {
   const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/login?redirect=/search');
-    }
+    if (!isAuthenticated) router.replace('/login?redirect=/search');
   }, [isAuthenticated, router]);
 
   const urlQ = params.get('q') || '';
@@ -55,6 +53,8 @@ export default function SearchPage() {
   }, [urlQ, urlCategory, urlTime, urlSort]);
 
   const { data, isLoading, isError } = useSearchPastes(searchQuery!, !!searchQuery);
+
+  if (!isAuthenticated) return null;
 
   const doSearch = () => {
     const parts = new URLSearchParams();
