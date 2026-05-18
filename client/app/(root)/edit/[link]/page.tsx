@@ -76,6 +76,10 @@ export default function EditPastePage() {
     );
   }
 
+  if (data && user && data.pasteData?.createdBy !== user.id) {
+    return null;
+  }
+
   if (isError) {
     return <InfoBox variant="error">Paste not found.</InfoBox>;
   }
