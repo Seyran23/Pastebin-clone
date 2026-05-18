@@ -14,8 +14,8 @@ export const validateSignup = [
   body('password')
     .notEmpty()
     .withMessage('Password is required')
-    .isLength({ min: 6, max: 20 })
-    .withMessage('Password must be between 6 and 20 characters'),
+    .isLength({ min: 8, max: 20 })
+    .withMessage('Password must be between 8 and 20 characters'),
 ];
 
 export const validateLogin = [
@@ -48,6 +48,6 @@ export const validateResetPassword = [
   body('newPassword')
     .notEmpty()
     .withMessage('New password is required')
-    .isLength({ min: 6, max: 20 })
-    .withMessage('Password must be between 6 and 20 characters'),
+    .isLength({ min: 8, max: 20 })
+    .withMessage('Password must be between 8 and 20 characters'),
 ];
