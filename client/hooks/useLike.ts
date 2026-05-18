@@ -31,6 +31,7 @@ export function useLike(
     const prevLikes = likes;
     const prevDislikes = dislikes;
 
+    setIsPending(true);
     setUserVote(isLike);
     if (isLike) {
       setLikes((n) => n + 1);
@@ -39,8 +40,6 @@ export function useLike(
       setDislikes((n) => n + 1);
       if (prevVote === true) setLikes((n) => n - 1);
     }
-
-    setIsPending(true);
     try {
       await toggleLike(pasteId, isLike);
     } catch {
