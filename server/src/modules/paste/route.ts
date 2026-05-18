@@ -26,6 +26,7 @@ import {
 import {
   validateCreateComment,
   validateCreatePaste,
+  validateEditPaste,
   validateLinkWithRegex,
   validateUUIDParam,
 } from './validator';
@@ -534,6 +535,7 @@ router.patch(
   '/:link',
   authMiddleware,
   validateLinkWithRegex,
+  validateEditPaste,
   handleValidationErrors,
   updatePasteByLink,
 );
