@@ -89,6 +89,10 @@ export function useNewPasteForm() {
   };
 
   const handleSubmit = () => {
+    if (!formData.content.trim()) {
+      toast.error('Content cannot be empty.');
+      return;
+    }
     createPasteMutation.mutate({
       name: formData.pasteName,
       exposure: formData.exposure,
