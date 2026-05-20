@@ -94,6 +94,72 @@ router.get('/profile/:username/pastes', getProfilePastes);
  */
 router.get('/stats/:username', authMiddleware, getPasteStatsForUser);
 
+/**
+ * @swagger
+ * /users/dashboard/{username}:
+ *   get:
+ *     summary: Get analytics dashboard data for the authenticated user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Dashboard data including summary stats, monthly time-series, and top pastes
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 summary:
+ *                   type: object
+ *                   properties:
+ *                     totalPastes:   { type: integer }
+ *                     totalViews:    { type: integer }
+ *                     totalLikes:    { type: integer }
+ *                     totalComments: { type: integer }
+ *                 pastesByMonth:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       month: { type: string, example: '2025-03' }
+ *                       count: { type: string }
+ *                 likesByMonth:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       month: { type: string }
+ *                       count: { type: string }
+ *                 commentsByMonth:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       month: { type: string }
+ *                       count: { type: string }
+ *                 topPastes:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:           { type: string }
+ *                       name:         { type: string }
+ *                       link_endpoint: { type: string }
+ *                       view_count:   { type: integer }
+ *                       exposure:     { type: string, enum: [public, private, unlisted] }
+ *                       createdAt:    { type: string, format: date-time }
+ *       403:
+ *         description: Forbidden — can only view your own dashboard
+ *       404:
+ *         description: User not found
+ */
 router.get('/dashboard/:username', authMiddleware, getDashboard);
 
 /**
