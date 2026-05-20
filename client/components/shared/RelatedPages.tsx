@@ -1,11 +1,15 @@
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 import { IRelatedPage } from '@/lib/types';
 import { useAuthStore } from "@/store/useAuthStore";
 
 const RelatedPages = ({ links }: { links: IRelatedPage[] }) => {
-  const {user} = useAuthStore()
+  const { user } = useAuthStore();
+  const pathname = usePathname();
+
+  const visibleLinks = links.filter((link) => link.href !== pathname);
 
   return (
     <div className="relative md:w-64 border border-zinc-700 bg-neutral-800 rounded-md self-start">
@@ -13,7 +17,7 @@ const RelatedPages = ({ links }: { links: IRelatedPage[] }) => {
         {user?.isActivated ? "ACCOUNT RELATED PAGES" : "RELATED PAGES"}
       </div>
       <div className="p-4 pt-6 space-y-2">
-        {links.map((link) => (
+        {visibleLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
