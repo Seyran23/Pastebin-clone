@@ -31,7 +31,7 @@ export const getCategoriesService = async () => {
   const cached = await redisClient.get(key);
   if (cached) return JSON.parse(cached) as { id: number; category_name: string }[];
   const rows = await PasteCategory.findAll({ attributes: ['id', 'category_name'], raw: true });
-  await redisClient.set(key, JSON.stringify(rows));
+  if (rows.length) await redisClient.set(key, JSON.stringify(rows));
   return rows;
 };
 
@@ -40,7 +40,7 @@ export const getHighlightsService = async () => {
   const cached = await redisClient.get(key);
   if (cached) return JSON.parse(cached) as { id: number; language: string }[];
   const rows = await SyntaxHighlights.findAll({ attributes: ['id', 'language'], raw: true });
-  await redisClient.set(key, JSON.stringify(rows));
+  if (rows.length) await redisClient.set(key, JSON.stringify(rows));
   return rows;
 };
 
@@ -50,7 +50,7 @@ export const getExpirationTimeService = async () => {
   if (cached) return JSON.parse(cached) as string[];
   const rows = await ExpirationTime.findAll({ attributes: ['label'], raw: true });
   const labels = rows.map((r) => r.label);
-  await redisClient.set(key, JSON.stringify(labels));
+  if (labels.length) await redisClient.set(key, JSON.stringify(labels));
   return labels;
 };
 
