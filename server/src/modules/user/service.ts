@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt';
+import { QueryTypes } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 
-import { LikeStats, Paste, User } from '@/db/models';
+import { LikeStats, Paste, sequelize, SyntaxHighlights, User } from '@/db/models';
 import { AppError } from '@/middlewares/error-handler';
 import { deleteFileFromS3 } from '@/modules/cloud/service';
 import { sendEmailAddressChangeEmail } from '@/modules/mail/controller';
@@ -108,6 +109,77 @@ export const getPasteStatsForUserService = async (username: string, requestingUs
     unlistedPastes,
     privatePastes,
     totalLikes,
+  };
+};
+
+export const getDashboardService = async (username: string, requestingUserId?: string) => {
+  const user = await User.findOne({
+    where: { username },
+    attributes: ['id'],
+  });
+  if (!user) throw new AppError(404, 'User not found');
+  if (requestingUserId !== user.id) throw new AppError(403, 'Forbidden');
+
+  const uid = user.id;
+  const r = { replacements: { uid }, type: QueryTypes.SELECT } as const;
+
+  const [totalPastes, totalViews, totalLikes, totalComments, pastesByMonth, likesByMonth, commentsByMonth] =
+    await Promise.all([
+      Paste.count({ where: { createdBy: uid, expired: false } }),
+      Paste.sum('view_count', { where: { createdBy: uid } }).then((v) => v ?? 0),
+      sequelize.query<{ count: string }>(
+        `SELECT COUNT(*) AS count FROM like_stats ls
+         INNER JOIN pastes p ON ls.paste_id = p.id
+         WHERE p."createdBy" = :uid AND ls.is_liked = true`,
+        r,
+      ).then((rows) => Number(rows[0]?.count ?? 0)),
+      sequelize.query<{ count: string }>(
+        `SELECT COUNT(*) AS count FROM comments c
+         INNER JOIN pastes p ON c.paste_id = p.id
+         WHERE p."createdBy" = :uid`,
+        r,
+      ).then((rows) => Number(rows[0]?.count ?? 0)),
+      sequelize.query<{ month: string; count: string }>(
+        `SELECT TO_CHAR(DATE_TRUNC('month', "createdAt"), 'YYYY-MM') AS month, COUNT(*) AS count
+         FROM pastes WHERE "createdBy" = :uid
+         GROUP BY DATE_TRUNC('month', "createdAt")
+         ORDER BY DATE_TRUNC('month', "createdAt") ASC`,
+        r,
+      ),
+      sequelize.query<{ month: string; count: string }>(
+        `SELECT TO_CHAR(DATE_TRUNC('month', ls."createdAt"), 'YYYY-MM') AS month, COUNT(*) AS count
+         FROM like_stats ls
+         INNER JOIN pastes p ON ls.paste_id = p.id
+         WHERE p."createdBy" = :uid AND ls.is_liked = true
+         GROUP BY DATE_TRUNC('month', ls."createdAt")
+         ORDER BY DATE_TRUNC('month', ls."createdAt") ASC`,
+        r,
+      ),
+      sequelize.query<{ month: string; count: string }>(
+        `SELECT TO_CHAR(DATE_TRUNC('month', c."createdAt"), 'YYYY-MM') AS month, COUNT(*) AS count
+         FROM comments c
+         INNER JOIN pastes p ON c.paste_id = p.id
+         WHERE p."createdBy" = :uid
+         GROUP BY DATE_TRUNC('month', c."createdAt")
+         ORDER BY DATE_TRUNC('month', c."createdAt") ASC`,
+        r,
+      ),
+    ]);
+
+  const topPastes = await Paste.findAll({
+    where: { createdBy: user.id, expired: false },
+    attributes: ['id', 'name', 'link_endpoint', 'view_count', 'exposure', 'createdAt'],
+    include: [{ model: SyntaxHighlights, as: 'syntaxHighlight', attributes: ['language'] }],
+    order: [['view_count', 'DESC']],
+    limit: 5,
+  });
+
+  return {
+    summary: { totalPastes, totalViews: Number(totalViews), totalLikes, totalComments },
+    pastesByMonth,
+    likesByMonth,
+    commentsByMonth,
+    topPastes,
   };
 };
 

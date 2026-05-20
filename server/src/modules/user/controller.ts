@@ -8,6 +8,7 @@ import {
   avatarUpdateService,
   changePasswordService,
   deleteUserService,
+  getDashboardService,
   getPasteStatsForUserService,
   getProfileService,
   userProfileUpdateService,
@@ -62,6 +63,15 @@ export const changePassword = async (req: Request, res: Response, next: NextFunc
       newPassword: string;
     };
     res.status(200).json(await changePasswordService(username, currentPassword, newPassword));
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getDashboard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { username } = req.params as { username: string };
+    res.status(200).json(await getDashboardService(username, req.user?.id));
   } catch (err) {
     next(err);
   }

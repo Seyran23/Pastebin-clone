@@ -8,6 +8,7 @@ import { getProfilePastes } from '@/modules/paste/controller';
 import {
   changePassword,
   deleteUser,
+  getDashboard,
   getPasteStatsForUser,
   getProfile,
   updateAvatar,
@@ -92,6 +93,8 @@ router.get('/profile/:username/pastes', getProfilePastes);
  *         description: Forbidden — can only view your own stats
  */
 router.get('/stats/:username', authMiddleware, getPasteStatsForUser);
+
+router.get('/dashboard/:username', authMiddleware, getDashboard);
 
 /**
  * @swagger
