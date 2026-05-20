@@ -20,14 +20,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { updateAvatar } from '@/lib/api';
+import { userSettingsLinks } from '@/lib/constants/auth-links';
 import { useAuthStore } from "@/store/useAuthStore";
 
-const authLinks = [
-  { href: "/user/profile", label: "Profile" },
-  { href: "/user/change-avatar", label: "Avatar" },
-  { href: "/user/password", label: "Password" },
-  { href: "/user/delete-account", label: "Delete Account" },
-];
 
 const formSchema = z.object({
   avatar: z
@@ -142,7 +137,7 @@ const ChangeAvatarPage = () => {
           </CardContent>
         </Card>
 
-        <RelatedPages links={authLinks} />
+        <RelatedPages links={userSettingsLinks} />
       </div>
     </div>
   );
