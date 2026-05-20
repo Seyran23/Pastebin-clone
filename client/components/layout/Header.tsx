@@ -5,6 +5,7 @@ import {
   ChevronDown,
   ClipboardList,
   KeyRound,
+  LayoutDashboard,
   LogOut,
   MessageSquareText,
   Plus,
@@ -32,6 +33,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 const getDropdownItems = (username: string) => [
   { label: "My Pastes", icon: <ClipboardList size={16} />, link: `/user/${username}` },
   { label: "My Comments", icon: <MessageSquareText size={16} />, link: `/user/${username}/comments` },
+  { label: "Dashboard", icon: <LayoutDashboard size={16} />, link: "/user/dashboard" },
   { label: "Edit Profile", icon: <UserPen size={16} />, link: "/user/profile" },
   { label: "Change Password", icon: <KeyRound size={16} />, link: "/user/password" },
 ];

@@ -43,3 +43,17 @@ export const changePassword = async (data: {
 export const deleteAccount = async (username: string): Promise<{ message: string }> => {
   return await api.delete(`/users/${username}`);
 };
+
+export const getUserDashboard = async (username: string): Promise<{
+  summary: { totalPastes: number; totalViews: number; totalLikes: number; totalComments: number };
+  pastesByMonth: { month: string; count: string }[];
+  likesByMonth: { month: string; count: string }[];
+  commentsByMonth: { month: string; count: string }[];
+  topPastes: {
+    id: string; name: string; link_endpoint: string;
+    view_count: number; exposure: string; createdAt: string;
+    syntaxHighlight?: { language: string } | null;
+  }[];
+}> => {
+  return await api.get(`/users/dashboard/${username}`);
+};
