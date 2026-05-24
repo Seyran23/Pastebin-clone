@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useRouter,useSearchParams } from "next/navigation";
+import { useEffect, useRef } from "react";
+
 import InfoBox from '@/components/shared/InfoBox';
 import { verifyEmail } from '@/lib/api';
 import { useAuthStore } from "@/store/useAuthStore";
@@ -39,7 +40,7 @@ const VerifyEmailPage = () => {
 
         // Redirect to the profile page
         router.push("/user/profile");
-      } catch (error) {
+      } catch {
         router.push("/error?type=email-verification");
       }
     };

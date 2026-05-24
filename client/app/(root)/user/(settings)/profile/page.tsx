@@ -52,10 +52,10 @@ const UserProfilePage = () => {
       setSuccessMessage(data.message);
     },
     onError: (error) => {
-      const customError = error as CustomError;
+      const customError = error as unknown as CustomError;
       if (customError.errors.length > 0) {
         customError.errors.forEach((err) => {
-          form.setError(err.field as any, { message: err.message });
+          form.setError(err.field as keyof z.infer<typeof formSchema>, { message: err.message });
         });
       } else {
         form.setError("root", { message: customError.message });

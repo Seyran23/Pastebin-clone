@@ -84,7 +84,7 @@ export default function NewPastePage() {
               <Select
                 instanceId="category"
                 options={categoryOptions}
-                value={categoryOptions.find((o) => o.value === formData.category) ?? null}
+                value={categoryOptions.find((o) => String(o.value) === formData.category) ?? null}
                 styles={selectStyles}
                 onChange={(o) => o && handleSelect('category', o)}
                 placeholder="Select category…"

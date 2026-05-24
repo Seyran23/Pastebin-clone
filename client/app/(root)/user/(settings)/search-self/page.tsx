@@ -65,7 +65,7 @@ export default function SearchSelfPage() {
             )}
 
             {pastes && pastes.length > 0 && (
-                <PastesTable pastes={pastes} />
+                <PastesTable pastes={pastes} isOwner={true} />
             )}
         </div>
     );

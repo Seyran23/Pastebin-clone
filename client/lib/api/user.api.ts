@@ -29,7 +29,7 @@ export const getUserPasteStats = async (username: string): Promise<IUserPastesSt
   return await api.get(`/users/stats/${username}`);
 };
 
-export const searchSelfPastes = async (query: string) => {
+export const searchSelfPastes = async (query: string): Promise<IUserPaste[]> => {
   return await api.get(`/pastes/search-self?title=${query}`);
 };
 

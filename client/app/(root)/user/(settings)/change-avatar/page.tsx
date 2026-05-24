@@ -52,7 +52,7 @@ const ChangeAvatarPage = () => {
       form.reset();
       router.push(`/user/${user?.username}`);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(error?.message ?? 'Failed to update avatar.');
       setTimeout(() => mutation.reset(), 5000);
     },

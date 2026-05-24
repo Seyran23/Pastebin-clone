@@ -36,7 +36,7 @@ export const searchPastes = async (query: SearchPastesQuery): Promise<SearchPast
   return await api.get('/pastes/search', { params: query });
 };
 
-export const getCategories = async (): Promise<string[]> => {
+export const getCategories = async (): Promise<{ id: number; category_name: string }[]> => {
   return await api.get('/pastes/categories');
 };
 
