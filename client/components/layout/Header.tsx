@@ -162,7 +162,7 @@ function UserDropdown({ username }: { username: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" aria-label="User menu">
           <ChevronDown size={16} />
         </Button>
       </DropdownMenuTrigger>
