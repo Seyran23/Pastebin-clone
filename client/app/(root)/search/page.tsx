@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useSearchPastes } from '@/hooks/useSearch';
 import { SearchPastesQuery } from '@/lib/types';
@@ -11,7 +11,7 @@ import PasteSearchCard from './_components/PasteSearchCard';
 import SearchFilters from './_components/SearchFilters';
 import { SearchSkeletonCard } from './_components/SearchSkeletonCard';
 
-export default function SearchPage() {
+function SearchContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { isAuthenticated } = useAuthStore();
@@ -134,4 +134,8 @@ export default function SearchPage() {
       )}
     </div>
   );
+}
+
+export default function SearchPage() {
+  return <Suspense><SearchContent /></Suspense>;
 }

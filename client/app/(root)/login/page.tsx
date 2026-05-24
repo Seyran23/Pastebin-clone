@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from 'sonner';
 import { z } from "zod";
@@ -36,7 +37,7 @@ const formSchema = z.object({
   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
 });
 
-const LoginPage = () => {
+function LoginContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { saveAccessToken, saveRefreshToken, setUserInfo } = useAuthStore();
@@ -181,4 +182,6 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default function LoginPage() {
+  return <Suspense><LoginContent /></Suspense>;
+}

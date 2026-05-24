@@ -2,11 +2,11 @@
 
 import { Loader2 } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import { useAuthStore } from '@/store/useAuthStore';
 
-export default function OAuthCallbackPage() {
+function OAuthCallbackContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { saveAccessToken, saveRefreshToken, setUserInfo } = useAuthStore();
@@ -54,4 +54,8 @@ export default function OAuthCallbackPage() {
       <p className="text-sm">Completing sign-in…</p>
     </div>
   );
+}
+
+export default function OAuthCallbackPage() {
+  return <Suspense><OAuthCallbackContent /></Suspense>;
 }

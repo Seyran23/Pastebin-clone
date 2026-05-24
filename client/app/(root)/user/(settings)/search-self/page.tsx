@@ -3,14 +3,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import PastesTable from '@/components/paste/PastesTable';
 import InfoBox from '@/components/shared/InfoBox';
 import { Input } from "@/components/ui/input";
 import { searchSelfPastes } from '@/lib/api';
 
-export default function SearchSelfPage() {
+function SearchSelfContent() {
     const params = useSearchParams();
     const initial = params.get("query") ?? "";
 
@@ -69,4 +69,8 @@ export default function SearchSelfPage() {
             )}
         </div>
     );
+}
+
+export default function SearchSelfPage() {
+  return <Suspense><SearchSelfContent /></Suspense>;
 }

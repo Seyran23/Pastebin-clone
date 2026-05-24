@@ -2,13 +2,15 @@
 
 import { Loader2 } from "lucide-react";
 import { useRouter,useSearchParams } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef } from "react";
 
 import InfoBox from '@/components/shared/InfoBox';
 import { verifyEmail } from '@/lib/api';
 import { useAuthStore } from "@/store/useAuthStore";
 
-const VerifyEmailPage = () => {
+export const dynamic = 'force-dynamic';
+
+function VerifyEmailContent() {
   const router = useRouter();
   const params = useSearchParams();
   const { saveAccessToken, saveRefreshToken,  setUserInfo, setIsAuthenticatedState, accessToken } =
@@ -70,4 +72,6 @@ const VerifyEmailPage = () => {
   );
 };
 
-export default VerifyEmailPage;
+export default function VerifyEmailPage() {
+  return <Suspense><VerifyEmailContent /></Suspense>;
+}

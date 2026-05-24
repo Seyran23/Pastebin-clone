@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -33,7 +33,7 @@ const formSchema = z.object({
   password: z.string().min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
-const SignupPage = () => {
+function SignupContent() {
   const router = useRouter();
   const params = useSearchParams();
   const messageParam = params.get('message');
@@ -210,4 +210,6 @@ const SignupPage = () => {
   );
 };
 
-export default SignupPage;
+export default function SignupPage() {
+  return <Suspense><SignupContent /></Suspense>;
+}
