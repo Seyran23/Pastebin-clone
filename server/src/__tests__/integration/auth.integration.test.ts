@@ -1,7 +1,8 @@
-import { beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
-import { Token, User } from '@/db/models';
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import app from '@/app';
+import { Token, User } from '@/db/models';
 
 const BASE = '/api/auth';
 

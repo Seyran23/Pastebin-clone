@@ -1,4 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import { buildOrder, calculateRemainingTime, parseTimeFilter } from '@/modules/paste/utils';
+import { validateExpiration } from '@/modules/paste/validator';
 
 // Mock @/db/models before importing utils (utils.ts imports sequelize from it)
 vi.mock('@/db/models', () => ({
@@ -10,9 +13,6 @@ vi.mock('@/db/models', () => ({
   Paste: {},
   User: {},
 }));
-
-import { calculateRemainingTime, buildOrder, parseTimeFilter } from '@/modules/paste/utils';
-import { validateExpiration } from '@/modules/paste/validator';
 
 describe('calculateRemainingTime', () => {
   it('returns null when expirationTime is null', () => {

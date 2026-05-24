@@ -1,4 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import {
+  createCommentService,
+  deleteCommentService,
+  getCommentsService,
+} from '@/modules/paste/service/comment.service';
 
 const {
   mockCommentFindAll,
@@ -23,12 +29,6 @@ vi.mock('@/db/models', () => ({
   Paste: { findByPk: mockPasteFindByPk },
   User: { findOne: mockUserFindOne },
 }));
-
-import {
-  createCommentService,
-  deleteCommentService,
-  getCommentsService,
-} from '@/modules/paste/service/comment.service';
 
 beforeEach(() => vi.clearAllMocks());
 

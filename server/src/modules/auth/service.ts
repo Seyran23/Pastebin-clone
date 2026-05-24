@@ -1,8 +1,6 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 
-import { GENERIC_EMAIL_RESPONSE } from './constants';
-
 import { User } from '@/db/models';
 import { AppError } from '@/middlewares/error-handler';
 import {
@@ -24,6 +22,8 @@ import {
 import attachAvatarImage from '@/utils/attachAvatar';
 import { CLIENT_URL } from '@/utils/env';
 import hashingPassword from '@/utils/passwordHashing';
+
+import { GENERIC_EMAIL_RESPONSE } from './constants';
 
 export const signupService = async (username: string, email: string, password: string) => {
   const [existingUsername, existingEmail] = await Promise.all([

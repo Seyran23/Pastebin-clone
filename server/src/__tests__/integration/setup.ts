@@ -1,4 +1,4 @@
-import { vi, beforeAll } from 'vitest';
+import { beforeAll,vi } from 'vitest';
 
 // ── Env vars ─────────────────────────────────────────────────────────────────
 process.env.NODE_ENV = 'test';

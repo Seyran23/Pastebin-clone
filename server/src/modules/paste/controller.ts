@@ -13,16 +13,17 @@ import {
   createCommentService,
   createPasteService,
   deleteCommentService,
-  getCommentsService,
   deletePasteService,
   getArchiveService,
   getCategoriesService,
+  getCommentsService,
   getExpirationTimeService,
   getHighlightsService,
   getLikeStatsService,
   getPasteMetadataService,
   getProfilePastesService,
   getPublicPasteSummariesService,
+  getUserCommentsService,
   getUserPasteSummariesService,
   processPasteContentService,
   searchMyPastesService,
@@ -30,7 +31,6 @@ import {
   toggleLikeService,
   unlockPasteService,
   updatePasteByLinkService,
-  getUserCommentsService,
 } from './service';
 
 export const getArchive = async (req: Request, res: Response, next: NextFunction) => {
@@ -186,7 +186,9 @@ export const createPaste = async (req: Request, res: Response, next: NextFunctio
         preview,
       });
     } catch (dbErr) {
-      void deleteFileFromS3(randomName).catch(() => {});
+      void deleteFileFromS3(randomName).catch((e: unknown) => {
+        console.warn('Failed to clean up orphaned S3 file after DB error', e);
+      });
       throw dbErr;
     }
 

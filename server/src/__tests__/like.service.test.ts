@@ -1,4 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { getLikeStatsService, toggleLikeService } from '@/modules/paste/service/like.service';
 
 const {
   mockLikeStatsCount,
@@ -25,8 +27,6 @@ vi.mock('@/db/models', () => ({
   Paste: { findByPk: mockPasteFindByPk },
   User: { findOne: mockUserFindOne },
 }));
-
-import { getLikeStatsService, toggleLikeService } from '@/modules/paste/service/like.service';
 
 beforeEach(() => vi.clearAllMocks());
 

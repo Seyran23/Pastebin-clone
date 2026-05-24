@@ -1,4 +1,12 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+import {
+  generateTokens,
+  resetPasswordToken,
+  validateAccessToken,
+  validateRefreshToken,
+  validateResetToken,
+} from '@/services/token.service';
 
 // Mock DB models — token.service imports Token model
 vi.mock('@/db/models', () => ({
@@ -8,14 +16,6 @@ vi.mock('@/db/models', () => ({
     destroy: vi.fn(),
   },
 }));
-
-import {
-  generateTokens,
-  validateAccessToken,
-  validateRefreshToken,
-  resetPasswordToken,
-  validateResetToken,
-} from '@/services/token.service';
 
 const mockPayload = {
   id: 'user-uuid-123',

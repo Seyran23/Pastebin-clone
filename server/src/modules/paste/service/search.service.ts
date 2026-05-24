@@ -91,12 +91,12 @@ export const searchPastesService = async (query: Record<string, string>) => {
   ]);
 
   const likesMap = new Map(
-    (likeRows as unknown as Array<{ paste_id: string; likes: string; dislikes: string }>).map(
+    (likeRows as unknown as { paste_id: string; likes: string; dislikes: string }[]).map(
       (r) => [r.paste_id, { likes: Number(r.likes), dislikes: Number(r.dislikes) }],
     ),
   );
   const commentsMap = new Map(
-    (commentRows as unknown as Array<{ paste_id: string; count: string }>).map((r) => [
+    (commentRows as unknown as { paste_id: string; count: string }[]).map((r) => [
       r.paste_id,
       Number(r.count),
     ]),

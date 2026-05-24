@@ -16,6 +16,7 @@ export default tseslint.config(
       '*.config.js',
       '*.config.cjs',
       '*.config.mjs',
+      '*.config.ts',
     ],
   },
 
@@ -34,14 +35,13 @@ export default tseslint.config(
       'import/resolver': {
         typescript: {
           alwaysTryTypes: true,
-          project: './tsconfig.json',
         },
       },
     },
 
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: import.meta.dirname,
       },
       globals: {
@@ -123,12 +123,16 @@ export default tseslint.config(
     },
   },
 
-  // Loosen rules in test files
+  // Loosen rules in test and seed files
   {
-    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**'],
+    files: ['**/*.test.ts', '**/*.spec.ts', '**/__tests__/**', 'seed.ts', 'src/db/seed.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-unsafe-assignment': 'off',
+      '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-unsafe-call': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
     },
   },
 );

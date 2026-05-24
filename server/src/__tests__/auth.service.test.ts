@@ -1,4 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach,describe, expect, it, vi } from 'vitest';
+
+import { forgotPasswordService, forgotUsernameService } from '@/modules/auth/service';
 
 const { mockUserFindOne, mockSendForgotPasswordEmail, mockSendForgotUsernameEmail } = vi.hoisted(
   () => ({
@@ -34,8 +36,6 @@ vi.mock('@/services/token.service', () => ({
 vi.mock('@/modules/user/dto', () => ({
   UserDto: vi.fn().mockImplementation((user: Record<string, unknown>) => user),
 }));
-
-import { forgotPasswordService, forgotUsernameService } from '@/modules/auth/service';
 
 const GENERIC_RESPONSE = 'If an account with that information exists, we have sent you an email.';
 

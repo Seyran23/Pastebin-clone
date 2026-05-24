@@ -238,7 +238,7 @@ export const updatePasteByLinkService = async (
 
   if ('name' in updateData && updateData.name !== undefined) paste.name = updateData.name as string;
   if ('exposure' in updateData && updateData.exposure !== undefined)
-    paste.exposure = updateData.exposure as 'public' | 'private' | 'unlisted';
+    {paste.exposure = updateData.exposure as 'public' | 'private' | 'unlisted';}
   if ('password' in updateData) {
     paste.password = updateData.password
       ? await bcrypt.hash(updateData.password as string, 12)

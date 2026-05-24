@@ -8,8 +8,9 @@
  *          GET  /user-comments/:username
  * User:    GET  /profile/:username/pastes · PATCH /edit/profile-details
  */
-import { describe, expect, it } from 'vitest';
 import request from 'supertest';
+import { describe, expect, it } from 'vitest';
+
 import app from '@/app';
 
 const AUTH = '/api/auth';
