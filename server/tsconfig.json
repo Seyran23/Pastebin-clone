@@ -23,5 +23,5 @@
     "strictNullChecks": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist", "src/db/migrations", "src/db/seeders"]
+  "exclude": ["node_modules", "dist", "src/db/migrations", "src/db/seeders", "src/__tests__"]
 }
