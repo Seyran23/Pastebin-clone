@@ -27,6 +27,7 @@ import {
   validateCreateComment,
   validateCreatePaste,
   validateEditPaste,
+  validateIntParam,
   validateLinkWithRegex,
   validateUUIDParam,
 } from './validator';
@@ -591,7 +592,7 @@ router.delete('/:id', authMiddleware, validateUUIDParam, handleValidationErrors,
 router.delete(
   '/comment/:id',
   authMiddleware,
-  validateUUIDParam,
+  validateIntParam,
   handleValidationErrors,
   deleteComment,
 );

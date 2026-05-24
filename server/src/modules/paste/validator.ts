@@ -48,6 +48,10 @@ export const validateUUIDParam = [
   param('id').isUUID().withMessage('Invalid ID format, must be a UUID'),
 ];
 
+export const validateIntParam = [
+  param('id').isInt({ min: 1 }).withMessage('Invalid ID format, must be a positive integer'),
+];
+
 export const validateLinkWithRegex = [
   param('link')
     .matches(/^[a-zA-Z0-9]{8}$/)
