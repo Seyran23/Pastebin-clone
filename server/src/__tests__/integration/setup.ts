@@ -9,7 +9,7 @@ process.env.DB_NAME = 'pastebin_test';
 process.env.DB_USERNAME = 'postgres';
 process.env.DB_PASSWORD = 'postgres';
 process.env.DB_HOST = 'localhost';
-process.env.DB_PORT = '5433';
+process.env.DB_PORT = '5432';
 process.env.JWT_ACCESS_TOKEN = 'integration_access_secret_for_tests!';
 process.env.JWT_REFRESH_TOKEN = 'integration_refresh_secret_for_tests!';
 process.env.JWT_RESET_TOKEN = 'integration_reset_secret_for_tests!!';
@@ -47,19 +47,18 @@ vi.mock('@/modules/mail/controller', () => ({
 }));
 
 // ── Per-file DB sync (tables only — schema already clean from globalSetup) ───
-import { sequelize } from '@/db/models';
-
+// Dynamic import ensures env vars above are set before models (and env.ts) load.
 beforeAll(async () => {
+  const { sequelize } = await import('../../db/models/index.js');
+
   const [rows] = await sequelize.query(
     "SELECT COUNT(*) AS count FROM information_schema.tables WHERE table_schema = 'public'",
   );
   const tableCount = Number((rows[0] as { count: string }).count);
 
   if (tableCount === 0) {
-    // First test file: globalSetup wiped the schema — create fresh tables
     await sequelize.sync({ force: true });
   } else {
-    // Subsequent test files: single atomic TRUNCATE for all tables
     await sequelize.query(
       'TRUNCATE TABLE users, tokens, pastes, like_stats, comments, syntax_highlights, paste_categories, expiration_times RESTART IDENTITY CASCADE',
     );

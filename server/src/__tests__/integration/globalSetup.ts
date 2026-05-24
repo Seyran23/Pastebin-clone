@@ -5,7 +5,7 @@ export async function setup() {
   const db = new Sequelize({
     dialect: 'postgres',
     host: 'localhost',
-    port: 5433,
+    port: 5432,
     username: 'postgres',
     password: 'postgres',
     database: 'pastebin_test',
