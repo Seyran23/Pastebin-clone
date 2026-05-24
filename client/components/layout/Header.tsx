@@ -15,7 +15,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { Button } from '@/components/ui/button';
@@ -43,7 +43,10 @@ const Header = () => {
   const currentPath = usePathname();
   const isSearchPage = currentPath === "/search";
 
-  const user = useAuthStore((state) => state.user);
+  const rawUser = useAuthStore((state) => state.user);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const user = mounted ? rawUser : null;
 
   return (
     <header className="border-b border-zinc-300 dark:border-zinc-600">
