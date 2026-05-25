@@ -21,7 +21,8 @@ COPY --from=builder /app/dist ./dist
 COPY .sequelizerc ./
 COPY src/config/db.js ./src/config/db.js
 COPY src/db/migrations ./src/db/migrations
+COPY src/db/seeders ./src/db/seeders
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "npx sequelize-cli db:migrate && node dist/index.js"]
+CMD ["sh", "-c", "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all --seeder-storage sequelize && node dist/index.js"]
