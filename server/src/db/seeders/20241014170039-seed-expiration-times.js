@@ -15,7 +15,7 @@ module.exports = {
         { label: '6 months', duration: 6 * 30 * 24 * 60 * 60 * 1000},
         { label: '1 year', duration:  12 * 30 * 24 * 60 * 60 * 1000},
         { label: 'never', duration: null },
-      ], {});
+      ], { ignoreDuplicates: true });
     
   },
 

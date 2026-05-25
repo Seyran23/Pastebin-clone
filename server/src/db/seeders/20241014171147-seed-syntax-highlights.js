@@ -15,7 +15,7 @@ module.exports = {
       { language: 'Java' },
       { language: 'JavaScript' },
       { language: 'Python' },
-    ], {});
+    ], { ignoreDuplicates: true });
 
   },
 

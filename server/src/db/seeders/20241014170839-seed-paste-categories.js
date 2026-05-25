@@ -27,7 +27,7 @@ module.exports = {
       { category_name: 'Travel' },
       { category_name: 'TV' },
       { category_name: 'Writing' },
-    ], {});
+    ], { ignoreDuplicates: true });
   },
 
   async down(queryInterface, Sequelize) {
