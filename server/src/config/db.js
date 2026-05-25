@@ -11,5 +11,14 @@ const base = {
 module.exports = {
   development: { ...base },
   test: { ...base },
-  production: { ...base, logging: false },
+  production: {
+    ...base,
+    logging: false,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  },
 };

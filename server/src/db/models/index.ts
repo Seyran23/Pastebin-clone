@@ -15,7 +15,12 @@ const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT,
   dialect: 'postgres',
-  logging: NODE_ENV === 'development' ? false : false,
+  logging: false,
+  ...(NODE_ENV === 'production' && {
+    dialectOptions: {
+      ssl: { require: true, rejectUnauthorized: false },
+    },
+  }),
 });
 
 User.initModel(sequelize);
