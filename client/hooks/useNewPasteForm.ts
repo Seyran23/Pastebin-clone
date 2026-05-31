@@ -78,7 +78,7 @@ export function useNewPasteForm() {
     setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSelect = (field: string, opt: { value: string | number }) =>
-    setFormData((p) => ({ ...p, [field]: opt.value }));
+    setFormData((p) => ({ ...p, [field]: String(opt.value) }));
 
   const handleSwitch = (field: string, checked: boolean) => {
     if (field === 'passwordProtection' && checked) {
