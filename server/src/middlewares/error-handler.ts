@@ -28,9 +28,7 @@ export const errorHandler: ErrorRequestHandler = (
   const statusCode = err.statusCode || 500;
   const status = err.status || 'error';
 
-  if (NODE_ENV === 'development') {
-    logger.error({ stack: err.stack }, err.message);
-  }
+  logger.error({ stack: err.stack, statusCode }, err.message);
 
   res.status(statusCode).json({
     status,
