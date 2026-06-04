@@ -34,6 +34,7 @@ const getDropdownItems = (username: string) => [
   { label: "My Pastes", icon: <ClipboardList size={16} />, link: `/user/${username}` },
   { label: "My Comments", icon: <MessageSquareText size={16} />, link: `/user/${username}/comments` },
   { label: "Dashboard", icon: <LayoutDashboard size={16} />, link: "/user/dashboard" },
+  { label: "Search", icon: <SearchIcon size={16} />, link: "/search" },
   { label: "Edit Profile", icon: <UserPen size={16} />, link: "/user/profile" },
   { label: "Change Password", icon: <KeyRound size={16} />, link: "/user/password" },
 ];
@@ -68,17 +69,6 @@ const Header = () => {
               <span className="hidden sm:block text-neutral-50 text-sm font-medium">New Paste</span>
             </Button>
           </Link>
-
-          {!isSearchPage && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="md:hidden text-neutral-600 dark:text-neutral-300 px-2"
-              onClick={() => router.push('/search')}
-            >
-              <SearchIcon size={18} />
-            </Button>
-          )}
 
           {!isSearchPage && (
             <div className="relative hidden md:flex ml-2 w-48">
