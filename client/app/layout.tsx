@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-zinc-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-50">
+      <body className="bg-zinc-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-50 overflow-x-hidden">
         <ThemeProvider>
           <QueryProvider>
             <div className="min-h-screen flex flex-col">

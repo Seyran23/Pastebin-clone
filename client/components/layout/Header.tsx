@@ -52,9 +52,9 @@ const Header = () => {
     <header className="border-b border-zinc-300 dark:border-zinc-600">
       <div className="container max-w-[1340px] mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
             <Image alt="logo" src={pastebinLogo} width={50} height={50} />
-            <span className="text-neutral-900 dark:text-neutral-50 text-2xl font-semibold tracking-wider uppercase">
+            <span className="hidden sm:block text-neutral-900 dark:text-neutral-50 text-2xl font-semibold tracking-wider uppercase">
               Pastebin
             </span>
           </Link>
@@ -65,7 +65,7 @@ const Header = () => {
               className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 transition-colors"
             >
               <Plus className="text-neutral-50" size={18} strokeWidth={2.5} />
-              <span className="text-neutral-50 text-sm font-medium">New Paste</span>
+              <span className="hidden sm:block text-neutral-50 text-sm font-medium">New Paste</span>
             </Button>
           </Link>
 
@@ -108,11 +108,12 @@ const Header = () => {
             <UnactivatedBanner username={user.username} />
           </div>
         ) : (
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link href="/login">
               <Button
                 variant="outline"
+                size="sm"
                 className="text-neutral-700 dark:text-white bg-transparent border-zinc-300 dark:border-zinc-500 hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-sm"
               >
                 Login
@@ -121,9 +122,11 @@ const Header = () => {
             <Link href="/signup">
               <Button
                 variant="default"
+                size="sm"
                 className="bg-neutral-900 dark:bg-white text-white dark:text-blue-600 hover:bg-neutral-700 dark:hover:bg-zinc-100 transition-colors text-sm"
               >
-                Sign Up
+                <span className="hidden sm:block">Sign Up</span>
+                <span className="sm:hidden">Join</span>
               </Button>
             </Link>
           </div>
