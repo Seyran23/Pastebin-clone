@@ -25,4 +25,4 @@ COPY src/db/seeders ./src/db/seeders
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && node dist/index.js"]
+CMD ["sh", "-c", "node_modules/.bin/sequelize db:migrate && node_modules/.bin/sequelize db:seed:all && node dist/index.js"]
