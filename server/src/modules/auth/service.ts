@@ -21,6 +21,7 @@ import {
 } from '@/services/token.service';
 import attachAvatarImage from '@/utils/attachAvatar';
 import { CLIENT_URL } from '@/utils/env';
+import logger from '@/utils/logger';
 import hashingPassword from '@/utils/passwordHashing';
 
 import { GENERIC_EMAIL_RESPONSE } from './constants';
@@ -39,11 +40,15 @@ export const signupService = async (username: string, email: string, password: s
 
   const user = await User.create({ username, email, password: hashedPassword, activationLink });
 
-  await sendRegistrationEmail(
-    email,
-    username,
-    `${CLIENT_URL}/verify-email?activationLink=${activationLink}`,
-  );
+  try {
+    await sendRegistrationEmail(
+      email,
+      username,
+      `${CLIENT_URL}/verify-email?activationLink=${activationLink}`,
+    );
+  } catch (emailErr) {
+    logger.error({ emailErr }, 'Failed to send registration email');
+  }
 
   const payload = { id: user.id, username, email, role: user.role, isActivated: user.isActivated, hasPassword: !!user.password };
   const tokens = generateTokens(payload);
