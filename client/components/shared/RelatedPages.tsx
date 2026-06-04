@@ -12,7 +12,7 @@ const RelatedPages = ({ links }: { links: IRelatedPage[] }) => {
   const visibleLinks = links.filter((link) => link.href !== pathname);
 
   return (
-    <div className="relative md:w-64 border border-zinc-700 bg-neutral-800 rounded-md self-start">
+    <div className="relative w-full md:w-64 border border-zinc-700 bg-neutral-800 rounded-md self-start">
       <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-neutral-800 px-2 text-xs text-zinc-300 font-semibold whitespace-nowrap">
         {user?.isActivated ? "ACCOUNT RELATED PAGES" : "RELATED PAGES"}
       </div>

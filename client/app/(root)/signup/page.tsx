@@ -103,7 +103,7 @@ function SignupContent() {
       )}
 
       <div className="flex flex-col md:flex-row gap-8">
-        <Card className="flex-1 bg-neutral-800 border-none">
+        <Card className="flex-1 bg-zinc-900 border border-zinc-700">
           <CardContent className="p-6 space-y-5">
 
             <Button
