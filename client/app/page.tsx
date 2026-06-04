@@ -96,7 +96,7 @@ export default function NewPastePage() {
               <Select
                 instanceId="syntax"
                 options={syntaxOptions}
-                value={syntaxOptions.find((o) => o.value === formData.syntax) ?? null}
+                value={syntaxOptions.find((o) => String(o.value) === formData.syntax) ?? null}
                 styles={selectStyles}
                 onChange={(o) => o && handleSelect('syntax', o)}
               />
