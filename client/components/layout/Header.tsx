@@ -70,6 +70,17 @@ const Header = () => {
           </Link>
 
           {!isSearchPage && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden text-neutral-600 dark:text-neutral-300 px-2"
+              onClick={() => router.push('/search')}
+            >
+              <SearchIcon size={18} />
+            </Button>
+          )}
+
+          {!isSearchPage && (
             <div className="relative hidden md:flex ml-2 w-48">
               <Input
                 type="text"
