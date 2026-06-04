@@ -158,8 +158,8 @@ export const resetPasswordService = async (token: string, newPassword: string) =
   return { message: 'Password has been reset successfully' };
 };
 
-export const resendActivationEmailService = async (username: string, email: string) => {
-  const user = await User.findOne({ where: { username, email } });
+export const resendActivationEmailService = async (username: string) => {
+  const user = await User.findOne({ where: { username } });
   if (!user) throw new AppError(404, 'User not found');
   if (user.isActivated) throw new AppError(409, 'This account is already activated.');
 
@@ -167,11 +167,15 @@ export const resendActivationEmailService = async (username: string, email: stri
   user.activationLink = activationLink;
   await user.save();
 
-  await resendActivationEmail(
-    email,
-    username,
-    `${CLIENT_URL}/verify-email?activationLink=${activationLink}`,
-  );
+  try {
+    await resendActivationEmail(
+      user.email,
+      username,
+      `${CLIENT_URL}/verify-email?activationLink=${activationLink}`,
+    );
+  } catch (emailErr) {
+    logger.error({ emailErr }, 'Failed to resend activation email');
+  }
 
   return {
     message:

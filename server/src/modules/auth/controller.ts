@@ -94,8 +94,8 @@ export const forgotUsername = async (req: Request, res: Response, next: NextFunc
 
 export const resendActivationLink = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { username, email } = req.body as { username: string; email: string };
-    res.status(200).json(await resendActivationEmailService(username, email));
+    const { username } = req.body as { username: string };
+    res.status(200).json(await resendActivationEmailService(username));
   } catch (err) {
     next(err);
   }
